@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grupo GPM — Em Breve</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      --branco-70: rgba(255,255,255,0.70);
+      --navy: #0b1d36;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--navy);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── Container central ── */
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 560px;
+      width: 100%;
+      gap: 0;
+    }
+
+    /* ── Logo estática ── */
+    .logo-img {
+      height: 120px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(201,168,76,0.2));
+    }
+
+    /* ── Badge EM BREVE ── */
+    .badge-embreve {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 1.2rem;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 999px;
+      color: var(--dourado-brilho);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-top: 1.25rem;
+    }
+
+    .badge-embreve::before {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--dourado);
+      animation: pulse-dot 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.65); }
+    }
+
+    /* ── Cronômetro ── */
+    .countdown-wrap { margin-top: 2rem; width: 100%; }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .cblock {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.22);
+      border-radius: 14px;
+      padding: 1.1rem 1.3rem;
+      min-width: 82px;
+      transition: border-color 0.3s ease;
+    }
+
+    .cblock:hover { border-color: rgba(201,168,76,0.5); }
+
+    .cblock-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 600;
+      color: var(--dourado-brilho);
+      line-height: 1;
+      min-width: 2ch;
+      text-align: center;
+    }
+
+    .cblock-label {
+      font-size: 0.63rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--branco-70);
+    }
+
+    /* ── Mensagem final (quando chegar a zero) ── */
+    .online-msg {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .online-msg p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      color: var(--dourado-brilho);
+      font-style: italic;
+    }
+
+    .online-msg a {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border: 1px solid var(--dourado);
+      border-radius: 999px;
+      color: var(--dourado);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .online-msg a:hover {
+      background: var(--dourado);
+      color: var(--navy);
+    }
+
+    /* ── Texto de apoio ── */
+    .apoio {
+      margin-top: 1.75rem;
+      font-size: 0.88rem;
+      color: var(--branco-70);
+      line-height: 1.75;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Botão flutuante WhatsApp ── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9990;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 24px rgba(37,211,102,0.5);
+    }
+
+    /* ── Responsividade ── */
+    @media (max-width: 480px) {
+      .logo-img   { height: 88px; }
+      .countdown  { gap: 0.55rem; }
+      .cblock     { padding: 0.85rem 0.65rem; min-width: 66px; }
+      .cblock-num { font-size: 1.8rem; }
+      .whatsapp-float { bottom: 16px; right: 16px; width: 48px; height: 48px; }
+      .whatsapp-float svg { width: 24px; height: 24px; }
+    }
+
+    @media (max-width: 340px) {
+      .countdown  { flex-wrap: wrap; max-width: 280px; margin: 0 auto; }
+      .cblock     { flex: 1 1 calc(50% - 0.4rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <img
+      class="logo-img"
+      src="assets/logo-gpm.png"
+      alt="Logo Grupo GPM"
+    >
+
+    <span class="badge-embreve">Em Breve</span>
+
+    <div class="countdown-wrap">
+      <div class="countdown" id="countdown">
+        <div class="cblock">
+          <span class="cblock-num" id="cd-dias">--</span>
+          <span class="cblock-label">Dias</span>
+        </div>
+        <div class="cblock">
+          <span class="cblock-num" id="cd-horas">--</span>
+          <span class="cblock-label">Horas</span>
+        </div>
+        <div class="cblock">
+          <span class="cblock-num" id="cd-min">--</span>
+          <span class="cblock-label">Minutos</span>
+        </div>
+        <div class="cblock">
+          <span class="cblock-num" id="cd-seg">--</span>
+          <span class="cblock-label">Segundos</span>
+        </div>
+      </div>
+
+      <div class="online-msg" id="online-msg">
+        <p>Estamos no ar!</p>
+        <a href="index.html">Acessar o site →</a>
+      </div>
+    </div>
+
+    <p class="apoio">Algo novo está sendo construído.<br>Em breve, no ar.</p>
+
+  </div>
+
+  <!-- Botão flutuante WhatsApp -->
+  <a
+    class="whatsapp-float"
+    href="https://wa.me/5521981094156?text=Ol%C3%A1%20Eduardo%2C%20quero%20conhecer%20mais%20sobre%20a%20GPM."
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Conversar no WhatsApp"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.857L.057 23.882a.5.5 0 0 0 .61.61l6.102-1.447A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.686-.519-5.215-1.422l-.373-.217-3.87.918.944-3.788-.234-.386A9.964 9.964 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+    </svg>
+  </a>
+
+  <script>
+    // Alvo: 03/07/2026 00:00 horário de Brasília (UTC-3)
+    const TARGET = new Date('2026-07-03T00:00:00-03:00').getTime();
+
+    const els = {
+      dias:  document.getElementById('cd-dias'),
+      horas: document.getElementById('cd-horas'),
+      min:   document.getElementById('cd-min'),
+      seg:   document.getElementById('cd-seg'),
+    };
+    const countdownEl = document.getElementById('countdown');
+    const onlineEl   = document.getElementById('online-msg');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const diff = TARGET - Date.now();
+
+      if (diff <= 0) {
+        countdownEl.style.display = 'none';
+        onlineEl.style.display = 'flex';
+        return;
+      }
+
+      const totalSec = Math.floor(diff / 1000);
+      const dias  = Math.floor(totalSec / 86400);
+      const horas = Math.floor((totalSec % 86400) / 3600);
+      const min   = Math.floor((totalSec % 3600) / 60);
+      const seg   = totalSec % 60;
+
+      els.dias.textContent  = pad(dias);
+      els.horas.textContent = pad(horas);
+      els.min.textContent   = pad(min);
+      els.seg.textContent   = pad(seg);
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+
+</body>
+</html>

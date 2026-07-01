@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[NOME DA UNIDADE] | Grupo GPM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --azul-marinho: #0a1628;
+      --azul-medio: #0d1f3c;
+      --azul-claro: #112240;
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      --dourado-escuro: #8a6a2a;
+      --branco: #ffffff;
+      --branco-70: rgba(255,255,255,0.70);
+      --branco-40: rgba(255,255,255,0.40);
+      --borda-sutil: rgba(201,168,76,0.15);
+      --borda-hover: rgba(201,168,76,0.45);
+      --radio: 28px;
+      --max-width: 1180px;
+    }
+
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--azul-marinho);
+      color: var(--branco);
+      line-height: 1.8;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .site-container {
+      width: min(100%, calc(100% - 2rem));
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(10,22,40,0.92);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+      position: relative;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(201,168,76,0.3));
+      transition: filter 0.3s ease;
+    }
+
+    .brand:hover img { filter: drop-shadow(0 0 14px rgba(201,168,76,0.6)); }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .logo-text small {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: rgba(201,168,76,0.7);
+      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.6rem;
+      font-size: 0.95rem;
+      color: var(--branco-70);
+    }
+
+    .menu a:hover { color: var(--dourado); }
+
+    .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 1rem 1.75rem;
+      transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho));
+      color: var(--azul-marinho);
+      box-shadow: 0 18px 40px rgba(201,168,76,0.16);
+    }
+
+    .button-primary:hover { transform: translateY(-2px); background: var(--dourado-brilho); }
+
+    .button-ghost {
+      border: 1px solid rgba(255,255,255,0.16);
+      color: var(--branco);
+      background: transparent;
+    }
+
+    .button-ghost:hover { border-color: var(--dourado); color: var(--dourado); }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--branco);
+      cursor: pointer;
+      transition: background 0.2s ease;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      position: relative;
+    }
+
+    .hamburger span::before,
+    .hamburger span::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    .hamburger span::before { top: -6px; }
+    .hamburger span::after { top: 6px; }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      left: 1rem;
+      background: rgba(10,22,40,0.98);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      z-index: 20;
+    }
+
+    .mobile-menu.open { display: block; }
+
+    .mobile-menu a {
+      display: block;
+      margin-bottom: 1rem;
+      color: var(--branco-70);
+      font-size: 1rem;
+    }
+
+    .mobile-menu a:last-child { margin-bottom: 0; }
+
+    /* ── Hero da unidade ── */
+    .unit-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 6rem clamp(20px, 5%, 5vw) 5rem;
+      background: radial-gradient(circle at top, rgba(201,168,76,0.10), transparent 30%),
+                  var(--azul-marinho);
+      text-align: center;
+    }
+
+    .unit-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 20%, rgba(201,168,76,0.10) 0, transparent 18%),
+                        radial-gradient(circle at 80% 15%, rgba(201,168,76,0.06) 0, transparent 12%);
+      pointer-events: none;
+    }
+
+    .unit-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      color: var(--dourado);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.03);
+      margin-bottom: 1.5rem;
+    }
+
+    .unit-hero h1 {
+      margin: 0 auto 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 6vw, 80px);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+    }
+
+    .unit-hero p {
+      color: var(--branco-70);
+      font-size: 1.1rem;
+      line-height: 1.9;
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── Seções genéricas ── */
+    .section { padding: 5rem 0; }
+    .section-alt { background: var(--azul-medio); }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      color: var(--dourado);
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.85rem;
+      margin: 0 0 1rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 44px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .section-heading {
+      margin: 0 0 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.05;
+    }
+
+    .section-text {
+      max-width: 68ch;
+      color: var(--branco-70);
+      margin: 0 0 2.5rem;
+      font-size: 1rem;
+    }
+
+    /* ── Cards "O que fazemos" ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .feature-card {
+      background: var(--azul-claro);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 28px;
+      padding: 2rem;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--borda-hover);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+    }
+
+    .feature-card .card-tag {
+      color: var(--dourado);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.9rem;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1.25rem;
+      color: var(--branco);
+      line-height: 1.2;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--branco-70);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    /* ── Seção "Por que o GPM" ── */
+    .porque-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .porque-points {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .point {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .point::before {
+      content: '';
+      margin-top: 0.65rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--dourado);
+      flex-shrink: 0;
+    }
+
+    .point strong {
+      display: block;
+      color: var(--branco);
+      margin-bottom: 0.3rem;
+    }
+
+    .point p { margin: 0; color: var(--branco-70); font-size: 0.97rem; }
+
+    .porque-card {
+      background: var(--azul-claro);
+      border: 1px solid var(--borda-sutil);
+      border-top: 2px solid var(--dourado);
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+    }
+
+    .porque-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--branco);
+      margin: 0 0 1rem;
+    }
+
+    .porque-card p { color: var(--branco-70); margin: 0; line-height: 1.85; }
+
+    /* ── CTA voltar ── */
+    .cta-voltar {
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .cta-voltar p {
+      color: var(--branco-70);
+      margin: 0 0 1.5rem;
+      font-size: 1rem;
+    }
+
+    .cta-voltar .actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* ── Footer ── */
+    footer { background: #081121; padding: 3rem 0 2rem; }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr 0.9fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .footer-logo { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-logo span { color: var(--branco-70); font-size: 0.95rem; }
+
+    .footer-links { display: grid; gap: 0.8rem; }
+    .footer-links a { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links a:hover { color: var(--dourado); }
+
+    .footer-bottom {
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--branco-40);
+      font-size: 0.92rem;
+    }
+
+    /* ── Responsivo ── */
+    @media (max-width: 980px) {
+      .menu, .topbar-actions { display: none; }
+      .hamburger { display: inline-flex; }
+
+      .cards-grid,
+      .porque-layout,
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .unit-hero { padding: 5rem 1.5rem 3.5rem; }
+      .section { padding: 3.5rem 0; }
+    }
+
+    /* ── Botão flutuante WhatsApp ── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9990;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      text-decoration: none;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.38);
+    }
+
+    @media (max-width: 768px) {
+      .whatsapp-float { bottom: 16px; right: 16px; width: 48px; height: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR  (idêntico ao site principal;
+       ajuste os hrefs para ../ quando necessário)
+  ════════════════════════════════════════════ -->
+  <header>
+    <div class="site-container topbar">
+      <a class="brand" href="../index.html">
+        <img
+          src="../assets/logo-gpm.png"
+          alt="Logo Grupo GPM"
+          style="width:52px; height:52px; object-fit:contain;"
+        >
+        <span class="logo-text">
+          GRUPO GPM
+          <small>ESSÊNCIA HUMANA. POTENCIAL ARTIFICIAL</small>
+        </span>
+      </a>
+      <button class="hamburger" id="menuToggle" aria-label="Abrir menu">
+        <span></span>
+      </button>
+      <nav class="menu" id="mainNav" aria-label="Menu principal">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+        <a href="../index.html#mentoria">Mentoria</a>
+        <a href="../index.html#contato">Contato</a>
+      </nav>
+      <div class="topbar-actions">
+        <a class="button button-primary" href="../index.html#mentoria">Mentoria Nexalista</a>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+        <a href="../index.html#mentoria">Mentoria</a>
+        <a href="../index.html#contato">Contato</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         HERO DA UNIDADE
+         — Substituir [NÚMERO], [NOME DA UNIDADE]
+           e [SUBTÍTULO] com os dados reais
+    ════════════════════════════════════════════ -->
+    <section class="unit-hero">
+      <span class="unit-eyebrow">UNIDADE [NÚMERO] · GRUPO GPM</span>
+      <h1>[NOME DA UNIDADE]</h1>
+      <p>[SUBTÍTULO — uma frase que resume a proposta de valor desta unidade. Aguardando áudio do Eduardo.]</p>
+      <a class="button button-primary" href="../index.html#contato">Falar com o grupo</a>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         O QUE FAZEMOS
+         — Preencher os 3 cards com os serviços
+           principais desta unidade
+    ════════════════════════════════════════════ -->
+    <section class="section section-alt">
+      <div class="site-container">
+        <div class="section-title">O que fazemos</div>
+        <h2 class="section-heading">Serviços e atuação</h2>
+        <p class="section-text">[Parágrafo de introdução desta unidade. Aguardando áudio do Eduardo.]</p>
+        <div class="cards-grid">
+          <div class="feature-card">
+            <span class="card-tag">Serviço 01</span>
+            <h3>[Nome do serviço]</h3>
+            <p>[Descrição do serviço — aguardando áudio do Eduardo.]</p>
+          </div>
+          <div class="feature-card">
+            <span class="card-tag">Serviço 02</span>
+            <h3>[Nome do serviço]</h3>
+            <p>[Descrição do serviço — aguardando áudio do Eduardo.]</p>
+          </div>
+          <div class="feature-card">
+            <span class="card-tag">Serviço 03</span>
+            <h3>[Nome do serviço]</h3>
+            <p>[Descrição do serviço — aguardando áudio do Eduardo.]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         POR QUE O GPM
+         — Preencher com os diferenciais
+           específicos desta unidade
+    ════════════════════════════════════════════ -->
+    <section class="section">
+      <div class="site-container porque-layout">
+        <div>
+          <div class="section-title">Por que o GPM</div>
+          <h2 class="section-heading">O diferencial desta unidade</h2>
+          <p class="section-text">[Texto de posicionamento desta unidade — aguardando áudio do Eduardo.]</p>
+          <div class="porque-points">
+            <div class="point">
+              <div>
+                <strong>[Diferencial 1]</strong>
+                <p>[Descrição — aguardando áudio do Eduardo.]</p>
+              </div>
+            </div>
+            <div class="point">
+              <div>
+                <strong>[Diferencial 2]</strong>
+                <p>[Descrição — aguardando áudio do Eduardo.]</p>
+              </div>
+            </div>
+            <div class="point">
+              <div>
+                <strong>[Diferencial 3]</strong>
+                <p>[Descrição — aguardando áudio do Eduardo.]</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="porque-card">
+          <h3>[Frase de impacto desta unidade]</h3>
+          <p>[Texto de apoio reforçando o posicionamento — aguardando áudio do Eduardo.]</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         CTA — VOLTAR / CONTATO
+    ════════════════════════════════════════════ -->
+    <section class="cta-voltar section-alt">
+      <div class="site-container">
+        <div class="section-title">Grupo GPM</div>
+        <h2 class="section-heading" style="text-align:center;">Pronto para dar o próximo passo?</h2>
+        <p>Converse diretamente com o grupo ou conheça as outras unidades de negócio.</p>
+        <div class="actions">
+          <a class="button button-primary" href="../index.html#mentoria">Mentoria Nexalista →</a>
+          <a class="button button-ghost" href="../index.html#unidades">Ver todas as unidades</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER  (idêntico ao site principal)
+  ════════════════════════════════════════════ -->
+  <footer>
+    <div class="site-container footer-inner">
+      <div class="footer-logo">
+        <div class="brand" style="gap:0.7rem;">
+          <img
+            src="../assets/logo-gpm.png"
+            alt="Logo Grupo GPM"
+            style="width:40px; height:40px; object-fit:contain;"
+          >
+          <span style="font-size:0.95rem; color: var(--branco);">GRUPO GPM</span>
+        </div>
+        <span>Essência humana, potencial artificial.</span>
+        <span>grupogpm.com.br · gpmintegracao.com.br</span>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#mentoria">Mentoria Nexalista</a>
+        <a href="../index.html#contato">Contato</a>
+        <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+    <div class="site-container footer-bottom">
+      <span>© 2026 Grupo GPM</span>
+      <span>Fundador e Gestor do Grupo | Espaço para empresas reais.</span>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('#menuToggle');
+    const mobileMenu = document.querySelector('#mobileMenu');
+    menuToggle?.addEventListener('click', () => mobileMenu?.classList.toggle('open'));
+    document.querySelectorAll('#mobileMenu a').forEach(link =>
+      link.addEventListener('click', () => mobileMenu?.classList.remove('open'))
+    );
+  </script>
+
+
+  <!-- Botão flutuante WhatsApp -->
+  <a class="whatsapp-float"
+     href="https://wa.me/5521981094156?text=Ol%C3%A1%20Eduardo%2C%20quero%20conhecer%20mais%20sobre%20a%20GPM."
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Conversar no WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.857L.057 23.882a.5.5 0 0 0 .61.61l6.102-1.447A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.686-.519-5.215-1.422l-.373-.217-3.87.918.944-3.788-.234-.386A9.964 9.964 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+    </svg>
+  </a>
+
+</body>
+</html>

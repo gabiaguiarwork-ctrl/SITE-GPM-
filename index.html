@@ -1,0 +1,3324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grupo GPM | Essência humana, potencial artificial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --azul-marinho: #0a1628;
+      --azul-header: #051a3d;
+      --azul-medio: #0d1f3c;
+      --azul-claro: #112240;
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      --dourado-escuro: #8a6a2a;
+      --branco: #ffffff;
+      --branco-70: rgba(255,255,255,0.70);
+      --branco-40: rgba(255,255,255,0.40);
+      --borda-sutil: rgba(201,168,76,0.15);
+      --borda-hover: rgba(201,168,76,0.45);
+      --radio: 28px;
+      --max-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: var(--azul-marinho);
+      color: var(--branco);
+      line-height: 1.8;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .site-container {
+      width: min(100%, calc(100% - 2rem));
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(5,26,61,0.92);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 14px 0;
+      position: relative;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+    }
+
+    .brand img {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 6px rgba(201,168,76,0.25));
+      transition: filter 0.3s ease;
+    }
+
+    .brand:hover img {
+      filter: drop-shadow(0 0 10px rgba(201,168,76,0.4));
+    }
+
+    .logo-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #ffffff;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      font-size: 0.9rem;
+      color: var(--branco-70);
+      white-space: nowrap;
+    }
+
+    .menu a { transition: color 0.2s ease; }
+
+    .menu a:hover {
+      color: var(--dourado);
+    }
+
+    /* ── Dropdown ── */
+    .menu-item { position: relative; }
+
+    /* bridge invisível que mantém :hover ativo no gap entre trigger e dropdown */
+    .menu-item::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 16px;
+    }
+
+    .menu-item > a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .arrow {
+      font-size: 10px;
+      line-height: 1;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .menu-item:hover > a .arrow { transform: rotate(180deg); }
+
+    .dropdown {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 0;
+      min-width: 210px;
+      background: rgba(8,17,33,0.97);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 14px;
+      padding: 0.6rem 0;
+      backdrop-filter: blur(20px);
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s 0.22s;
+      pointer-events: none;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+
+    .menu-item:hover .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.88rem;
+      color: var(--branco-70);
+      white-space: nowrap;
+    }
+
+    .dropdown a:hover {
+      color: var(--dourado);
+      background: rgba(201,168,76,0.07);
+    }
+
+    /* ── Mobile accordion ── */
+    .mobile-group { margin-bottom: 0.5rem; }
+
+    .mobile-group-toggle {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      background: none;
+      border: none;
+      color: var(--branco-70);
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      padding: 0 0 1rem;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .mobile-arrow {
+      font-size: 11px;
+      transition: transform 0.25s ease;
+      display: inline-block;
+    }
+
+    .mobile-group-items {
+      display: none;
+      padding: 0 0 0.5rem 1rem;
+      border-left: 1px solid rgba(201,168,76,0.15);
+      margin-bottom: 0.5rem;
+    }
+
+    .mobile-group-items.open { display: block; }
+
+    .mobile-group-items a {
+      display: block;
+      margin-bottom: 0.65rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5) !important;
+    }
+
+    .mobile-group-items a:last-child { margin-bottom: 0; }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--branco);
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hamburger:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-1px);
+    }
+
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      position: relative;
+    }
+
+    .hamburger span::before,
+    .hamburger span::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    .hamburger span::before {
+      top: -6px;
+    }
+
+    .hamburger span::after {
+      top: 6px;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      left: 1rem;
+      background: rgba(10,22,40,0.98);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      z-index: 20;
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      margin-bottom: 1rem;
+      color: var(--branco-70);
+      font-size: 1rem;
+    }
+
+    .mobile-menu a:last-child {
+      margin-bottom: 0;
+    }
+
+    .cursor,
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease, opacity 0.25s ease,
+                  background 0.3s ease, border-color 0.3s ease;
+      mix-blend-mode: screen;
+    }
+
+    .cursor {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--dourado);
+    }
+
+    .cursor-ring {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(201,168,76,0.45);
+      border-radius: 50%;
+      transition: transform 0.25s ease, width 0.25s ease, height 0.25s ease,
+                  border-color 0.3s ease;
+    }
+
+    /* Cursor sobre fundo claro — vira navy */
+    .cursor.sobre-fundo-claro {
+      background: #1F3864;
+      mix-blend-mode: multiply;
+    }
+
+    .cursor-ring.sobre-fundo-claro {
+      border-color: rgba(31,56,100,0.4);
+      mix-blend-mode: multiply;
+    }
+
+    .animate {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .titulo-linha::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 1px;
+      background: var(--dourado);
+      transition: width 0.8s ease;
+      margin-top: 0.9rem;
+    }
+
+    .titulo-linha.visible::after {
+      width: 72px;
+    }
+
+    .scroll-indicator {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.65);
+      font-size: 0.82rem;
+      margin-top: 2.4rem;
+    }
+
+    .scroll-indicator span {
+      display: inline-flex;
+      width: 1.3rem;
+      height: 1.3rem;
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .scroll-indicator span::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-bottom: 2px solid rgba(255,255,255,0.7);
+      border-right: 2px solid rgba(255,255,255,0.7);
+      transform: rotate(45deg);
+      display: block;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(4px); opacity: 0.7; }
+    }
+
+    .glow-gold {
+      box-shadow: 0 0 28px rgba(201,168,76,0.15);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .btn-nav {
+      padding: 12px 26px;
+      font-size: 0.9rem;
+      box-shadow: 0 0 20px rgba(201,168,76,0.35), 0 4px 16px rgba(201,168,76,0.2) !important;
+    }
+
+    .btn-nav:hover {
+      box-shadow: 0 0 30px rgba(201,168,76,0.55), 0 4px 20px rgba(201,168,76,0.3) !important;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 1rem 1.75rem;
+      transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho));
+      color: var(--azul-marinho);
+      box-shadow: 0 18px 40px rgba(201,168,76,0.16);
+    }
+
+    .button-primary:hover {
+      transform: translateY(-2px);
+      background: var(--dourado-brilho);
+      box-shadow: 0 8px 28px rgba(201,168,76,0.38);
+    }
+
+    .button-ghost {
+      border: 1px solid rgba(255,255,255,0.16);
+      color: var(--branco);
+      background: transparent;
+    }
+
+    .button-ghost:hover {
+      border-color: var(--dourado);
+      color: var(--dourado);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+      min-height: 600px;
+      background: #0b1d36;
+      isolation: isolate;
+    }
+
+    .hero-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2rem;
+      width: 100%;
+      max-width: none;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    /* ensure hero children are above the particles */
+    .hero-content > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero::before { content: none; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      color: var(--dourado);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.03);
+      z-index: 1;
+    }
+
+    .hero-title {
+      margin: 0.75rem 0 1.4rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 7vw, 96px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      width: min(100%, 60vw);
+      max-width: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .linha-1 { display: block; color: #ffffff; }
+    .linha-2 { display: block; color: #c9a84c; font-style: italic; }
+
+    .hero-title span {
+      color: var(--dourado);
+      font-style: italic;
+    }
+
+    .hero-text {
+      color: var(--branco-70);
+      font-size: 1.07rem;
+      line-height: 1.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .hero-actions,
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      z-index: 1;
+    }
+
+    .hero-actions a,
+    .hero-actions button {
+      min-height: 44px;
+    }
+
+    /* ── Carrossel ── */
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      min-height: 600px;
+      background: none !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      padding: 5rem clamp(20px, 5%, 5vw) 5.5rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      background: none !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .slide-inner {
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      gap: 3rem;
+      align-items: center;
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      background: none !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .slide-text .hero-title { width: 100%; }
+
+    .slide-text .hero-text {
+      margin: 0 0 2rem;
+      max-width: 520px;
+    }
+
+    .slide-text .hero-actions { justify-content: flex-start; }
+
+    .slide-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: none !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .hero-video {
+      width: 100%;
+      max-width: 440px;
+      mix-blend-mode: screen;
+      display: block;
+      background: transparent;
+      filter: brightness(1.1) contrast(1.05);
+    }
+
+    .img-placeholder {
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 1;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(5,26,61,0.85), rgba(201,168,76,0.08));
+      border: 1px solid rgba(201,168,76,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.22);
+      font-size: 0.82rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+      line-height: 1.7;
+    }
+
+    /* Setas */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.35);
+      background: rgba(5,26,61,0.65);
+      color: rgba(255,255,255,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+      transition: border-color 0.22s ease, color 0.22s ease, background 0.22s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .carousel-arrow:hover {
+      border-color: var(--dourado);
+      color: var(--dourado);
+      background: rgba(5,26,61,0.9);
+    }
+
+    .carousel-arrow-prev { left: 1.5rem; }
+    .carousel-arrow-next { right: 1.5rem; }
+
+    /* Bolinhas */
+    .carousel-dots {
+      position: absolute;
+      bottom: 1.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.55rem;
+      z-index: 20;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.28);
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .carousel-dot.active {
+      background: var(--dourado);
+      transform: scale(1.4);
+    }
+
+    /* Slide 1 — contraste reforçado sobre fundo sólido #0b1d36 */
+    .hero-slide:first-child .hero-eyebrow {
+      color: var(--dourado-brilho);
+      border-color: rgba(226,196,106,0.25);
+    }
+
+    .hero-slide:first-child .linha-2 {
+      color: var(--dourado-brilho);
+    }
+
+    .hero-slide:first-child .hero-text {
+      color: rgba(255,255,255,0.88);
+    }
+
+    .section {
+      padding: 4.5rem 0;
+    }
+
+    body {
+      cursor: none;
+    }
+
+    @media (max-width: 980px) {
+      body {
+        cursor: auto;
+      }
+
+      .cursor,
+      .cursor-ring {
+        display: none;
+      }
+    }
+
+    .section-alt {
+      background: var(--azul-medio);
+    }
+
+    .section-dark {
+      background: var(--azul-medio);
+    }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      color: var(--dourado);
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.85rem;
+      margin: 0 0 1rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 44px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* Numbers section: centered layout and interactive cards */
+    .numbers-heading {
+      text-align: center;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .numbers-heading.titulo-linha::after,
+    .numbers-heading.titulo-linha.visible::after,
+    .sobre-heading.titulo-linha::after,
+    .sobre-heading.titulo-linha.visible::after {
+      content: none;
+    }
+
+    .stat-gpm {
+      color: var(--dourado);
+    }
+
+    .section.section-numbers .grid-4 {
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .num-card {
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      user-select: none;
+    }
+
+    .num-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: rgba(201,168,76,0.5);
+      box-shadow: 0 0 40px rgba(201,168,76,0.15);
+    }
+
+    .num-card:active,
+    .num-card.pulsed {
+      transform: scale(1.08);
+      border-color: #c9a84c;
+      box-shadow: 0 0 60px rgba(201,168,76,0.35);
+    }
+
+    .num-card .numero {
+      transition: transform 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
+      display: inline-block;
+    }
+
+    .num-card:hover .numero,
+    .num-card.pulsed .numero {
+      transform: scale(1.12);
+      text-shadow: 0 0 30px rgba(201,168,76,0.7);
+      color: #e2c46a;
+    }
+
+    h1,
+    h2 {
+      width: 100%;
+    }
+
+    .section-heading {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 56px);
+      font-family: 'Cormorant Garamond', serif;
+      line-height: 1.05;
+      width: 100%;
+      max-width: none;
+    }
+
+    .section-text {
+      max-width: 68ch;
+      color: var(--branco-70);
+      margin: 1.4rem 0 0;
+      font-size: 1rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .stat-card {
+      background: var(--azul-claro);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 24px;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--borda-hover);
+    }
+
+    .stat-number {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 4vw, 4rem);
+      color: var(--dourado);
+      line-height: 1;
+    }
+
+    .stat-label {
+      margin: 0.8rem 0 0;
+      color: var(--branco-70);
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .about-grid,
+    .mentor-grid,
+    .contact-grid {
+      display: grid;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .about-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .hero-card,
+    .unit-card,
+    .feature-card,
+    .faq-card,
+    .contact-card,
+    .highlight-card {
+      background: var(--azul-claro);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 28px;
+      padding: 2rem;
+      color: var(--branco-70);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero-card:hover,
+    .unit-card:hover,
+    .feature-card:hover,
+    .faq-card:hover,
+    .contact-card:hover,
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--borda-hover);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(201,168,76,0.14), transparent 22%),
+                  radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08), transparent 15%);
+      pointer-events: none;
+    }
+
+    .hero-card h3,
+    .unit-card h3,
+    .feature-card h3,
+    .highlight-card h3 {
+      margin: 0 0 1rem;
+      font-size: 1.5rem;
+      color: var(--branco);
+      line-height: 1.2;
+    }
+
+    .hero-card p,
+    .unit-copy,
+    .feature-copy,
+    .faq-copy,
+    .contact-card p,
+    .contact-card a {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--branco-70);
+    }
+
+    .hero-card small,
+    .unit-meta,
+    .feature-meta {
+      color: var(--dourado);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .unit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .unit-card {
+      min-height: 240px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .unit-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(201,168,76,0.5);
+      box-shadow: 0 0 40px rgba(201,168,76,0.15);
+    }
+
+    .unit-card:active,
+    .unit-card.pulsed {
+      transform: scale(1.04);
+      border-color: #c9a84c;
+      box-shadow: 0 0 60px rgba(201,168,76,0.3);
+    }
+
+    .unit-card:hover .card-numero {
+      color: #e2c46a;
+      text-shadow: 0 0 20px rgba(201,168,76,0.6);
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .unit-card:hover .card-titulo {
+      color: #e2c46a;
+      transition: color 0.3s ease;
+    }
+
+    .unit-card span {
+      color: var(--dourado);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      display: block;
+      margin-bottom: 0.9rem;
+    }
+
+    .unit-card p {
+      color: var(--branco-70);
+      line-height: 1.8;
+    }
+
+    .unit-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      color: var(--dourado);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: color 0.2s ease, letter-spacing 0.2s ease;
+    }
+
+    .unit-link:hover {
+      color: var(--dourado-brilho);
+      letter-spacing: 0.08em;
+    }
+
+    .presence-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .presence-copy {
+      max-width: 520px;
+    }
+
+    .presence-copy .section-text {
+      margin-top: 1.25rem;
+      color: var(--branco-70);
+    }
+
+    .presence-list {
+      margin-top: 1.5rem;
+      color: var(--branco-70);
+      font-size: 0.98rem;
+      line-height: 1.9;
+      letter-spacing: 0.02em;
+    }
+
+    .presence-footnote {
+      margin-top: 1.8rem;
+      color: var(--branco-40);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .presence-map {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    #mapa-container svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes pulse-pin {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.4); }
+    }
+
+    #mapa-container svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes pin-pulse {
+      0%,100% { opacity:0.9; r:7; }
+      50%      { opacity:0.2; r:11; }
+    }
+
+    .about-points {
+      display: grid;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .point {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .point::before {
+      content: '';
+      margin-top: 0.65rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--dourado);
+      flex-shrink: 0;
+    }
+
+    .point strong {
+      display: block;
+      color: var(--branco);
+      margin-bottom: 0.35rem;
+    }
+
+    /* Pilares de posicionamento */
+    .pilares-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px;
+      margin-top: 2rem;
+    }
+
+    .pilar {
+      border-top: 1px solid rgba(201,168,76,0.3);
+      padding-top: 24px;
+      transition: border-color 0.3s ease;
+    }
+
+    .pilar:hover {
+      border-top-color: #c9a84c;
+    }
+
+    .pilar-numero {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: #c9a84c;
+      margin-bottom: 12px;
+    }
+
+    .pilar-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .pilar-texto {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--branco-70);
+      line-height: 1.7;
+    }
+
+    /* Seção about — nova estrutura empilhada */
+    .sobre-texto {
+      max-width: 100%;
+    }
+
+    .pilares-sobre {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px;
+      margin-top: 2.5rem;
+    }
+
+    .sobre-faixa {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid rgba(201,168,76,0.35);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .sobre-faixa-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    .sobre-faixa-texto {
+      font-size: 0.9rem;
+      color: var(--branco-70);
+      margin: 0;
+      text-align: right;
+    }
+
+    /* ── Seção Posicionamento — fundo claro ── */
+    .section-about {
+      background: #F5F0E8;
+    }
+
+    .posic-layout {
+      display: grid;
+      grid-template-columns: 60fr 40fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .posic-wrap {
+      width: 100%;
+      margin: 0;
+    }
+
+    .posic-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .posic-badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--dourado-escuro);
+      margin: 0 0 1.5rem;
+    }
+
+    .posic-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      font-weight: 600;
+      color: #1F3864;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0 0 2.5rem;
+    }
+
+    .posic-titulo.titulo-linha::after,
+    .posic-titulo.titulo-linha.visible::after {
+      content: none;
+    }
+
+    .posic-texto {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.07rem;
+      color: #3a3a3a;
+      line-height: 1.9;
+      margin: 0 0 1.75rem;
+    }
+
+    .posic-texto:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Seção Fundamentos ── */
+    .fund-header {
+      margin-bottom: 3.5rem;
+      max-width: 680px;
+    }
+
+    .fund-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.2rem;
+    }
+
+    .fund-subtitulo {
+      font-size: 1rem;
+      color: var(--branco-70);
+      line-height: 1.85;
+      margin: 0;
+      max-width: 600px;
+    }
+
+    .fund-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .fund-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.14);
+      border-top: 2px solid var(--dourado);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .fund-card:hover {
+      transform: translateY(-7px);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(201,168,76,0.42);
+      border-top-color: var(--dourado-brilho);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.22), 0 0 0 1px rgba(201,168,76,0.12);
+    }
+
+    .fund-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dourado);
+      margin: 0 0 1rem;
+    }
+
+    .fund-card-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.55rem, 2.2vw, 2.1rem);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.15;
+      margin: 0 0 1rem;
+    }
+
+    .fund-card-linha {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(226,196,106,0.85);
+      margin: 0 0 1.25rem;
+      line-height: 1.5;
+    }
+
+    .fund-card-corpo {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--branco-70);
+      line-height: 1.85;
+      margin: 0;
+    }
+
+    /* ── Seção História ── */
+    .section-historia {
+      background: var(--azul-marinho);
+    }
+
+    .section-historia .site-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hist-header {
+      margin-bottom: 2.5rem;
+      max-width: 780px;
+      text-align: center;
+    }
+
+    .hist-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.2rem;
+      text-align: center;
+    }
+
+    .hist-sub {
+      font-size: 1rem;
+      color: var(--branco-70);
+      line-height: 1.85;
+      margin: 0 auto;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .hist-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+      color: var(--branco-70);
+      line-height: 1.75;
+      border-left: none;
+      padding-left: 0;
+      margin: 3.5rem 0 0;
+      max-width: 580px;
+      text-align: center;
+    }
+
+    /* ── Timeline ── */
+    .hist-timeline {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Linha dourada: fundo tênue + fill animado */
+    .hist-track-bg,
+    .hist-track-fill {
+      position: absolute;
+      top: 92px; /* alinhado com o centro dos pontos: altura do hist-numero (88px) + raio do ponto (7px) - borda (3px) */
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hist-track-bg  { background: rgba(201,168,76,0.18); }
+
+    .hist-track-fill {
+      background: linear-gradient(90deg, var(--dourado), var(--dourado-brilho));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hist-timeline.hist-visible .hist-track-fill {
+      transform: scaleX(1);
+    }
+
+    .hist-marcos {
+      display: flex;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hist-marco {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 0.5rem;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .hist-timeline.hist-visible .hist-marco:nth-child(1) { opacity:1; transform:none; transition-delay:0.2s; }
+    .hist-timeline.hist-visible .hist-marco:nth-child(2) { opacity:1; transform:none; transition-delay:0.42s; }
+    .hist-timeline.hist-visible .hist-marco:nth-child(3) { opacity:1; transform:none; transition-delay:0.64s; }
+    .hist-timeline.hist-visible .hist-marco:nth-child(4) { opacity:1; transform:none; transition-delay:0.86s; }
+    .hist-timeline.hist-visible .hist-marco:nth-child(5) { opacity:1; transform:none; transition-delay:1.08s; }
+
+    .hist-numero {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 600;
+      color: var(--dourado);
+      line-height: 1;
+      height: 88px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 16px;
+    }
+
+    .hist-ponto {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--dourado);
+      border: 3px solid var(--azul-marinho);
+      outline: 1px solid rgba(201,168,76,0.6);
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, outline-color 0.28s ease;
+    }
+
+    .hist-marco:hover .hist-ponto {
+      transform: scale(1.8);
+      box-shadow: 0 0 22px rgba(201,168,76,0.6);
+      outline-color: var(--dourado-brilho);
+    }
+
+    .hist-baixo {
+      padding-top: 22px;
+      max-width: 150px;
+    }
+
+    .hist-forte {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 0.4rem;
+      line-height: 1.4;
+    }
+
+    .hist-suave {
+      font-size: 0.82rem;
+      color: var(--branco-70);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .founder-layout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      margin-top: 2rem;
+    }
+
+    .founder-foto-wrap {
+      flex-shrink: 0;
+    }
+
+    .founder-foto {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--dourado);
+      box-shadow: 0 0 32px rgba(201,168,76,0.2);
+      display: block;
+    }
+
+    .founder-nome {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 0.4rem;
+      line-height: 1.1;
+    }
+
+    .founder-cargo {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0 0 1.4rem;
+    }
+
+    .founder-citacao {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+      color: var(--branco-70);
+      line-height: 1.75;
+      border-left: 2px solid var(--dourado);
+      margin: 0 0 1.6rem;
+      padding-left: 1.2rem;
+    }
+
+    .founder-linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--dourado);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: color 0.2s ease, gap 0.2s ease;
+    }
+
+    .founder-linkedin:hover {
+      color: var(--dourado-brilho);
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 680px) {
+      .founder-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .founder-foto {
+        width: 140px;
+        height: 140px;
+        margin: 0 auto;
+      }
+
+      .founder-citacao {
+        border-left: none;
+        border-top: 1px solid rgba(201,168,76,0.3);
+        padding-left: 0;
+        padding-top: 1.2rem;
+        text-align: left;
+      }
+
+      .founder-linkedin {
+        justify-content: center;
+      }
+    }
+
+    .boring-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      color: #ffffff;
+      font-weight: 700;
+      margin: 0.4rem 0 2.2rem;
+      line-height: 1.2;
+    }
+
+    .boring-body {
+      max-width: 68ch;
+    }
+
+    .boring-body p {
+      color: var(--branco-70);
+      font-size: 1.07rem;
+      line-height: 1.9;
+      margin: 0 0 1.2rem;
+    }
+
+    .boring-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .link-methodo {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--dourado);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .pilares-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .metod-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .metod-card {
+        padding: 28px 22px;
+      }
+
+      .metod-card h3 {
+        font-size: 20px;
+      }
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .feature-card {
+      min-height: 220px;
+    }
+
+    .feature-card p {
+      margin-top: 0.75rem;
+    }
+
+    .metod-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 3rem;
+    }
+
+    .metod-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 16px;
+      padding: 36px 28px;
+      cursor: pointer;
+      transition: transform 0.35s ease,
+                  border-color 0.35s ease,
+                  box-shadow 0.35s ease,
+                  background 0.35s ease;
+    }
+
+    .metod-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(201,168,76,0.6);
+      background: rgba(201,168,76,0.06);
+      box-shadow: 0 12px 50px rgba(201,168,76,0.18),
+                  0 0 0 1px rgba(201,168,76,0.2);
+    }
+
+    .metod-card.metod-card--destaque {
+      border-color: rgba(201,168,76,0.35);
+      background: rgba(201,168,76,0.07);
+      border-top: 2px solid #c9a84c;
+    }
+
+    .metod-card.metod-card--destaque:hover {
+      box-shadow: 0 12px 60px rgba(201,168,76,0.28),
+                  0 0 0 1px rgba(201,168,76,0.4);
+    }
+
+    .metod-tag {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+    }
+
+    .metod-icone {
+      font-size: 28px;
+      color: rgba(201,168,76,0.5);
+      margin-bottom: 16px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .metod-card:hover .metod-icone {
+      color: #c9a84c;
+      transform: scale(1.15);
+    }
+
+    .metod-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 14px 0;
+      line-height: 1.25;
+    }
+
+    .metod-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.58);
+      margin: 0;
+    }
+
+    #metodologia .section-heading {
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: 1.15;
+      max-width: 100%;
+    }
+
+    .ebook-panel {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem;
+      border: 1px solid var(--borda-sutil);
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    }
+
+    .ebook-copy p {
+      margin: 1.2rem 0 0;
+      color: var(--branco-70);
+      max-width: 48ch;
+    }
+
+    .ebook-form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      font-size: 0.9rem;
+      color: var(--branco-70);
+    }
+
+    .field input,
+    .field textarea {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      color: var(--branco);
+      padding: 1rem 1.1rem;
+      font: inherit;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+
+    .mentor-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .mentor-panel {
+      padding: 2rem;
+      border: 1px solid var(--borda-sutil);
+      border-radius: 32px;
+      position: relative;
+    }
+
+    .mentor-panel::before {
+      content: 'CONVITE EXCLUSIVO';
+      position: absolute;
+      top: 1.75rem;
+      left: 2rem;
+      color: var(--dourado);
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .mentor-panel h3 {
+      margin-top: 3rem;
+      font-size: 2.3rem;
+      line-height: 1.05;
+      color: var(--branco);
+    }
+
+    .mentor-panel p {
+      margin: 1.4rem 0 0;
+      color: var(--branco-70);
+      line-height: 1.9;
+    }
+
+    .benefits {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0 0;
+    }
+
+    .benefit {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .benefit::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      margin-top: 0.4rem;
+      border-radius: 50%;
+      background: var(--dourado);
+      flex-shrink: 0;
+    }
+
+    .benefit strong {
+      display: block;
+      color: var(--branco);
+      margin-bottom: 0.25rem;
+    }
+
+    /* ── Tese do Grupo (nova seção rica) ── */
+    .section-tese {
+      background: #F5F0E8;
+      padding: 100px 0;
+    }
+
+    .tese-badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--dourado-escuro);
+      margin: 0 0 1.4rem;
+    }
+
+    .tese-titulo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 700;
+      color: #1F3864;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin: 0 0 1.4rem;
+    }
+
+    .tese-divisor {
+      width: 60px;
+      height: 2px;
+      background: var(--dourado);
+      border: none;
+      margin: 0 0 3rem;
+    }
+
+    .tese-corpo {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .tese-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      mix-blend-mode: multiply;
+    }
+
+    .tese-texto {
+      columns: 2;
+      column-gap: 2.5rem;
+    }
+
+    .tese-texto p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: #333333;
+      line-height: 1.85;
+      margin: 0 0 1.25rem;
+      break-inside: avoid;
+    }
+
+    .tese-texto p:last-child {
+      margin-bottom: 0;
+    }
+
+    .tese-fechamento {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: #1F3864;
+      line-height: 1.7;
+      break-inside: avoid;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1.2fr 0.95fr;
+    }
+
+    .contact-panel {
+      display: grid;
+      gap: 1rem;
+      padding: 2rem;
+      border: 1px solid var(--borda-sutil);
+      border-radius: 32px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .contact-panel strong {
+      display: block;
+      color: var(--branco);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-panel a {
+      color: var(--dourado);
+      word-break: break-word;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 50%;
+      color: var(--branco);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .social-links a:hover {
+      border-color: var(--dourado);
+      color: var(--dourado);
+      box-shadow: 0 0 14px rgba(201,168,76,0.22);
+    }
+
+    /* ── Botão flutuante WhatsApp ── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9990;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      text-decoration: none;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.38);
+    }
+
+    @media (max-width: 768px) {
+      .whatsapp-float {
+        bottom: 16px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    .faq-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    details {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 1.4rem 1.6rem;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+      color: var(--branco);
+      font-size: 1rem;
+    }
+
+    details[open] summary {
+      color: var(--dourado);
+    }
+
+    details p {
+      margin: 1rem 0 0;
+      color: var(--branco-70);
+      line-height: 1.8;
+    }
+
+    footer {
+      background: #081121;
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr 0.9fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-logo span {
+      color: var(--branco-70);
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .footer-links a {
+      color: var(--branco-70);
+      font-size: 0.95rem;
+    }
+
+    .footer-bottom {
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--branco-40);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .about-grid,
+      .hero-grid,
+      .hero-card,
+      .contact-grid,
+      .mentor-grid,
+      .ebook-panel,
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .tese-corpo {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .tese-img {
+        max-width: 280px;
+        margin: 0 auto;
+      }
+
+      .tese-texto {
+        columns: 1;
+      }
+
+      .tese-titulo {
+        font-size: 2rem;
+      }
+
+      /* Números: grid 2×2 em tablets/mobile */
+      .grid-4 {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .posic-layout {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .posic-visual {
+        order: -1;
+        margin-bottom: 2rem;
+      }
+
+      .fund-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .fund-header {
+        margin-bottom: 2.5rem;
+      }
+
+      /* Timeline mobile: vira grid 2×3, sem linha horizontal */
+      .hist-track-bg,
+      .hist-track-fill,
+      .hist-ponto {
+        display: none;
+      }
+
+      .hist-marcos {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .hist-marco {
+        align-items: flex-start;
+        text-align: left;
+        padding: 1.25rem 1rem;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(201,168,76,0.15);
+        border-top: 2px solid var(--dourado);
+        border-radius: 16px;
+        opacity: 1;
+        transform: none;
+      }
+
+      .hist-numero {
+        height: auto;
+        padding-bottom: 0.5rem;
+        align-items: flex-start;
+        font-size: 2.2rem;
+        justify-content: flex-start;
+      }
+
+      .hist-baixo {
+        padding-top: 0.25rem;
+        max-width: 100%;
+      }
+
+      .hist-quote {
+        margin: 2.5rem 0 0;
+        text-align: center;
+        padding-left: 0;
+        border-left: none;
+      }
+
+      .pilares-sobre {
+        grid-template-columns: 1fr;
+      }
+
+      .sobre-faixa {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .sobre-faixa-texto {
+        text-align: left;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .menu {
+        display: none;
+      }
+
+      .hamburger {
+        display: inline-flex;
+      }
+
+      .topbar-actions {
+        gap: 0.75rem;
+      }
+
+      .brand img {
+        height: 42px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        padding-top: 4rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2.8rem, 10vw, 4rem);
+      }
+
+      .hero-eyebrow {
+        font-size: 0.75rem;
+      }
+
+      .section-heading {
+        font-size: clamp(2rem, 8vw, 2.8rem);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .topbar-actions,
+      .menu {
+        gap: 0.8rem;
+      }
+
+      .contact-grid,
+      .ebook-panel,
+      .about-grid,
+      .mentor-grid {
+        gap: 1.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        background: rgba(10,22,40,0.98);
+      }
+
+      nav {
+        padding: 0 20px;
+        height: 56px;
+      }
+
+      .menu {
+        display: none;
+      }
+
+      /* Esconde só o CTA, mantém o hambúrguer visível */
+      .topbar-actions {
+        display: flex;
+      }
+
+      .btn-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .logo-text {
+        font-size: 14px;
+      }
+
+      .hero {
+        min-height: 520px;
+      }
+
+      .hero-carousel {
+        min-height: 520px;
+      }
+
+      .hero-slide {
+        padding: 3.5rem 1.2rem 5rem;
+        align-items: flex-start;
+      }
+
+      .slide-inner {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .slide-visual {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: clamp(32px, 9vw, 48px);
+        line-height: 1.15;
+        width: 100%;
+      }
+
+      .hero-text {
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .slide-text .hero-actions {
+        justify-content: center;
+      }
+
+      .hero-actions,
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .carousel-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .carousel-arrow-prev { left: 0.5rem; }
+      .carousel-arrow-next { right: 0.5rem; }
+
+      .hero-actions a,
+      .hero-actions button,
+      .hero-buttons a,
+      .hero-buttons button {
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+        padding: 16px 24px;
+        font-size: 16px;
+      }
+
+      .numeros-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .unit-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .presence-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      #mapa-container {
+        max-width: 340px;
+        margin: 0 auto;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .brand .logo-text {
+        font-size: 13px;
+      }
+
+      .brand .logo-text small {
+        display: none;
+      }
+
+      /* site-container já provê margem horizontal — sem dupla margem */
+      section {
+        padding: 60px 0;
+      }
+
+      h2 {
+        font-size: clamp(28px, 7vw, 40px);
+        text-align: center;
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        text-align: center;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      * {
+        cursor: auto !important;
+      }
+
+      .cursor,
+      .cursor-ring {
+        display: none;
+      }
+
+      /* Bolinhas do carrossel: pseudo-elemento amplia área de toque para ~44px */
+      .carousel-dot {
+        position: relative;
+      }
+
+      .carousel-dot::before {
+        content: '';
+        position: absolute;
+        inset: -18px;
+      }
+
+      /* Setas do carrossel: aumenta para 40px */
+      .carousel-arrow {
+        width: 40px;
+        height: 40px;
+      }
+
+      /* ebook-panel padding interno reduzido */
+      .ebook-panel {
+        padding: 1.5rem 1.25rem;
+        border-radius: 20px;
+        gap: 1.5rem;
+      }
+
+      /* stat-card: padding mais enxuto no grid 2×2 */
+      .stat-card {
+        padding: 1.5rem 1rem;
+      }
+
+      /* CTA "Mentoria" no menu mobile */
+      .mobile-menu-cta {
+        margin-top: 1.25rem !important;
+        margin-bottom: 0 !important;
+        text-align: center;
+        padding: 0.85rem 1.5rem !important;
+        font-size: 0.9rem !important;
+        color: var(--azul-marinho) !important;
+        display: block;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero h1,
+      .hero-title {
+        font-size: 32px;
+      }
+
+      section {
+        padding: 48px 0;
+      }
+
+      .stat-card {
+        padding: 1.25rem 0.75rem;
+        border-radius: 18px;
+      }
+    }
+
+    /* ── Dados institucionais (contato) ── */
+    .contato-dados {
+      background: rgba(201,168,76,0.06);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 16px;
+      padding: 36px;
+      margin-top: 40px;
+    }
+
+    .contato-dados-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    @media (max-width: 768px) {
+      .contato-dados {
+        padding: 1.25rem;
+        margin-top: 1.5rem;
+      }
+
+      .contato-dados-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-container topbar">
+
+      <!-- Marca -->
+      <a class="brand" href="#inicio">
+        <img
+          src="assets/logo-gpm-nova.png?v=2"
+          alt="Logo Grupo GPM"
+        >
+      </a>
+
+      <!-- Menu desktop (5 itens) -->
+      <nav class="menu" id="mainNav" aria-label="Menu principal">
+        <a href="#inicio">Início</a>
+
+        <div class="menu-item">
+          <a href="#sobre">Sobre <span class="arrow">▾</span></a>
+          <div class="dropdown">
+            <a href="#sobre">Nossa Tese</a>
+            <a href="#fundador">Eduardo</a>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <a href="#unidades">Unidades <span class="arrow">▾</span></a>
+          <div class="dropdown">
+            <a href="unidades/armazenagem-4-0.html">Armazenagem 4.0</a>
+            <a href="unidades/engenharia-civil.html">Engenharia Civil</a>
+            <a href="unidades/engenharia-industrial.html">Engenharia Industrial</a>
+            <a href="unidades/tecnologias-operacoes-industriais.html">Tecnologia p/ Operações Industriais</a>
+            <a href="unidades/gestao-ativos-ambientais.html">Gestão de Ativos Ambientais</a>
+            <a href="unidades/intralogistica.html">Intralogística</a>
+          </div>
+        </div>
+
+        <a href="#metodologia">Metodologia</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <!-- Ações (CTA + hambúrguer) -->
+      <div class="topbar-actions">
+        <a class="button button-primary btn-nav" href="#mentoria">Mentoria Nexalista</a>
+        <button class="hamburger" id="menuToggle" aria-label="Abrir menu">
+          <span></span>
+        </button>
+      </div>
+
+      <!-- Menu mobile -->
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#inicio">Início</a>
+
+        <div class="mobile-group">
+          <button class="mobile-group-toggle">Sobre <span class="mobile-arrow">▾</span></button>
+          <div class="mobile-group-items">
+            <a href="#sobre">Nossa Tese</a>
+            <a href="#fundador">Eduardo</a>
+          </div>
+        </div>
+
+        <div class="mobile-group">
+          <button class="mobile-group-toggle">Unidades <span class="mobile-arrow">▾</span></button>
+          <div class="mobile-group-items">
+            <a href="unidades/armazenagem-4-0.html">Armazenagem 4.0</a>
+            <a href="unidades/engenharia-civil.html">Engenharia Civil</a>
+            <a href="unidades/engenharia-industrial.html">Engenharia Industrial</a>
+            <a href="unidades/tecnologias-operacoes-industriais.html">Tecnologia p/ Operações Industriais</a>
+            <a href="unidades/gestao-ativos-ambientais.html">Gestão de Ativos Ambientais</a>
+            <a href="unidades/intralogistica.html">Intralogística</a>
+          </div>
+        </div>
+
+        <a href="#metodologia">Metodologia</a>
+        <a href="#contato">Contato</a>
+        <a href="#mentoria" class="button button-primary mobile-menu-cta">Mentoria Nexalista</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="hero-carousel">
+
+        <!-- ── Slide 1: Institucional ── -->
+        <div class="hero-slide active">
+          <div class="slide-inner site-container">
+            <div class="slide-text">
+              <h1 class="hero-title">
+                <span class="linha-1">Essência humana.</span>
+                <span class="linha-2">Potencial artificial.</span>
+              </h1>
+              <p class="hero-text">Estrutura matricial. Liderança humana. IA como vetor.</p>
+              <div class="hero-actions">
+                <a class="button button-primary glow-gold" href="#unidades">Conheça nossas unidades</a>
+              </div>
+            </div>
+            <div class="slide-visual">
+              <video class="hero-video" autoplay loop muted playsinline>
+                <source src="assets/LOGO_ALPHA.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Slide 2: Mentoria Nexalista ── -->
+        <div class="hero-slide">
+          <div class="slide-inner site-container">
+            <div class="slide-text">
+              <span class="hero-eyebrow">MENTORIA NEXALISTA</span>
+              <h2 class="hero-title">
+                <span class="linha-1">Visão estratégica para</span>
+                <span class="linha-2">quem lidera negócios reais.</span>
+              </h2>
+              <p class="hero-text">Um espaço de desenvolvimento para líderes que querem unir gestão, tecnologia e execução prática no dia a dia da operação.</p>
+              <div class="hero-actions">
+                <a class="button button-primary glow-gold" href="#mentoria">Saiba mais sobre a mentoria</a>
+              </div>
+            </div>
+            <div class="slide-visual">
+              <!-- TODO: substituir por foto real em assets/mentoria-foto.jpg -->
+              <div class="img-placeholder">Foto da Mentoria<br>(substituir)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Setas de navegação -->
+        <button class="carousel-arrow carousel-arrow-prev" aria-label="Slide anterior">&#8249;</button>
+        <button class="carousel-arrow carousel-arrow-next" aria-label="Próximo slide">&#8250;</button>
+
+        <!-- Indicadores de slide -->
+        <div class="carousel-dots" role="tablist">
+          <button class="carousel-dot active" aria-label="Slide 1" role="tab"></button>
+          <button class="carousel-dot" aria-label="Slide 2" role="tab"></button>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="sobre" class="section section-about">
+      <div class="site-container">
+        <div class="posic-layout">
+          <div class="posic-wrap">
+            <p class="posic-badge">Posicionamento</p>
+            <h2 class="posic-titulo">O futuro da economia real não será construído apenas por tecnologia.</h2>
+            <p class="posic-texto">O avanço da inteligência artificial representa uma das maiores transformações da nossa geração. Ainda assim, acreditamos que o futuro continuará sendo definido pela capacidade humana de liderar, decidir e construir.</p>
+            <p class="posic-texto">Por isso, o Grupo GPM une desenvolvimento humano, método de gestão e inteligência artificial para fortalecer empresas familiares da economia real.</p>
+            <p class="posic-texto">Nossa convicção é simples: quando a essência humana conduz a operação, o potencial artificial multiplica os resultados.</p>
+          </div>
+          <div class="posic-visual">
+            <img
+              src="assets/posicionamento-gpm.png"
+              alt="Posicionamento Grupo GPM"
+              class="posic-img"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-fundamentos">
+      <div class="site-container">
+        <div class="fund-header">
+          <h2 class="fund-titulo">Nossa forma de construir negócios.</h2>
+          <p class="fund-subtitulo">Três fundamentos orientam cada decisão do Grupo GPM. É assim que desenvolvemos empresas familiares da economia real para os desafios do presente e do futuro.</p>
+        </div>
+        <div class="fund-grid">
+          <article class="fund-card">
+            <p class="fund-label">Onde?</p>
+            <h3 class="fund-card-titulo">Economia Real</h3>
+            <p class="fund-card-linha">É onde escolhemos atuar.</p>
+            <p class="fund-card-corpo">Desenvolvemos empresas que movimentam a indústria, a logística, a engenharia, a infraestrutura e outros setores que sustentam a economia do país.</p>
+          </article>
+          <article class="fund-card">
+            <p class="fund-label">Para quem?</p>
+            <h3 class="fund-card-titulo">Empresas Familiares</h3>
+            <p class="fund-card-linha">É quem escolhemos desenvolver.</p>
+            <p class="fund-card-corpo">Respeitamos a história construída ao longo dos anos, preservamos o legado de cada negócio e ajudamos seus líderes a preparar a empresa para o próximo ciclo de crescimento.</p>
+          </article>
+          <article class="fund-card">
+            <p class="fund-label">Como?</p>
+            <h3 class="fund-card-titulo">Essência Humana.<br>Potencial Artificial.</h3>
+            <p class="fund-card-linha">É assim que construímos o futuro.</p>
+            <p class="fund-card-corpo">Desenvolvemos pessoas, aplicamos método de gestão e utilizamos a inteligência artificial para ampliar a capacidade de decisão e execução das empresas.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-historia">
+      <div class="site-container">
+        <div class="hist-header">
+          <h2 class="hist-titulo">Mais de uma década construindo a <span style="color: var(--dourado); font-style: italic;">economia real.</span></h2>
+          <p class="hist-sub">Nossa história é medida pelo que construímos ao longo do tempo: pessoas, operações, empresas e presença nacional.</p>
+        </div>
+        <div class="hist-timeline" id="histTimeline">
+          <div class="hist-track-bg"></div>
+          <div class="hist-track-fill"></div>
+          <div class="hist-marcos">
+            <article class="hist-marco">
+              <div class="hist-numero">2015</div>
+              <div class="hist-ponto"></div>
+              <div class="hist-baixo">
+                <p class="hist-forte">Fundação do Grupo GPM.</p>
+              </div>
+            </article>
+            <article class="hist-marco">
+              <div class="hist-numero">10+</div>
+              <div class="hist-ponto"></div>
+              <div class="hist-baixo">
+                <p class="hist-forte">Anos de história.</p>
+                <p class="hist-suave">Mais de uma década desenvolvendo empresas da economia real.</p>
+              </div>
+            </article>
+            <article class="hist-marco">
+              <div class="hist-numero">7</div>
+              <div class="hist-ponto"></div>
+              <div class="hist-baixo">
+                <p class="hist-forte">Estados de atuação.</p>
+                <p class="hist-suave">Presença em regiões estratégicas do Brasil.</p>
+              </div>
+            </article>
+            <article class="hist-marco">
+              <div class="hist-numero">5+</div>
+              <div class="hist-ponto"></div>
+              <div class="hist-baixo">
+                <p class="hist-forte">Empresas no grupo.</p>
+                <p class="hist-suave">Unidades especializadas conectadas pelo mesmo método e propósito.</p>
+              </div>
+            </article>
+            <article class="hist-marco">
+              <div class="hist-numero">6</div>
+              <div class="hist-ponto"></div>
+              <div class="hist-baixo">
+                <p class="hist-forte">Unidades de negócio.</p>
+                <p class="hist-suave">Atuação integrada em diferentes segmentos da economia real.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+        <blockquote class="hist-quote">
+          Legados não são construídos em um instante. São desenvolvidos ao longo do tempo.
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="section section-presence section-dark">
+      <div class="site-container presence-layout">
+        <div class="presence-copy">
+          <div class="section-title">Presença nacional</div>
+          <h2 class="section-heading">Presente em 7 estados com atuação real.</h2>
+          <p class="section-text">A presença do Grupo GPM acompanha as federações com produção, apoio e gestão local.</p>
+          <p class="presence-list">Goiás · Rio de Janeiro · São Paulo · Minas Gerais · Espírito Santo · Pará · Distrito Federal</p>
+          <p class="presence-footnote">Sede e matriz: Barra da Tijuca, Rio de Janeiro — RJ</p>
+        </div>
+        <div class="presence-map">
+          <div id="mapa-container" style="width:100%;max-width:460px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tese">
+      <div class="site-container">
+        <p class="tese-badge">Tese do Grupo</p>
+        <h2 class="tese-titulo">
+          Essência humana.<br>
+          <em style="color: var(--dourado); font-style: italic;">Potencial artificial.</em>
+        </h2>
+        <hr class="tese-divisor">
+        <div class="tese-corpo">
+          <div class="tese-visual">
+            <img src="assets/tese-gpm.png" alt="Tese do Grupo GPM" class="tese-img">
+          </div>
+          <div class="tese-texto">
+            <p>Vivemos um momento em que a inteligência artificial passou a ocupar o centro das discussões sobre o futuro. A pergunta mais recorrente é se ela substituirá pessoas, profissões e empresas.</p>
+            <p>Para o Grupo GPM, essa não é a pergunta mais importante. A verdadeira questão é outra.</p>
+            <p><strong>Quem estará preparado para utilizar esse novo potencial?</strong></p>
+            <p>A inteligência artificial não cria discernimento. Não forma líderes. Não desenvolve caráter, responsabilidade ou capacidade de decisão. Ela amplia aquilo que já existe.</p>
+            <p>Quando aplicada sobre organizações frágeis, amplia fragilidades. Quando aplicada sobre lideranças despreparadas, amplia erros. Quando aplicada sobre empresas sem método, apenas acelera a desorganização.</p>
+            <p>É por isso que a tecnologia, por si só, nunca será suficiente.</p>
+            <p>Nossa convicção é que o fator decisivo continuará sendo humano. A profundidade com que uma liderança compreende seu negócio. A maturidade para tomar decisões em ambientes de incerteza. A disciplina para transformar estratégia em execução. A capacidade de preservar um legado enquanto prepara a empresa para o futuro.</p>
+            <p>É nesse ponto que a inteligência artificial deixa de ser protagonista e passa a ocupar o lugar que realmente lhe pertence: o de potencializar pessoas, métodos e operações.</p>
+            <p class="tese-fechamento">Essa é a tese que orienta o Grupo GPM. Desenvolver a essência humana para que o potencial artificial produza resultados reais na economia real.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="unidades" class="section section-units section-alt">
+      <div class="site-container">
+        <div class="section-title">Unidades de negócio</div>
+        <h2 class="section-heading">Seis frentes. Uma visão.</h2>
+        <div class="unit-grid" style="margin-top: 2rem;">
+          <article class="unit-card">
+            <span class="card-numero">01</span>
+            <h3 class="card-titulo">Intralogística</h3>
+            <p>Movimentação de carga, transbordo, locação de equipamentos e operações logísticas integradas em plantas e terminais.</p>
+            <a class="unit-link" href="unidades/intralogistica.html">Conheça esta unidade →</a>
+          </article>
+          <article class="unit-card">
+            <span class="card-numero">02</span>
+            <h3 class="card-titulo">Engenharia Civil</h3>
+            <p>Projetos e obras robustas que conectam estratégia de negócio à execução técnica sólida.</p>
+            <a class="unit-link" href="unidades/engenharia-civil.html">Conheça esta unidade →</a>
+          </article>
+          <article class="unit-card">
+            <span class="card-numero">03</span>
+            <h3 class="card-titulo">Engenharia Industrial</h3>
+            <p>Intervenções industriais pensadas para produtividade, segurança e integração com o chão de fábrica.</p>
+            <a class="unit-link" href="unidades/engenharia-industrial.html">Conheça esta unidade →</a>
+          </article>
+          <article class="unit-card">
+            <span class="card-numero">04</span>
+            <h3 class="card-titulo">Tecnologias para Operações Industriais</h3>
+            <p>Soluções tecnológicas que automatizam processos industriais e conectam o chão de fábrica à gestão de operações.</p>
+            <a class="unit-link" href="unidades/tecnologias-operacoes-industriais.html">Conheça esta unidade →</a>
+          </article>
+          <article class="unit-card">
+            <span class="card-numero">05</span>
+            <h3 class="card-titulo">Armazenagem 4.0</h3>
+            <p>Armazenagem inteligente que combina estrutura física com controle digital e disciplina operacional.</p>
+            <a class="unit-link" href="unidades/armazenagem-4-0.html">Conheça esta unidade →</a>
+          </article>
+          <article class="unit-card">
+            <span class="card-numero">06</span>
+            <h3 class="card-titulo">Gestão de Ativos Ambientais</h3>
+            <p>Soluções para licenciamento, compensação e monetização de ativos com qualidade técnica e controle.</p>
+            <a class="unit-link" href="unidades/gestao-ativos-ambientais.html">Conheça esta unidade →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="metodologia" class="section section-method">
+      <div class="site-container">
+        <div class="section-title">Metodologia GPM</div>
+        <h2 class="section-heading">
+          Estrutura matricial.<br>
+          Liderança humana.<br>
+          IA como vetor.
+        </h2>
+        <div class="metod-grid">
+          <div class="metod-card">
+            <div class="metod-tag">Red Quarta</div>
+            <div class="metod-icone">⬡</div>
+            <h3>Gestão matricial</h3>
+            <p>Os líderes de cada unidade atuam de forma integrada nos eixos Financeiro, Comercial e Operacional — cruzando estrutura sem perder autonomia.</p>
+          </div>
+
+          <div class="metod-card metod-card--destaque">
+            <div class="metod-tag">Liderança comportamental</div>
+            <div class="metod-icone">◈</div>
+            <h3>O humano no centro</h3>
+            <p>O perfil comportamental do gestor orienta cada decisão. Antes da ferramenta, vem o ser humano — esse é o diferencial da Metodologia GPM.</p>
+          </div>
+
+          <div class="metod-card">
+            <div class="metod-tag">IA aplicada</div>
+            <div class="metod-icone">◎</div>
+            <h3>Tecnologia como vetor</h3>
+            <p>A inteligência artificial amplifica decisões, reduz desperdício e aumenta a previsibilidade — sem substituir o julgamento humano.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 3rem; text-align: center;">
+          <a href="#ebook" class="button button-primary" style="font-size: 16px; padding: 18px 48px; letter-spacing: 0.05em;">
+            Conhecer o Playbook GPM →
+          </a>
+          <p style="margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em;">
+            Gratuito. Sem compromisso.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="mentoria" class="section section-mentoria">
+      <div class="site-container mentor-grid">
+        <article>
+          <div class="section-title">Mentoria Nexalista</div>
+          <h2 class="section-heading">O primeiro passo para entrar no ecossistema GPM.</h2>
+          <p class="section-text">Um convite para empresários da economia real e líderes de empresas familiares. Não é venda. É um encontro para entender se há fit e onde a metodologia GPM pode acelerar seu negócio.</p>
+          <div class="benefits">
+            <div class="benefit"><strong>Encontro direto</strong>Com o Fundador e Gestor do Grupo.</div>
+            <div class="benefit"><strong>Para economia real</strong>Focado em negócios reais, não em promessas.</div>
+            <div class="benefit"><strong>Primeiro passo</strong>Para participar do ecossistema GPM.</div>
+          </div>
+        </article>
+        <article class="mentor-panel">
+          <h3>Mentoria Nexalista</h3>
+          <p>Agenda aberta para quem quer conhecer o modelo, validar estratégias e conversar diretamente com quem já entregou resultados reais em empresas familiares.</p>
+          <div style="display:flex; align-items:center; gap:20px;
+                      margin-bottom:32px; margin-top:1.8rem; padding:24px;
+                      background:rgba(255,255,255,0.04);
+                      border:1px solid rgba(201,168,76,0.15);
+                      border-radius:14px;">
+            <img src="assets/foto-eduardo.webp"
+                 alt="Eduardo Pitombo Mesquita — Fundador e CEO do Grupo GPM"
+                 style="width:72px; height:72px; border-radius:50%;
+                        object-fit:cover;
+                        border:2px solid rgba(201,168,76,0.4);">
+            <div>
+              <div style="font-family:'Cormorant Garamond',serif;
+                          font-size:18px; color:#fff; font-weight:600;">
+                Eduardo Pitombo Mesquita
+              </div>
+              <div style="font-size:13px; color:rgba(255,255,255,0.55);
+                          margin-bottom:6px;">
+                Fundador e CEO
+              </div>
+              <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 style="font-size:12px; color:#c9a84c;
+                        text-decoration:none; letter-spacing:0.05em;">
+                Ver perfil no LinkedIn →
+              </a>
+            </div>
+          </div>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeoecTeHyhlVpOE-u7D8cHWu5j8Rcajyon_BPwFQFLZB6JiPw/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="button button-primary"
+          >Quero participar</a>
+          <p style="margin-top: 1rem; color: var(--branco-40);">Vagas limitadas por turma.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundador" class="section section-founder section-dark">
+      <div class="site-container">
+        <div class="section-title">Fundador e CEO</div>
+        <div class="founder-layout">
+          <div class="founder-foto-wrap">
+            <img
+              src="assets/foto-eduardo.webp"
+              alt="Eduardo Pitombo Mesquita — Fundador e CEO do Grupo GPM"
+              class="founder-foto"
+            >
+          </div>
+          <div class="founder-info">
+            <h2 class="founder-nome">Eduardo Pitombo Mesquita</h2>
+            <p class="founder-cargo">Fundador e CEO</p>
+            <blockquote class="founder-citacao">
+              "Um grupo criado para contribuição para o desenvolvimento do Brasil, criando valor na sociedade e desenvolvendo negócios sustentáveis que criem impacto positivo na vida das pessoas."
+            </blockquote>
+            <a
+              href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="founder-linkedin"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              Ver perfil no LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="section section-contact section-alt">
+      <div class="site-container contact-grid">
+        <div class="contact-panel">
+          <strong>Contato</strong>
+          <p>Endereço da sede: Barra da Tijuca, Rio de Janeiro — RJ</p>
+          <p>E-mail: <a href="mailto:contato@grupogpm.com.br">contato@grupogpm.com.br</a></p>
+          <p>WhatsApp: <a href="https://wa.me/5521981094156?text=Ol%C3%A1%20Eduardo%2C%20quero%20conhecer%20mais%20sobre%20a%20GPM." target="_blank" rel="noopener noreferrer">+55 21 98109-4156</a></p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/" target="_blank" rel="noopener noreferrer">/eduardo-pitombo-mesquita</a></p>
+          <div class="social-links">
+            <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/"
+               aria-label="LinkedIn de Eduardo Pitombo Mesquita"
+               target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://www.instagram.com/gpmholding/"
+               aria-label="Instagram do Grupo GPM"
+               target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://wa.me/5521981094156?text=Ol%C3%A1%20Eduardo%2C%20quero%20conhecer%20mais%20sobre%20a%20GPM."
+               aria-label="WhatsApp do Grupo GPM"
+               target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </a>
+          </div>
+        </div>
+        <form class="contact-panel" action="mailto:contato@grupogpm.com.br" method="post" enctype="text/plain">
+          <div class="field"><label for="contact-name">Nome</label><input id="contact-name" type="text" placeholder="Seu nome" /></div>
+          <div class="field"><label for="contact-company">Empresa</label><input id="contact-company" type="text" placeholder="Nome da empresa" /></div>
+          <div class="field"><label for="contact-email">E-mail</label><input id="contact-email" type="email" placeholder="Seu e-mail" /></div>
+          <div class="field"><label for="contact-message">Mensagem</label><textarea id="contact-message" rows="5" placeholder="Como podemos ajudar?"></textarea></div>
+          <button type="submit" class="button button-primary">Enviar mensagem</button>
+        </form>
+      </div>
+
+      <div class="contato-dados">
+
+        <h3 style="font-family:'Cormorant Garamond',serif;
+                   font-size:22px; color:#fff; margin-bottom:24px;">
+          Dados institucionais
+        </h3>
+
+        <div class="contato-dados-grid">
+          <div><strong style="color:#c9a84c;">CNPJ</strong><br>
+          A preencher</div>
+          <div><strong style="color:#c9a84c;">Endereço</strong><br>
+          Barra da Tijuca, Rio de Janeiro — RJ</div>
+          <div><strong style="color:#c9a84c;">Contato Direto</strong><br>
+          Eduardo Pitombo Mesquita — Fundador e CEO<br>
+          <span style="color:rgba(255,255,255,0.4); font-size:12px;">[número a inserir]</span></div>
+          <div><strong style="color:#c9a84c;">E-mail</strong><br>
+          contato@grupogpm.com.br</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Botão flutuante WhatsApp -->
+  <a class="whatsapp-float"
+     href="https://wa.me/5521981094156?text=Ol%C3%A1%20Eduardo%2C%20quero%20conhecer%20mais%20sobre%20a%20GPM."
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Conversar no WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.857L.057 23.882a.5.5 0 0 0 .61.61l6.102-1.447A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.686-.519-5.215-1.422l-.373-.217-3.87.918.944-3.788-.234-.386A9.964 9.964 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+    </svg>
+  </a>
+
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+  <script>
+    const menuToggle = document.querySelector('#menuToggle');
+    const mobileMenu = document.querySelector('#mobileMenu');
+    menuToggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('open');
+    });
+    document.querySelectorAll('#mobileMenu a').forEach((link) => {
+      link.addEventListener('click', () => mobileMenu?.classList.remove('open'));
+    });
+
+    document.querySelectorAll('.mobile-group-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const items = btn.nextElementSibling;
+        const arrow = btn.querySelector('.mobile-arrow');
+        const isOpen = items.classList.toggle('open');
+        if (arrow) arrow.style.transform = isOpen ? 'rotate(180deg)' : '';
+      });
+    });
+
+    // ── Carrossel ──
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.hero-slide'));
+      const dots   = Array.from(document.querySelectorAll('.carousel-dot'));
+      const prev   = document.querySelector('.carousel-arrow-prev');
+      const next   = document.querySelector('.carousel-arrow-next');
+      if (!slides.length) return;
+
+      let current = 0;
+      let timer   = null;
+      const DELAY = 6000;
+
+      function show(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+      }
+
+      function schedule() {
+        clearTimeout(timer);
+        timer = setTimeout(() => { show(current + 1); schedule(); }, DELAY);
+      }
+
+      function interact(n) {
+        show(n);
+        schedule(); // reinicia contagem após interação
+      }
+
+      prev?.addEventListener('click', () => interact(current - 1));
+      next?.addEventListener('click', () => interact(current + 1));
+      dots.forEach((dot, i) => dot.addEventListener('click', () => interact(i)));
+
+      schedule();
+    })();
+
+    (function () {
+      const timeline = document.getElementById('histTimeline');
+      if (!timeline) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('hist-visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.25 });
+      obs.observe(timeline);
+    })();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.querySelectorAll('.titulo-linha').forEach((title) => title.classList.add('visible'));
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('section').forEach((section) => {
+      section.classList.add('animate');
+      observer.observe(section);
+    });
+
+    document.querySelectorAll('.section-heading').forEach((heading) => {
+      heading.classList.add('titulo-linha');
+    });
+
+    // num-card pulse on click
+    document.querySelectorAll('.num-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.add('pulsed');
+        setTimeout(() => card.classList.remove('pulsed'), 600);
+      });
+    });
+
+    // unit-card pulse on click
+    document.querySelectorAll('.unit-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.add('pulsed');
+        setTimeout(() => card.classList.remove('pulsed'), 600);
+      });
+    });
+
+    const cursor = document.querySelector('.cursor');
+    const cursorRing = document.querySelector('.cursor-ring');
+
+    // Cursor muda para navy ao entrar em seções de fundo claro
+    document.querySelectorAll('.section-about').forEach(sec => {
+      sec.addEventListener('mouseenter', () => {
+        cursor?.classList.add('sobre-fundo-claro');
+        cursorRing?.classList.add('sobre-fundo-claro');
+      });
+      sec.addEventListener('mouseleave', () => {
+        cursor?.classList.remove('sobre-fundo-claro');
+        cursorRing?.classList.remove('sobre-fundo-claro');
+      });
+    });
+
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+      document.addEventListener('mousemove', (event) => {
+        const pointerX = event.clientX;
+        const pointerY = event.clientY;
+        cursor?.style.setProperty('left', `${pointerX}px`);
+        cursor?.style.setProperty('top', `${pointerY}px`);
+        cursorRing?.style.setProperty('left', `${pointerX}px`);
+        cursorRing?.style.setProperty('top', `${pointerY}px`);
+      });
+
+      document.querySelectorAll('a, button').forEach((element) => {
+        element.addEventListener('mouseenter', () => {
+          cursorRing?.style.setProperty('transform', 'translate(-50%, -50%) scale(1.6)');
+        });
+        element.addEventListener('mouseleave', () => {
+          cursorRing?.style.setProperty('transform', 'translate(-50%, -50%) scale(1)');
+        });
+      });
+    } else {
+      cursor?.remove();
+      cursorRing?.remove();
+    }
+
+    const width = 460, height = 520;
+
+    const svg = d3.select('#mapa-container')
+      .append('svg')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('width', '100%');
+
+    const projection = d3.geoMercator()
+      .center([-52, -14])
+      .scale(680)
+      .translate([width / 2, height / 2]);
+
+    const path = d3.geoPath().projection(projection);
+
+    const estadosGPM = ['Pará','Goiás','Minas Gerais',
+      'Espírito Santo','São Paulo','Rio de Janeiro',
+      'Distrito Federal'];
+
+    fetch('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson')
+      .then(r => r.json())
+      .then(geojson => {
+
+        svg.selectAll('path')
+          .data(geojson.features)
+          .enter()
+          .append('path')
+          .attr('d', path)
+          .attr('fill', d =>
+            estadosGPM.includes(d.properties.name)
+              ? 'rgba(201,168,76,0.25)'
+              : 'rgba(201,168,76,0.05)')
+          .attr('stroke', d =>
+            estadosGPM.includes(d.properties.name)
+              ? '#c9a84c'
+              : 'rgba(201,168,76,0.15)')
+          .attr('stroke-width', d =>
+            estadosGPM.includes(d.properties.name) ? 1.2 : 0.5)
+          .style('transition','all 0.3s ease')
+          .on('mouseover', function(event, d) {
+            if(estadosGPM.includes(d.properties.name)){
+              d3.select(this)
+                .attr('fill','rgba(201,168,76,0.55)')
+                .attr('stroke','#e2c46a')
+                .style('filter','drop-shadow(0 0 8px rgba(201,168,76,0.6))');
+            }
+          })
+          .on('mouseout', function(event, d) {
+            if(estadosGPM.includes(d.properties.name)){
+              d3.select(this)
+                .attr('fill','rgba(201,168,76,0.25)')
+                .attr('stroke','#c9a84c')
+                .style('filter','none');
+            }
+          });
+
+        const centroids = geojson.features
+          .filter(d => estadosGPM.includes(d.properties.name));
+
+        const labelConfig = {
+          'Pará':             { label: 'PARÁ',            anchor: 'start', dx: 12,  dy: 4   },
+          'Goiás':            { label: 'GOIÁS',           anchor: 'start', dx: 12,  dy: -14 },
+          'Distrito Federal': { label: 'BRASÍLIA/DF',     anchor: 'end',   dx: -12, dy: 4   },
+          'Minas Gerais':     { label: 'MINAS GERAIS',    anchor: 'start', dx: 12,  dy: -8  },
+          'Espírito Santo':   { label: 'ESPÍRITO SANTO',  anchor: 'end',   dx: -12, dy: -14 },
+          'São Paulo':        { label: 'SÃO PAULO',       anchor: 'end',   dx: -12, dy: 18  },
+          'Rio de Janeiro':   { label: 'RIO DE JANEIRO',  anchor: 'end',   dx: -12, dy: 4   },
+        };
+
+        centroids.forEach((d, i) => {
+          const [x, y] = path.centroid(d);
+          const cfg = labelConfig[d.properties.name] || { label: d.properties.name.toUpperCase(), anchor: 'start', dx: 12, dy: 4 };
+
+          svg.append('circle')
+            .attr('cx', x).attr('cy', y).attr('r', 7)
+            .attr('fill', 'none')
+            .attr('stroke', '#c9a84c')
+            .attr('stroke-width', 1)
+            .style('animation', `pin-pulse 2s ease-in-out ${i*0.3}s infinite`);
+
+          svg.append('circle')
+            .attr('cx', x).attr('cy', y).attr('r', 3)
+            .attr('fill', '#c9a84c');
+
+          svg.append('text')
+            .attr('x', x + cfg.dx)
+            .attr('y', y + cfg.dy)
+            .attr('fill', '#c9a84c')
+            .attr('font-family', 'Inter, sans-serif')
+            .attr('font-size', '11')
+            .attr('font-weight', '500')
+            .attr('letter-spacing', '0.05em')
+            .attr('text-anchor', cfg.anchor)
+            .style('paint-order', 'stroke')
+            .style('stroke', 'rgba(10,22,40,0.9)')
+            .style('stroke-width', '3px')
+            .style('stroke-linejoin', 'round')
+            .style('pointer-events', 'none')
+            .text(cfg.label);
+        });
+      });
+  </script>
+
+  <footer>
+    <div class="site-container footer-inner">
+      <div class="footer-logo">
+        <div class="brand" style="gap:0.7rem;">
+          <img
+            src="assets/logo-gpm.jpg"
+            alt="Logo Grupo GPM"
+            style="width:36px; height:auto; object-fit:contain;"
+          >
+          <span style="font-size:0.95rem; color: var(--branco);">GRUPO GPM</span>
+        </div>
+        <span>Essência humana, potencial artificial.</span>
+        <span>grupogpm.com.br · gpmintegracao.com.br</span>
+      </div>
+      <div class="footer-links">
+        <a href="#sobre">Sobre</a>
+        <a href="#unidades">Unidades</a>
+        <a href="#metodologia">Metodologia</a>
+      </div>
+      <div class="footer-links">
+        <a href="#mentoria">Mentoria Nexalista</a>
+        <a href="#contato">Contato</a>
+        <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://www.instagram.com/gpmholding/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </div>
+    </div>
+    <div class="site-container footer-bottom">
+      <span>© 2026 Grupo GPM</span>
+      <span>Fundador e Gestor do Grupo | Espaço para empresas reais.</span>
+    </div>
+  </footer>
+</body>
+</html>

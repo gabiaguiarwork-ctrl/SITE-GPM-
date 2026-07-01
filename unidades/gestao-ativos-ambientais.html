@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão de Ativos Ambientais | Grupo GPM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --azul-marinho: #0a1628;
+      --azul-medio: #0d1f3c;
+      --azul-claro: #112240;
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      --branco: #ffffff;
+      --branco-70: rgba(255,255,255,0.70);
+      --branco-40: rgba(255,255,255,0.40);
+      --borda-sutil: rgba(201,168,76,0.15);
+      --borda-hover: rgba(201,168,76,0.45);
+      --max-width: 1180px;
+      --accent-unit: rgba(100,200,130,0.10);
+    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--azul-marinho); color: var(--branco); line-height: 1.8; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .site-container { width: min(100%, calc(100% - 2rem)); max-width: var(--max-width); margin: 0 auto; }
+    header { position: sticky; top: 0; z-index: 30; background: rgba(10,22,40,0.92); border-bottom: 1px solid rgba(201,168,76,0.12); backdrop-filter: blur(16px); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; position: relative; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 0 8px rgba(201,168,76,0.3)); transition: filter 0.3s ease; }
+    .brand:hover img { filter: drop-shadow(0 0 14px rgba(201,168,76,0.6)); }
+    .logo-text { font-size: 15px; font-weight: 600; letter-spacing: 0.1em; color: #fff; line-height: 1.2; }
+    .logo-text small { display: block; font-size: 9px; letter-spacing: 0.2em; color: rgba(201,168,76,0.7); margin-top: 2px; font-weight: 400; }
+    .menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.6rem; font-size: 0.95rem; color: var(--branco-70); }
+    .menu a:hover { color: var(--dourado); }
+    .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+    .button { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; padding: 1rem 1.75rem; transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease; font-size: 0.95rem; }
+    .button-primary { background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho)); color: var(--azul-marinho); box-shadow: 0 18px 40px rgba(201,168,76,0.16); }
+    .button-primary:hover { transform: translateY(-2px); background: var(--dourado-brilho); }
+    .button-ghost { border: 1px solid rgba(255,255,255,0.16); color: var(--branco); background: transparent; }
+    .button-ghost:hover { border-color: var(--dourado); color: var(--dourado); }
+    .hamburger { display: none; background: none; border: 1px solid rgba(255,255,255,0.12); width: 44px; height: 44px; border-radius: 50%; color: var(--branco); cursor: pointer; align-items: center; justify-content: center; }
+    .hamburger span { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 1px; position: relative; }
+    .hamburger span::before, .hamburger span::after { content: ''; position: absolute; left: 0; width: 100%; height: 2px; background: currentColor; border-radius: 1px; }
+    .hamburger span::before { top: -6px; }
+    .hamburger span::after { top: 6px; }
+    .mobile-menu { display: none; position: absolute; top: 100%; right: 1rem; left: 1rem; background: rgba(10,22,40,0.98); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 1.5rem; backdrop-filter: blur(16px); z-index: 20; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a { display: block; margin-bottom: 1rem; color: var(--branco-70); font-size: 1rem; }
+    .mobile-menu a:last-child { margin-bottom: 0; }
+    .unit-hero { position: relative; overflow: hidden; padding: 5rem clamp(20px,5%,5vw) 5rem; background: radial-gradient(circle at top, rgba(100,200,130,0.08), transparent 30%), var(--azul-marinho); text-align: center; }
+    .unit-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 20%, rgba(100,200,130,0.06) 0, transparent 18%); pointer-events: none; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--branco-40); font-size: 0.88rem; margin-bottom: 2rem; transition: color 0.2s; letter-spacing: 0.05em; }
+    .back-link:hover { color: var(--dourado); }
+    .unit-eyebrow { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1.1rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.75rem; background: rgba(255,255,255,0.03); margin-bottom: 1.5rem; }
+    .unit-hero h1 { margin: 0 auto 1.2rem; font-family: 'Cormorant Garamond', serif; font-size: clamp(40px,6vw,80px); line-height: 1.0; letter-spacing: -0.03em; max-width: 800px; }
+    .unit-hero .hero-sub { color: var(--dourado); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem,2.2vw,1.7rem); margin: 0 auto 1.8rem; max-width: 640px; }
+    .unit-hero p.hero-desc { color: var(--branco-70); font-size: 1rem; line-height: 1.9; max-width: 560px; margin: 0 auto 2.5rem; }
+    .section { padding: 5rem 0; }
+    .section-alt { background: var(--azul-medio); }
+    .section-title { display: inline-flex; align-items: center; gap: 0.9rem; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.32em; font-size: 0.82rem; margin: 0 0 1rem; }
+    .section-title::before { content: ''; display: block; width: 44px; height: 1px; background: rgba(255,255,255,0.15); }
+    .section-heading { margin: 0 0 1rem; font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,4vw,48px); line-height: 1.05; }
+    .section-text { max-width: 68ch; color: var(--branco-70); margin: 0 0 2.5rem; font-size: 1rem; line-height: 1.85; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .feature-card { background: var(--azul-claro); border: 1px solid var(--borda-sutil); border-radius: 24px; padding: 2rem; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
+    .feature-card:hover { transform: translateY(-4px); border-color: var(--borda-hover); box-shadow: 0 30px 60px rgba(0,0,0,0.18); }
+    .card-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--accent-unit); border-radius: 12px; margin-bottom: 1.2rem; color: var(--dourado); font-size: 1.35rem; }
+    .feature-card h3 { margin: 0 0 0.6rem; font-size: 1.05rem; color: var(--branco); line-height: 1.3; font-weight: 600; }
+    .feature-card p { margin: 0; color: var(--branco-70); font-size: 0.93rem; line-height: 1.75; }
+    .setores-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.8rem; }
+    .setor-tag { display: inline-flex; align-items: center; padding: 0.55rem 1.2rem; border: 1px solid rgba(201,168,76,0.22); border-radius: 999px; color: var(--branco-70); font-size: 0.88rem; background: rgba(255,255,255,0.03); transition: border-color 0.2s, color 0.2s; }
+    .setor-tag:hover { border-color: rgba(201,168,76,0.55); color: var(--dourado); }
+    .diferenciais-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .diferencial-item { background: var(--azul-claro); border: 1px solid var(--borda-sutil); border-radius: 24px; padding: 2rem; display: flex; gap: 1.2rem; align-items: flex-start; }
+    .dif-icon { width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--accent-unit); border-radius: 12px; color: var(--dourado); font-size: 1.35rem; }
+    .diferencial-item h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--branco); font-weight: 600; }
+    .diferencial-item p { margin: 0; color: var(--branco-70); font-size: 0.93rem; line-height: 1.7; }
+    .cta-section { padding: 5rem 0; text-align: center; }
+    .cta-section .section-heading { text-align: center; }
+    .cta-section p { color: var(--branco-70); max-width: 52ch; margin: 0 auto 2rem; font-size: 1rem; }
+    .cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+    footer { background: #081121; padding: 3rem 0 2rem; }
+    .footer-inner { display: grid; grid-template-columns: 1.2fr 0.9fr 0.9fr; gap: 2rem; align-items: start; }
+    .footer-logo { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-logo span { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links { display: grid; gap: 0.8rem; }
+    .footer-links a { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links a:hover { color: var(--dourado); }
+    .footer-bottom { margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; color: var(--branco-40); font-size: 0.92rem; }
+    @media (max-width: 980px) { .menu, .topbar-actions { display: none; } .hamburger { display: inline-flex; } .footer-inner { grid-template-columns: 1fr; } }
+    @media (max-width: 680px) { .unit-hero { padding: 4rem 1.5rem 3.5rem; } .section { padding: 3.5rem 0; } .diferenciais-grid { grid-template-columns: 1fr; } .diferencial-item { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="site-container topbar">
+      <a class="brand" href="../index.html">
+        <img src="../assets/logo-gpm.jpg" alt="Logo Grupo GPM" style="width:48px; height:auto;">
+        <span class="logo-text">GRUPO GPM<small>ESSÊNCIA HUMANA. POTENCIAL ARTIFICIAL</small></span>
+      </a>
+      <button class="hamburger" id="menuToggle" aria-label="Abrir menu"><span></span></button>
+      <nav class="menu" aria-label="Menu principal">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+        <a href="../index.html#mentoria">Mentoria</a>
+        <a href="../index.html#contato">Contato</a>
+      </nav>
+      <div class="topbar-actions">
+        <a class="button button-primary" href="../index.html#mentoria">Mentoria Nexalista</a>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+        <a href="../index.html#mentoria">Mentoria</a>
+        <a href="../index.html#contato">Contato</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="unit-hero">
+      <a class="back-link" href="../index.html#unidades">← Todas as unidades</a>
+      <div><span class="unit-eyebrow">UNIDADE 06 · GRUPO GPM</span></div>
+      <h1>Gestão de Ativos Ambientais</h1>
+      <p class="hero-sub">Conformidade ambiental não é custo. É o pré-requisito para operar.</p>
+      <p class="hero-desc">Atuamos na interface entre operação industrial e meio ambiente — com soluções técnicas que garantem conformidade, segurança e responsabilidade ambiental em cada projeto.</p>
+      <a class="button button-primary" href="../index.html#contato">Falar com o grupo</a>
+    </section>
+
+    <section class="section section-alt">
+      <div class="site-container">
+        <div class="section-title">O que fazemos</div>
+        <h2 class="section-heading">Operação responsável com resultado técnico comprovado</h2>
+        <p class="section-text">Da dragagem à gestão de resíduos, do controle de efluentes à remediação de passivos ambientais — o Grupo GPM entrega soluções que permitem às empresas operar com conformidade, minimizando riscos técnicos, regulatórios e reputacionais.</p>
+        <div class="cards-grid">
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-droplet"></i></div>
+            <h3>Dragagem Industrial</h3>
+            <p>Operações de dragagem para manutenção de canais, bacias de contenção, reservatórios e áreas portuárias.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-shield"></i></div>
+            <h3>Descontaminação de Solos e Estruturas</h3>
+            <p>Remoção de contaminantes em solos, superfícies e estruturas industriais com protocolos ambientalmente seguros.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-wash"></i></div>
+            <h3>Limpeza Industrial</h3>
+            <p>Limpeza técnica de tanques, dutos, trocadores de calor, caldeiras e equipamentos em regime de parada.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-recycle"></i></div>
+            <h3>Gestão de Resíduos Industriais</h3>
+            <p>Classificação, acondicionamento, transporte e destinação final de resíduos conforme a legislação vigente.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-certificate"></i></div>
+            <h3>Conformidade Ambiental</h3>
+            <p>Apoio técnico para atendimento às exigências de licenças ambientais, laudos e planos de gerenciamento de resíduos.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-anchor"></i></div>
+            <h3>Limpeza de Áreas Portuárias</h3>
+            <p>Serviços especializados para limpeza de píeres, berços de atracação e áreas de manobra em terminais marítimos.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-waves"></i></div>
+            <h3>Controle de Efluentes</h3>
+            <p>Implantação e operação de sistemas de tratamento e controle de efluentes industriais.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon"><i class="ti ti-leaf"></i></div>
+            <h3>Remediação de Passivos Ambientais</h3>
+            <p>Identificação, caracterização e remediação de passivos ambientais em áreas industriais e portuárias.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="site-container">
+        <div class="section-title">Setores que atendemos</div>
+        <h2 class="section-heading">Onde a gestão ambiental é operacionalmente crítica</h2>
+        <p class="section-text">Atuamos em setores com alta exposição regulatória e ambiental, onde a conformidade é requisito para a licença de operação.</p>
+        <div class="setores-grid">
+          <span class="setor-tag">Portos e Terminais</span>
+          <span class="setor-tag">Petroquímica e Refinarias</span>
+          <span class="setor-tag">Forças Armadas</span>
+          <span class="setor-tag">Mineração</span>
+          <span class="setor-tag">Energia e Utilities</span>
+          <span class="setor-tag">Saneamento</span>
+          <span class="setor-tag">Papel e Celulose</span>
+          <span class="setor-tag">Indústria Química</span>
+          <span class="setor-tag">Siderurgia</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="site-container">
+        <div class="section-title">Por que o GPM</div>
+        <h2 class="section-heading">O diferencial da Gestão de Ativos Ambientais GPM</h2>
+        <p class="section-text">Um passivo ambiental não gerenciado não é problema do meio ambiente — é problema do balanço patrimonial. Gestão ambiental é gestão de risco.</p>
+        <div class="diferenciais-grid">
+          <div class="diferencial-item">
+            <div class="dif-icon"><i class="ti ti-certificate"></i></div>
+            <div>
+              <h3>Conformidade como Entrega</h3>
+              <p>Não apenas executamos o serviço — garantimos que o resultado esteja dentro dos padrões exigidos pelos órgãos ambientais.</p>
+            </div>
+          </div>
+          <div class="diferencial-item">
+            <div class="dif-icon"><i class="ti ti-users"></i></div>
+            <div>
+              <h3>Equipe Técnica Especializada</h3>
+              <p>Profissionais com formação em engenharia ambiental, química e segurança do trabalho atuando de forma integrada.</p>
+            </div>
+          </div>
+          <div class="diferencial-item">
+            <div class="dif-icon"><i class="ti ti-file-check"></i></div>
+            <div>
+              <h3>Gestão Documental Completa</h3>
+              <p>Laudos, manifestos de resíduos, ART e toda a documentação necessária para comprovação e rastreabilidade perante os órgãos reguladores.</p>
+            </div>
+          </div>
+          <div class="diferencial-item">
+            <div class="dif-icon"><i class="ti ti-shield-check"></i></div>
+            <div>
+              <h3>Operação em Ambientes Críticos</h3>
+              <p>Capacidade de atuar em refinarias, terminais portuários e áreas com restrições especiais de segurança e acesso controlado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="site-container">
+        <div class="section-title" style="justify-content:center;">Grupo GPM</div>
+        <h2 class="section-heading">Precisa de gestão ambiental com resultado técnico?</h2>
+        <p>Converse com o grupo e descubra como a Gestão de Ativos Ambientais GPM pode garantir conformidade e reduzir riscos na sua operação.</p>
+        <div class="cta-actions">
+          <a class="button button-primary" href="../index.html#contato">Falar com o grupo →</a>
+          <a class="button button-ghost" href="../index.html#unidades">Ver todas as unidades</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="site-container footer-inner">
+      <div class="footer-logo">
+        <div class="brand" style="gap:0.7rem;">
+          <img src="../assets/logo-gpm.jpg" alt="Logo Grupo GPM" style="width:36px; height:auto;">
+          <span style="font-size:0.95rem;">GRUPO GPM</span>
+        </div>
+        <span>Essência humana, potencial artificial.</span>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#mentoria">Mentoria Nexalista</a>
+        <a href="../index.html#contato">Contato</a>
+        <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="site-container footer-bottom">
+      <span>© 2026 Grupo GPM</span>
+      <span>Negócios reais. Gestão com método. Resultado medido no dia a dia.</span>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('#menuToggle');
+    const mobileMenu = document.querySelector('#mobileMenu');
+    menuToggle?.addEventListener('click', () => mobileMenu?.classList.toggle('open'));
+    document.querySelectorAll('#mobileMenu a').forEach(l => l.addEventListener('click', () => mobileMenu?.classList.remove('open')));
+  </script>
+
+</body>
+</html>
