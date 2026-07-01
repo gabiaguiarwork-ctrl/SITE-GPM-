@@ -1,0 +1,10 @@
+node_modules/
+*.sqlite
+*.db
+*.log
+.env
+.env.local
+dist/
+build/
+._tmp_*
+*.html.html
