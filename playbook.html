@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook GPM — Baixe gratuitamente</title>
+<link rel="icon" type="image/png" href="assets/icone-gpm.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a1628;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lp-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1000px;
+    width: 90%;
+    min-height: 600px;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .lp-left {
+    background: linear-gradient(135deg, #0d1f3c 0%, #0a1628 100%);
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .lp-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  .lp-left h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    line-height: 1.12;
+    margin-bottom: 20px;
+  }
+
+  .lp-left h1 em {
+    color: #c9a84c;
+    font-style: italic;
+  }
+
+  .lp-left p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 32px;
+    max-width: 380px;
+  }
+
+  .lp-benefits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .lp-benefits li {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .lp-benefits li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: #c9a84c;
+    font-size: 8px;
+    top: 4px;
+  }
+
+  .lp-right {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .lp-right h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .lp-right .lp-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 32px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus {
+    border-color: #c9a84c;
+  }
+
+  .form-group input::placeholder {
+    color: rgba(255,255,255,0.25);
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: #c9a84c;
+    color: #0a1628;
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-submit:hover { opacity: 0.88; }
+
+  .form-footer {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .lp-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .lp-logo img {
+    width: 40px; height: 40px;
+    object-fit: contain;
+  }
+
+  .lp-logo span {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
+  .lp-back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+
+  .lp-back:hover { color: #c9a84c; }
+
+  @media (max-width: 768px) {
+    .lp-container {
+      grid-template-columns: 1fr;
+      width: 95%;
+    }
+    .lp-left { padding: 40px 28px 32px; }
+    .lp-right { padding: 32px 28px 40px; }
+    .lp-left h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="lp-back">← Voltar ao site</a>
+
+<div class="lp-container">
+
+  <div class="lp-left">
+    <div class="lp-logo">
+      <img src="assets/logo-gpm.png" alt="GPM">
+      <span>GRUPO GPM</span>
+    </div>
+
+    <div class="lp-tag">MATERIAL GRATUITO</div>
+
+    <h1>Playbook GPM.<br><em>Metodologia de gestão para a economia real.</em></h1>
+
+    <p>O método que o Grupo GPM usa para consolidar
+    empresas familiares com estrutura, liderança
+    comportamental e inteligência artificial aplicada.</p>
+
+    <ul class="lp-benefits">
+      <li>Estrutura matricial Red Quarta explicada</li>
+      <li>Como mapear o perfil comportamental do gestor</li>
+      <li>IA como vetor de potencialização — aplicações reais</li>
+      <li>Casos práticos de empresas da economia real</li>
+    </ul>
+  </div>
+
+  <div class="lp-right">
+    <h2>Receba o Playbook</h2>
+    <div class="lp-sub">Preencha abaixo e receba no seu e-mail.</div>
+
+    <form id="playbook-form" action="https://formspree.io/f/xwvdapgq" method="POST">
+
+      <input type="hidden" name="_subject" value="Novo download — Playbook GPM">
+      <input type="hidden" name="_next" value="https://gpmintegracao.com.br/obrigado.html">
+
+      <div class="form-group">
+        <label>Seu nome</label>
+        <input type="text" name="nome" placeholder="Como prefere ser chamado" required>
+      </div>
+
+      <div class="form-group">
+        <label>Telefone</label>
+        <input type="tel" name="telefone" placeholder="(00) 00000-0000" required>
+      </div>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" name="email" placeholder="seu@email.com" required>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        Quero receber o Playbook →
+      </button>
+
+      <p id="form-error" style="display:none; margin-top:14px; font-size:13px; color:#e2907a; text-align:center;">
+        Não foi possível enviar o formulário. Tente novamente.
+      </p>
+
+    </form>
+
+    <div class="form-footer">
+      Gratuito. Sem spam. Seus dados estão seguros.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const playbookForm = document.getElementById('playbook-form');
+  const formError = document.getElementById('form-error');
+  const submitBtn = playbookForm.querySelector('.btn-submit');
+
+  playbookForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    formError.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+
+    try {
+      const response = await fetch(playbookForm.action, {
+        method: 'POST',
+        body: new FormData(playbookForm),
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (response.ok) {
+        window.location.href = 'obrigado.html';
+        return;
+      }
+      formError.style.display = 'block';
+    } catch (err) {
+      formError.style.display = 'block';
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '';
+  });
+</script>
+
+</body>
+</html>
