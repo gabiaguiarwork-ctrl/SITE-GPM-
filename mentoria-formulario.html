@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário de Entrada — Mentoria Nexialista | Grupo GPM</title>
+<link rel="icon" type="image/png" href="assets/icone-gpm.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a1628;
+    color: #fff;
+    min-height: 100vh;
+    padding: 96px 20px 60px;
+  }
+
+  .mf-back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+    z-index: 10;
+  }
+
+  .mf-back:hover { color: #c9a84c; }
+
+  .mf-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .mf-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+
+  .mf-logo img { width: 36px; height: 36px; object-fit: contain; }
+  .mf-logo span { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; color: rgba(255,255,255,0.7); }
+
+  .mf-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .mf-tag {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .mf-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(30px, 5vw, 44px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+
+  .mf-header h1 em { color: #c9a84c; font-style: italic; }
+
+  .mf-header p {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .mf-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+
+  .mf-progress-label strong { color: #c9a84c; font-weight: 600; }
+
+  .mf-progress-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .mf-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a84c, #e2c46a);
+    border-radius: 3px;
+    transition: width 0.35s ease;
+    width: 11%;
+  }
+
+  .mf-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 20px;
+    padding: 40px 36px;
+  }
+
+  .mf-step { display: none; }
+  .mf-step.active { display: block; animation: mf-fade 0.35s ease; }
+
+  @keyframes mf-fade {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mf-step-eyebrow {
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .mf-step h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .mf-step-intro {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 28px;
+  }
+
+  .mf-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #fff;
+    border-left: 2px solid #c9a84c;
+    padding-left: 18px;
+    margin-bottom: 8px;
+  }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 7px;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-size: 14.5px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: #c9a84c; }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.25); }
+
+  .mf-question {
+    margin-bottom: 30px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mf-question:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .mf-question-num {
+    color: #c9a84c;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  .mf-question-text {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 6px;
+  }
+
+  .mf-question-hint {
+    font-style: italic;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 14px;
+  }
+
+  .mf-scale-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 26px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .mf-scale-legend strong { color: rgba(255,255,255,0.65); }
+
+  .mf-scale {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    max-width: 320px;
+  }
+
+  .mf-scale-opt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .mf-scale-opt input {
+    width: 18px;
+    height: 18px;
+    accent-color: #c9a84c;
+    cursor: pointer;
+  }
+
+  .mf-scale-opt span {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .mf-info-box {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.55);
+    margin-top: 8px;
+    margin-bottom: 28px;
+  }
+
+  .mf-info-box strong { color: rgba(255,255,255,0.8); }
+
+  .mf-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .mf-btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: opacity 0.2s, background 0.2s;
+  }
+
+  .mf-btn-back {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    flex: 0 0 120px;
+  }
+
+  .mf-btn-back:hover { border-color: rgba(255,255,255,0.35); }
+
+  .mf-btn-next {
+    background: #c9a84c;
+    color: #0a1628;
+  }
+
+  .mf-btn-next:hover { opacity: 0.88; }
+
+  #form-error {
+    display: none;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #e2907a;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 84px 14px 40px; }
+    .mf-card { padding: 28px 22px; }
+    .mf-scale { max-width: 100%; }
+    .mf-btn-back { flex: 0 0 96px; padding: 15px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="mf-back">← Voltar ao site</a>
+
+<div class="mf-wrap">
+
+  <div class="mf-logo">
+    <img src="assets/logo-gpm.png" alt="GPM">
+    <span>GRUPO GPM</span>
+  </div>
+
+  <div class="mf-header">
+    <div class="mf-tag">Instrumento de seleção</div>
+    <h1>Questionário <em>de Entrada</em></h1>
+    <p>Não existe resposta certa — existe resposta verdadeira. Responda no primeiro impulso, sem administrar a imagem: o que você tenta controlar aqui é justamente o que mais nos interessa ler.</p>
+  </div>
+
+  <div class="mf-progress-label">
+    <span>Etapa <strong id="mf-step-current">1</strong> de <span id="mf-step-total">9</span></span>
+    <span id="mf-step-name">Seus dados</span>
+  </div>
+  <div class="mf-progress-track">
+    <div class="mf-progress-bar" id="mf-progress-bar"></div>
+  </div>
+
+  <form id="mentoria-form" action="https://formspree.io/f/xwvdapgq" method="POST">
+    <input type="hidden" name="_subject" value="Nova aplicação — Mentoria Nexialista">
+    <input type="hidden" name="_next" value="https://gpmintegracao.com.br/obrigado-mentoria.html">
+
+    <div class="mf-card">
+
+      <!-- ETAPA 1 — DADOS DE CONTATO -->
+      <div class="mf-step active" data-step="1" data-name="Seus dados">
+        <div class="mf-step-eyebrow">Candidato</div>
+        <h2>Antes de começar</h2>
+        <p class="mf-step-intro">Precisamos desses dados para entrar em contato com você sobre a Mentoria Nexialista.</p>
+
+        <div class="form-group">
+          <label>Nome completo</label>
+          <input type="text" name="nome" placeholder="Seu nome" required>
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" name="email" placeholder="seu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp</label>
+          <input type="tel" name="telefone" placeholder="(00) 00000-0000" required>
+        </div>
+        <div class="form-group">
+          <label>Empresa / Unidade</label>
+          <input type="text" name="empresa" placeholder="Nome da sua empresa" required>
+        </div>
+      </div>
+
+      <!-- ETAPA 2 — PERGUNTA-ZERO -->
+      <div class="mf-step" data-step="2" data-name="Abertura">
+        <div class="mf-step-eyebrow">Abertura · Pergunta-zero</div>
+        <h2>Antes de qualquer bloco</h2>
+        <p class="mf-step-intro">Responda de imediato, sem planejar a resposta.</p>
+
+        <div class="mf-question">
+          <p class="mf-quote">"Me fala de alguém que tem sido decisivo na sua trajetória."</p>
+        </div>
+
+        <div class="form-group">
+          <textarea name="pergunta_zero" rows="4" placeholder="Escreva sua resposta aqui" required></textarea>
+        </div>
+      </div>
+
+      <!-- ETAPA 3 — BLOCO A -->
+      <div class="mf-step" data-step="3" data-name="Autopercepção · Bloco A">
+        <div class="mf-step-eyebrow">Parte 1 · Autopercepção em escala</div>
+        <h2>Postura cognitivo-comportamental</h2>
+        <p class="mf-step-intro">Marque o quanto cada afirmação descreve você <strong style="color:rgba(255,255,255,0.8)">hoje</strong> — não quem você pretende ser.</p>
+
+        <div class="mf-scale-legend">
+          <span><strong>1</strong> Discordo totalmente</span>
+          <span><strong>2</strong> Discordo</span>
+          <span><strong>3</strong> Neutro</span>
+          <span><strong>4</strong> Concordo</span>
+          <span><strong>5</strong> Concordo totalmente</span>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">01</span>Mesmo com anos de experiência, entro em conversas assumindo que meu prognóstico pode estar errado.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q01" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q01" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q01" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q01" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q01" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">02</span>Quando alguém de fora da minha área questiona meu processo, escuto antes de defender.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q02" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q02" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q02" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q02" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q02" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">03</span>Sob forte pressão emocional, mantenho clareza para decidir sem reagir no impulso.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q03" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q03" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q03" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q03" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q03" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">04</span>Reviso minhas próprias convicções com a mesma frequência com que cobro que os outros revisem as deles.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q04" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q04" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q04" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q04" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q04" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">05</span>Reconheço com facilidade quando não sou bom o suficiente em algo — e trato isso como ponto de partida, não como ameaça.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q05" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q05" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q05" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q05" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q05" value="5" required><span>5</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 4 — BLOCO B -->
+      <div class="mf-step" data-step="4" data-name="Autopercepção · Bloco B">
+        <div class="mf-step-eyebrow">Parte 1 · Autopercepção em escala</div>
+        <h2>Risco e antifragilidade</h2>
+
+        <div class="mf-scale-legend">
+          <span><strong>1</strong> Discordo totalmente</span>
+          <span><strong>2</strong> Discordo</span>
+          <span><strong>3</strong> Neutro</span>
+          <span><strong>4</strong> Concordo</span>
+          <span><strong>5</strong> Concordo totalmente</span>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">06</span>Já atravessei perdas severas (financeiras, societárias, de reputação) e saí delas mais forte, não apenas intacto.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q06" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q06" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q06" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q06" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q06" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">07</span>Tomo decisões relevantes com pele em jogo — arrisco algo meu, não só dos outros.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q07" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q07" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q07" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q07" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q07" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">08</span>Incerteza e mudança brusca das regras me energizam mais do que me paralisam.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q08" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q08" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q08" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q08" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q08" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">09</span>Prefiro uma exposição assimétrica (pouco a perder, muito a ganhar) a uma aposta confortável e simétrica.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q09" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q09" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q09" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q09" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q09" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">10</span>Quando o cenário desaba, minha disciplina de execução se mantém — ou melhora.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q10" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q10" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q10" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q10" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q10" value="5" required><span>5</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 5 — BLOCO C -->
+      <div class="mf-step" data-step="5" data-name="Autopercepção · Bloco C">
+        <div class="mf-step-eyebrow">Parte 1 · Autopercepção em escala</div>
+        <h2>Método e inteligência artificial</h2>
+
+        <div class="mf-scale-legend">
+          <span><strong>1</strong> Discordo totalmente</span>
+          <span><strong>2</strong> Discordo</span>
+          <span><strong>3</strong> Neutro</span>
+          <span><strong>4</strong> Concordo</span>
+          <span><strong>5</strong> Concordo totalmente</span>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">11</span>Minhas decisões seguem um método explícito, não intuição ou achismo.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q11" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q11" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q11" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q11" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q11" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">12</span>Uso IA para simular hipóteses e ampliar meu raciocínio ("e se…"), não para me entregar respostas prontas.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q12" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q12" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q12" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q12" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q12" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">13</span>Distingo com clareza o que devo delegar à máquina do que só eu posso decidir.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q13" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q13" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q13" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q13" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q13" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">14</span>Estruturo problemas complexos em partes antes de agir sobre eles.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q14" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q14" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q14" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q14" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q14" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">15</span>Trato a IA como extensão do meu julgamento — nunca como substituto dele.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q15" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q15" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q15" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q15" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q15" value="5" required><span>5</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 6 — BLOCO D -->
+      <div class="mf-step" data-step="6" data-name="Autopercepção · Bloco D">
+        <div class="mf-step-eyebrow">Parte 1 · Autopercepção em escala</div>
+        <h2>Presença e marca</h2>
+
+        <div class="mf-scale-legend">
+          <span><strong>1</strong> Discordo totalmente</span>
+          <span><strong>2</strong> Discordo</span>
+          <span><strong>3</strong> Neutro</span>
+          <span><strong>4</strong> Concordo</span>
+          <span><strong>5</strong> Concordo totalmente</span>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">16</span>Minha marca pessoal é a cristalização pública de uma experiência real que acumulei — não uma construção de imagem.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q16" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q16" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q16" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q16" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q16" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">17</span>O que eu mostro publicamente e o que eu sou de fato estão alinhados.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q17" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q17" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q17" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q17" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q17" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">18</span>Sustento posição própria diante de um grupo, mesmo quando isso me custa aprovação.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q18" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q18" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q18" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q18" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q18" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">19</span>As pessoas certas me procuram pelo que represento, não apenas pelo que entrego.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q19" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q19" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q19" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q19" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q19" value="5" required><span>5</span></label>
+          </div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">20</span>Invisto deliberadamente em tornar pública a obra que construo, sem depender disso para me sentir válido.</p>
+          <div class="mf-scale">
+            <label class="mf-scale-opt"><input type="radio" name="q20" value="1" required><span>1</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q20" value="2" required><span>2</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q20" value="3" required><span>3</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q20" value="4" required><span>4</span></label>
+            <label class="mf-scale-opt"><input type="radio" name="q20" value="5" required><span>5</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 7 — AUDITORIA DE IDENTIDADE (1/3) -->
+      <div class="mf-step" data-step="7" data-name="Auditoria de identidade (1/3)">
+        <div class="mf-step-eyebrow">Parte 2 · Auditoria de identidade</div>
+        <h2>Escreva com honestidade bruta</h2>
+        <p class="mf-step-intro">Aqui não há escala. A extensão não importa; a verdade, sim.</p>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">01</span>Como você acha que o mundo o vê? E como você vê a si mesmo?</p>
+          <p class="mf-question-hint">Onde as duas leituras divergem, e onde coincidem.</p>
+          <div class="form-group"><textarea name="ident_01" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">02</span>Como seu "eu público" difere do seu "eu privado"?</p>
+          <div class="form-group"><textarea name="ident_02" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">03</span>O que traz o seu pior lado à tona? Por quê?</p>
+          <div class="form-group"><textarea name="ident_03" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">04</span>Quais condições produzem a sua melhor versão?</p>
+          <p class="mf-question-hint">Competição · medo de perda · um revés · uma vitória · alguém que acredita em você · ter algo a provar.</p>
+          <div class="form-group"><textarea name="ident_04" rows="3"></textarea></div>
+        </div>
+      </div>
+
+      <!-- ETAPA 8 — AUDITORIA DE IDENTIDADE (2/3) -->
+      <div class="mf-step" data-step="8" data-name="Auditoria de identidade (2/3)">
+        <div class="mf-step-eyebrow">Parte 2 · Auditoria de identidade</div>
+        <h2>Continuando</h2>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">05</span>Que tipo de pessoa mais o incomoda, e por quê?</p>
+          <div class="form-group"><textarea name="ident_05" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">06</span>Quem você inveja secretamente?</p>
+          <p class="mf-question-hint">Não precisa registrar o nome — registre o que essa inveja aponta.</p>
+          <div class="form-group"><textarea name="ident_06" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">07</span>Como você lida com uma perda pública? E com a exposição?</p>
+          <div class="form-group"><textarea name="ident_07" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">08</span>Aponte um período de 90 dias em que você teve mais sede de sucesso. O que o motivou?</p>
+          <div class="form-group"><textarea name="ident_08" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">09</span>Você tende a culpar os outros pela sua própria falta de esforço ou disciplina? Se sim, por quê?</p>
+          <div class="form-group"><textarea name="ident_09" rows="3"></textarea></div>
+        </div>
+      </div>
+
+      <!-- ETAPA 9 — AUDITORIA DE IDENTIDADE (3/3) + ENVIO -->
+      <div class="mf-step" data-step="9" data-name="Auditoria de identidade (3/3)">
+        <div class="mf-step-eyebrow">Parte 2 · Auditoria de identidade</div>
+        <h2>Últimas perguntas</h2>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">10</span>Com quem você mais fala quando está perdendo?</p>
+          <p class="mf-question-hint">Quem está à sua frente · quem está no seu nível · quem ainda não chegou lá · ninguém · Deus.</p>
+          <div class="form-group"><textarea name="ident_10" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">11</span>O que você mais teme no seu ramo de atividade?</p>
+          <div class="form-group"><textarea name="ident_11" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">12</span>De que realizações você mais se orgulha, e por quê?</p>
+          <div class="form-group"><textarea name="ident_12" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-question">
+          <p class="mf-question-text"><span class="mf-question-num">13</span>O que você mais valoriza — nos negócios e na vida?</p>
+          <div class="form-group"><textarea name="ident_13" rows="3"></textarea></div>
+        </div>
+
+        <div class="mf-info-box">
+          <strong>Sobre os próximos passos:</strong> este questionário fixa a sua linha de base. Ao final de um eventual ciclo de doze meses, aplicamos os instrumentos de diagnóstico conduzidos pelo mentor — a distância entre a leitura de entrada e a de saída é o dado central do processo.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mf-nav">
+      <button type="button" class="mf-btn mf-btn-back" id="mf-btn-back" style="visibility:hidden;">← Voltar</button>
+      <button type="button" class="mf-btn mf-btn-next" id="mf-btn-next">Avançar →</button>
+    </div>
+
+    <p id="form-error">Não foi possível enviar o formulário. Tente novamente.</p>
+
+  </form>
+
+</div>
+
+<script>
+  const form = document.getElementById('mentoria-form');
+  const steps = Array.from(form.querySelectorAll('.mf-step'));
+  const total = steps.length;
+  const btnBack = document.getElementById('mf-btn-back');
+  const btnNext = document.getElementById('mf-btn-next');
+  const progressBar = document.getElementById('mf-progress-bar');
+  const stepCurrentLabel = document.getElementById('mf-step-current');
+  const stepTotalLabel = document.getElementById('mf-step-total');
+  const stepNameLabel = document.getElementById('mf-step-name');
+  const formError = document.getElementById('form-error');
+
+  stepTotalLabel.textContent = total;
+  let current = 0;
+
+  function render() {
+    steps.forEach((step, i) => step.classList.toggle('active', i === current));
+    stepCurrentLabel.textContent = current + 1;
+    stepNameLabel.textContent = steps[current].dataset.name || '';
+    progressBar.style.width = (((current + 1) / total) * 100) + '%';
+    btnBack.style.visibility = current === 0 ? 'hidden' : 'visible';
+    btnNext.textContent = current === total - 1 ? 'Enviar aplicação →' : 'Avançar →';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function currentStepValid() {
+    const fields = steps[current].querySelectorAll('input, textarea');
+    for (const field of fields) {
+      if (!field.checkValidity()) {
+        field.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  btnBack.addEventListener('click', () => {
+    if (current > 0) { current--; render(); }
+  });
+
+  btnNext.addEventListener('click', async () => {
+    if (!currentStepValid()) return;
+
+    if (current < total - 1) {
+      current++;
+      render();
+      return;
+    }
+
+    // Última etapa: enviar o formulário inteiro.
+    formError.style.display = 'none';
+    btnNext.disabled = true;
+    btnBack.disabled = true;
+    btnNext.style.opacity = '0.7';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (response.ok) {
+        window.location.href = 'obrigado-mentoria.html';
+        return;
+      }
+      formError.style.display = 'block';
+    } catch (err) {
+      formError.style.display = 'block';
+    }
+
+    btnNext.disabled = false;
+    btnBack.disabled = false;
+    btnNext.style.opacity = '';
+  });
+
+  render();
+</script>
+
+</body>
+</html>
