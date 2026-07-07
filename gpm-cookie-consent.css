@@ -1,0 +1,174 @@
+/* ── Grupo GPM — banner de cookies + checkbox de consentimento ── */
+
+.gpm-cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: #0b1d36;
+  border-top: 2px solid #C9A84C;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.25);
+  font-family: 'Inter', sans-serif;
+
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.gpm-cookie-banner.gpm-cookie-banner--visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gpm-cookie-banner__text {
+  flex: 1 1 380px;
+  max-width: 620px;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.gpm-cookie-banner__text a {
+  color: #C9A84C;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.gpm-cookie-banner__actions {
+  display: flex;
+  gap: 0.7rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.gpm-cookie-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.gpm-cookie-btn--outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.8);
+}
+
+.gpm-cookie-btn--outline:hover {
+  border-color: #C9A84C;
+  color: #C9A84C;
+}
+
+.gpm-cookie-btn--solid {
+  background: #C9A84C;
+  border: 1px solid #C9A84C;
+  color: #0b1d36;
+}
+
+.gpm-cookie-btn--solid:hover {
+  opacity: 0.88;
+}
+
+@media (max-width: 680px) {
+  .gpm-cookie-banner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.2rem;
+  }
+
+  .gpm-cookie-banner__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .gpm-cookie-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ── Checkbox de consentimento injetado nos formulários ── */
+
+.gpm-consent-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 1rem 0;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.gpm-consent-field--error {
+  border-color: #d64545;
+  background: rgba(214,69,69,0.06);
+}
+
+.gpm-consent-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  cursor: pointer;
+}
+
+.gpm-consent-checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid #999;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.gpm-consent-checkbox-input:checked + .gpm-consent-checkbox {
+  background: #C9A84C;
+  border-color: #C9A84C;
+}
+
+.gpm-consent-checkbox-input:checked + .gpm-consent-checkbox::after {
+  content: '✓';
+  color: #0b1d36;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.gpm-consent-field--error .gpm-consent-checkbox {
+  border-color: #d64545;
+}
+
+.gpm-consent-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #555;
+  cursor: pointer;
+}
+
+.gpm-consent-label a {
+  color: #C9A84C;
+  text-decoration: underline;
+}
