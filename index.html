@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="gpm-cookie-consent.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
   <style>
     :root {
@@ -2435,6 +2436,15 @@
       font-size: 0.92rem;
     }
 
+    .footer-legal-links a {
+      color: var(--branco-40);
+      transition: color 0.2s ease;
+    }
+
+    .footer-legal-links a:hover {
+      color: var(--dourado);
+    }
+
     @media (max-width: 980px) {
       .about-grid,
       .hero-grid,
@@ -3764,7 +3774,13 @@
     <div class="site-container footer-bottom">
       <span>© 2026 Grupo GPM</span>
       <span>Espaço para empresas reais.</span>
+      <span class="footer-legal-links">
+        <a href="politica-privacidade.html">Política de Privacidade</a> ·
+        <a href="politica-cookies.html">Política de Cookies</a> ·
+        <a href="termos-de-uso.html">Termos de Uso</a>
+      </span>
     </div>
   </footer>
+  <script src="gpm-cookie-consent.js"></script>
 </body>
 </html>
