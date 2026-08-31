@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grupo GPM | Essência humana, potencial artificial</title>
-  <link rel="icon" type="image/png" href="assets/icone-gpm.png">
+  <link rel="icon" type="image/png" href="assets/logo-alfa.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -33,6 +33,13 @@
       box-sizing: border-box;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Tamanho base do site: a maioria dos textos usa rem, então esse ajuste
+       deixa a leitura mais confortável em todo o site de uma vez, sem
+       exagerar. */
+    html {
+      font-size: 17px;
     }
 
     body {
@@ -64,18 +71,20 @@
       position: sticky;
       top: 0;
       z-index: 30;
-      background: rgba(5,26,61,0.92);
+      background: rgba(10,22,40,0.92);
       border-bottom: 1px solid rgba(201,168,76,0.12);
       backdrop-filter: blur(16px);
     }
 
     .topbar {
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: 1.5rem;
-      padding: 14px 0;
+      padding: 14px 2.5rem;
       position: relative;
+      width: 100%;
+      max-width: 100%;
     }
 
     .brand {
@@ -111,8 +120,9 @@
     .menu {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 2rem;
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--branco-70);
       white-space: nowrap;
     }
@@ -412,7 +422,7 @@
     }
 
     .glow-gold {
-      box-shadow: 0 0 28px rgba(201,168,76,0.15);
+      box-shadow: none;
     }
 
     .topbar-actions {
@@ -423,13 +433,16 @@
     }
 
     .btn-nav {
-      padding: 12px 26px;
-      font-size: 0.9rem;
-      box-shadow: 0 0 20px rgba(201,168,76,0.35), 0 4px 16px rgba(201,168,76,0.2) !important;
+      padding: 7px 18px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--dourado-brilho), var(--dourado) 60%, var(--dourado-escuro));
+      box-shadow: none !important;
     }
 
     .btn-nav:hover {
-      box-shadow: 0 0 30px rgba(201,168,76,0.55), 0 4px 20px rgba(201,168,76,0.3) !important;
+      box-shadow: 0 2px 10px rgba(201,168,76,0.3) !important;
     }
 
     .button {
@@ -439,38 +452,29 @@
       border-radius: 999px;
       font-weight: 600;
       padding: 1rem 1.75rem;
+      white-space: nowrap;
       transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
     }
 
     .button-primary {
       background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho));
       color: var(--azul-marinho);
-      box-shadow: 0 18px 40px rgba(201,168,76,0.16);
+      box-shadow: 0 4px 14px rgba(201,168,76,0.16);
     }
 
     .button-primary:hover {
       transform: translateY(-2px);
       background: var(--dourado-brilho);
-      box-shadow: 0 8px 28px rgba(201,168,76,0.38);
+      box-shadow: 0 6px 18px rgba(201,168,76,0.28);
     }
 
     .button-sharp {
       border-radius: 3px;
-      padding: 1.05rem 2.4rem;
-      font-size: 0.85rem;
+      padding: 1.15rem 2.6rem;
+      font-size: 0.92rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      border: 1px solid rgba(11,29,54,0.18);
       position: relative;
-    }
-
-    .button-sharp::after {
-      content: '';
-      position: absolute;
-      inset: 4px;
-      border: 1px solid rgba(11,29,54,0.25);
-      border-radius: 2px;
-      pointer-events: none;
     }
 
     .button-ghost {
@@ -491,6 +495,26 @@
       min-height: 600px;
       background: #0b1d36;
       isolation: isolate;
+    }
+
+    /* Vídeo de fundo do hero: bem sutil, atrás de tudo — o texto continua
+       sendo o elemento em maior evidência. */
+    .hero-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(11,29,54,0.5) 0%, rgba(11,29,54,0.68) 100%);
+      pointer-events: none;
     }
 
     .hero-content {
@@ -532,7 +556,7 @@
     .hero-title {
       margin: 0.75rem 0 1.4rem;
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(48px, 7vw, 96px);
+      font-size: clamp(52px, 7.5vw, 104px);
       line-height: 0.95;
       letter-spacing: -0.04em;
       width: min(100%, 60vw);
@@ -574,6 +598,7 @@
     /* ── Carrossel ── */
     .hero-carousel {
       position: relative;
+      z-index: 2;
       width: 100%;
       min-height: 600px;
       background: none !important;
@@ -633,6 +658,27 @@
       background-color: transparent !important;
       border: none !important;
       box-shadow: none !important;
+    }
+
+    /* Slide sem imagem/vídeo ao lado: título e texto centralizados,
+       ocupando a largura toda em vez do grid de duas colunas. */
+    .slide-inner--solo {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .slide-inner--solo .slide-text {
+      max-width: 760px;
+    }
+
+    .slide-inner--solo .hero-text {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .slide-inner--solo .hero-actions {
+      justify-content: center;
     }
 
     .hero-video {
@@ -1025,6 +1071,7 @@
     .units-carousel-track {
       display: flex;
       gap: 0;
+      transition: opacity 0.28s ease, transform 0.28s ease;
     }
 
     .units-slide {
@@ -1055,6 +1102,10 @@
       margin: 0;
     }
 
+    .units-intro-heading {
+      font-size: clamp(42px, 6vw, 64px);
+    }
+
     .units-slide-intro .section-title::after {
       content: '';
       display: block;
@@ -1070,6 +1121,20 @@
       background-color: #112240;
     }
 
+    /* Card ainda sem foto definitiva — mostra só o espaço reservado. */
+    .units-slide-photo--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.25);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0 24px;
+    }
+
     .units-slide-panel {
       flex: 2 1 0;
       display: flex;
@@ -1078,6 +1143,20 @@
       padding: 40px 36px;
       background: var(--azul-marinho);
       min-width: 0;
+    }
+
+    /* Card com texto mais extenso (Gestão de Ativos Ambientais): rola
+       internamente em vez de estourar a altura fixa do card. */
+    .units-slide-text-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-right: -10px;
+    }
+
+    .units-slide-text-scroll p + p {
+      margin-top: 12px;
     }
 
     .units-slide-num {
@@ -1951,19 +2030,6 @@
         grid-template-columns: 1fr;
         gap: 28px;
       }
-
-      .metod-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-
-      .metod-card {
-        padding: 28px 22px;
-      }
-
-      .metod-card h3 {
-        font-size: 22px;
-      }
     }
 
     .feature-grid {
@@ -2056,6 +2122,21 @@
       line-height: 1.75;
       color: rgba(255,255,255,0.58);
       margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .metod-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .metod-card {
+        padding: 28px 22px;
+      }
+
+      .metod-card h3 {
+        font-size: 22px;
+      }
     }
 
     #metodologia .section-heading {
@@ -2238,38 +2319,6 @@
       margin-bottom: 0;
     }
 
-
-    /* ── Botão flutuante WhatsApp ── */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9990;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: #25D366;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
-      text-decoration: none;
-    }
-
-    .whatsapp-float:hover {
-      transform: scale(1.08);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.38);
-    }
-
-    @media (max-width: 768px) {
-      .whatsapp-float {
-        bottom: 16px;
-        right: 16px;
-        width: 48px;
-        height: 48px;
-      }
-    }
 
     .faq-grid {
       display: grid;
@@ -2578,6 +2627,7 @@
       .topbar {
         display: flex;
         justify-content: space-between;
+        padding: 14px 1.25rem;
       }
 
       .menu {
@@ -2658,10 +2708,15 @@
         margin-top: 1.25rem !important;
         margin-bottom: 0 !important;
         text-align: center;
-        padding: 0.85rem 1.5rem !important;
-        font-size: 0.9rem !important;
+        padding: 0.7rem 1rem !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        letter-spacing: normal !important;
         color: var(--azul-marinho) !important;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--dourado-brilho), var(--dourado) 60%, var(--dourado-escuro));
         display: block;
+        white-space: nowrap;
       }
 
       .hamburger {
@@ -2695,13 +2750,13 @@
       }
 
       .hero-title {
-        font-size: clamp(32px, 9vw, 48px);
+        font-size: clamp(35px, 9.5vw, 53px);
         line-height: 1.15;
         width: 100%;
       }
 
       .hero-text {
-        font-size: 15px;
+        font-size: 16.5px;
         line-height: 1.7;
       }
 
@@ -2733,8 +2788,8 @@
         width: 100%;
         max-width: 320px;
         text-align: center;
-        padding: 16px 24px;
-        font-size: 16px;
+        padding: 13px 22px;
+        font-size: 14.5px;
       }
 
       .numeros-grid {
@@ -2775,8 +2830,8 @@
       }
 
       .brand img {
-        width: 40px;
-        height: 40px;
+        width: 52px;
+        height: 52px;
       }
 
       .brand .logo-text {
@@ -2860,25 +2915,82 @@
     }
 
     @media (max-width: 640px) {
+      /* Sem isso, todo card "estica" para acompanhar a altura do mais alto
+         do grupo (o de introdução) — com o card de texto compactado, isso
+         sobrava como espaço vazio embaixo do texto. */
+      .units-carousel-track {
+        align-items: flex-start;
+      }
+
+      .units-slide-intro {
+        height: auto;
+        padding: 22px 20px;
+      }
+
+      .units-intro-heading {
+        font-size: 26px;
+        margin-bottom: 8px !important;
+      }
+
+      .units-slide-intro p {
+        font-size: 13.5px !important;
+        line-height: 1.55 !important;
+      }
+
+      .units-slide-intro > div:last-child {
+        margin-top: 14px !important;
+      }
+
       .units-slide:not(.units-slide-intro) {
         flex-direction: column;
         height: auto;
       }
 
+      /* Sem foto no mobile: card mais enxuto, direto ao texto. */
       .units-slide-photo {
-        height: 200px;
+        display: none;
       }
 
       .units-slide-panel {
-        padding: 28px 24px;
-        gap: 20px;
+        padding: 24px 20px;
+        gap: 10px;
+      }
+
+      /* Card sem altura fixa (height:auto) mais o texto mais longo do grupo
+         (Gestão de Ativos Ambientais) faziam o card mais alto ditar a altura
+         de TODOS os outros na mesma linha do carrossel. Trava uma altura
+         máxima de texto e volta a rolar internamente, como no desktop. */
+      .units-slide-text-scroll {
+        max-height: 190px;
+      }
+
+      .units-slide-num {
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+
+      .units-slide-panel h3 {
+        font-size: 20px;
+        margin: 0 0 10px;
+      }
+
+      .units-slide-panel p {
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+
+      /* CTA extra (ex.: "Visitar site da unidade") — compacta junto com o resto. */
+      .units-slide-panel .button {
+        margin-top: 0 !important;
+        padding: 0.55rem 1rem !important;
+        font-size: 0.78rem !important;
       }
     }
 
     @media (max-width: 400px) {
       .hero h1,
       .hero-title {
-        font-size: 32px;
+        font-size: 35px;
       }
 
       section {
@@ -2935,7 +3047,7 @@
 
       <!-- Ações (CTA + hambúrguer) -->
       <div class="topbar-actions">
-        <a class="button button-primary btn-nav" href="#mentoria">Mentoria Nexialista</a>
+        <a class="button button-primary btn-nav" href="mentoria.html"><span>Como se tornar um <strong>Nexialista</strong></span></a>
         <button class="hamburger" id="menuToggle" aria-label="Abrir menu">
           <span></span>
         </button>
@@ -2967,18 +3079,23 @@
 
         <a href="#metodologia">Metodologia</a>
         <a href="#contato">Contato</a>
-        <a href="#mentoria" class="button button-primary mobile-menu-cta">Mentoria Nexialista</a>
+        <a href="mentoria.html" class="button button-primary mobile-menu-cta"><span>Como se tornar um <strong>Nexialista</strong></span></a>
       </div>
     </div>
   </header>
 
   <main id="inicio">
     <section class="hero">
+      <video class="hero-bg-video" autoplay loop muted playsinline>
+        <source src="assets/video-home.mp4" type="video/mp4">
+      </video>
+      <div class="hero-bg-overlay"></div>
+
       <div class="hero-carousel">
 
         <!-- ── Slide 1: Institucional ── -->
         <div class="hero-slide active">
-          <div class="slide-inner site-container">
+          <div class="slide-inner site-container slide-inner--solo">
             <div class="slide-text">
               <h1 class="hero-title">
                 <span class="linha-1">Essência humana.</span>
@@ -2989,11 +3106,14 @@
                 <a class="button button-primary button-sharp glow-gold" href="#metodologia">Conheça o método GPM</a>
               </div>
             </div>
+            <!-- Logo/vídeo animado removido por hora — para restaurar, descomente o bloco abaixo
+                 e retire a classe "slide-inner--solo" da div .slide-inner acima.
             <div class="slide-visual">
               <video class="hero-video" autoplay loop muted playsinline>
                 <source src="assets/LOGO_ALPHA.mp4" type="video/mp4">
               </video>
             </div>
+            -->
           </div>
         </div>
 
@@ -3005,9 +3125,9 @@
         <div class="posic-layout">
           <div class="posic-wrap">
             <p class="posic-badge">Posicionamento</p>
-            <h2 class="posic-titulo">O futuro da economia real não será construído apenas por tecnologia.</h2>
+            <h2 class="posic-titulo">O futuro da Economia Real não será construído apenas por tecnologia.</h2>
             <p class="posic-texto">O avanço da inteligência artificial representa uma das maiores transformações da nossa geração. Ainda assim, acreditamos que o futuro continuará sendo definido pela capacidade humana de liderar, decidir e construir.</p>
-            <p class="posic-texto">Por isso, o Grupo GPM une desenvolvimento humano, método de gestão e inteligência artificial para fortalecer empresas familiares da economia real.</p>
+            <p class="posic-texto">Por isso, o Grupo GPM une desenvolvimento humano, método de gestão e inteligência artificial para fortalecer empresas familiares da Economia Real.</p>
             <p class="posic-texto">Nossa convicção é simples: quando a essência humana conduz a operação, o potencial artificial multiplica os resultados.</p>
           </div>
           <div class="posic-visual">
@@ -3025,7 +3145,7 @@
       <div class="site-container">
         <div class="fund-header">
           <h2 class="fund-titulo">Nossa forma de construir negócios.</h2>
-          <p class="fund-subtitulo">Três fundamentos orientam cada decisão do Grupo GPM. É assim que desenvolvemos empresas familiares da economia real para os desafios do presente e do futuro.</p>
+          <p class="fund-subtitulo">Três fundamentos orientam cada decisão do Grupo GPM. É assim que desenvolvemos empresas familiares da Economia Real para os desafios do presente e do futuro.</p>
         </div>
         <div class="fund-grid">
           <article class="fund-card">
@@ -3053,7 +3173,7 @@
     <section class="section section-historia">
       <div class="site-container">
         <div class="hist-header">
-          <h2 class="hist-titulo">Mais de uma década construindo a <span style="color: var(--dourado); font-style: italic;">economia real.</span></h2>
+          <h2 class="hist-titulo">Mais de uma década construindo na <span style="color: var(--dourado); font-style: italic;">Economia Real.</span></h2>
           <p class="hist-sub">Nossa história é medida pelo que construímos ao longo do tempo:<br>pessoas, operações, empresas e presença nacional.</p>
         </div>
         <div class="hist-timeline" id="histTimeline">
@@ -3065,14 +3185,16 @@
               <div class="hist-ponto"></div>
               <div class="hist-baixo">
                 <p class="hist-forte">Fundação do Grupo GPM.</p>
+                <p class="hist-forte" style="color: var(--dourado);">10+ anos de história.</p>
+                <p class="hist-suave">Mais de uma década desenvolvendo empresas da Economia Real.</p>
               </div>
             </article>
             <article class="hist-marco">
-              <div class="hist-numero">10+</div>
+              <div class="hist-numero">2017</div>
               <div class="hist-ponto"></div>
               <div class="hist-baixo">
-                <p class="hist-forte">Anos de história.</p>
-                <p class="hist-suave">Mais de uma década desenvolvendo empresas da economia real.</p>
+                <p class="hist-forte">GPM torna-se Holding.</p>
+                <p class="hist-suave">Realiza sua primeira aquisição e inicia a consolidação do grupo empresarial.</p>
               </div>
             </article>
             <article class="hist-marco">
@@ -3084,11 +3206,11 @@
               </div>
             </article>
             <article class="hist-marco">
-              <div class="hist-numero">5+</div>
+              <div class="hist-numero">350+</div>
               <div class="hist-ponto"></div>
               <div class="hist-baixo">
-                <p class="hist-forte">Empresas no grupo.</p>
-                <p class="hist-suave">Unidades especializadas conectadas pelo mesmo método e propósito.</p>
+                <p class="hist-forte">Colaboradores.</p>
+                <p class="hist-suave">Profissionais que constroem diariamente a força operacional do Grupo GPM.</p>
               </div>
             </article>
             <article class="hist-marco">
@@ -3096,7 +3218,7 @@
               <div class="hist-ponto"></div>
               <div class="hist-baixo">
                 <p class="hist-forte">Unidades de negócio.</p>
-                <p class="hist-suave">Atuação integrada em diferentes segmentos da economia real.</p>
+                <p class="hist-suave">Atuação integrada em diferentes segmentos da Economia Real.</p>
               </div>
             </article>
           </div>
@@ -3137,7 +3259,7 @@
             </div>
             <div class="tese-texto-cols">
               <div class="tese-col">
-                <p>Existe um grupo de empresas que move a economia todos os dias e, ainda assim, quase nunca ocupa o centro das discussões. São empresas familiares, indústrias, operadores logísticos, negócios de infraestrutura, organizações que, silenciosamente, transformam trabalho em desenvolvimento e sustentam a economia real do país.</p>
+                <p>Existe um grupo de empresas que move a economia todos os dias e, ainda assim, quase nunca ocupa o centro das discussões. São empresas familiares, indústrias, operadores logísticos, negócios de infraestrutura, organizações que, silenciosamente, transformam trabalho em desenvolvimento e sustentam a Economia Real do país.</p>
                 <p>É nesse espaço, nem sempre visível, mas decisivo, que o Grupo GPM atua, ao lado de lideranças que carregam responsabilidades reais, em negócios que não podem parar.</p>
               </div>
               <div class="tese-col">
@@ -3157,7 +3279,7 @@
           <!-- SLIDE 0: Introdução -->
           <div class="units-slide units-slide-intro">
             <div class="section-title">Unidades de negócio</div>
-            <h2 style="font-family:'Cormorant Garamond',serif; font-size:clamp(42px,6vw,64px); line-height:1.15; max-width:480px; margin-bottom:24px; color: var(--branco);">
+            <h2 class="units-intro-heading" style="font-family:'Cormorant Garamond',serif; line-height:1.15; max-width:480px; margin-bottom:24px; color: var(--branco);">
               Seis frentes.<br>
               <em style="color: var(--dourado); font-style: italic;">Uma visão.</em>
             </h2>
@@ -3171,40 +3293,40 @@
 
           <!-- SLIDE 1 -->
           <div class="units-slide">
-            <div class="units-slide-photo" style="background-image:url('assets/intralogistica.jpg')"></div>
+            <div class="units-slide-photo" style="background-image:url('assets/intralogistica.png')"></div>
             <div class="units-slide-panel">
-              <div>
+              <div class="units-slide-text-scroll">
                 <span class="units-slide-num">01</span>
                 <h3>Intralogística</h3>
-                <p>Movimentação de carga, transbordo, locação de equipamentos e operações logísticas integradas em plantas e terminais.</p>
+                <p>Movimentação, içamento e transporte de cargas industriais. Atua no planejamento e execução de operações com guindastes, caminhões guindauto (Munck), empilhadeiras e outros equipamentos especializados, oferecendo soluções eficientes e personalizada para cada necessidade operacional. O portfólio contempla a movimentação de cargas leves e pesadas, atendendo segmentos como mineração, siderurgia, logística, construção, energia e operações portuárias.</p>
               </div>
-              <span class="hs-unit-link">ENTRE EM CONTATO &nbsp;&nbsp;→</span>
             </div>
           </div>
 
           <!-- SLIDE 2 -->
           <div class="units-slide">
-            <div class="units-slide-photo" style="background-image:url('assets/engenharia-civil.jpg')"></div>
+            <div class="units-slide-photo" style="background-image:url('assets/engenharia-civil.png')"></div>
             <div class="units-slide-panel">
-              <div>
+              <div class="units-slide-text-scroll">
                 <span class="units-slide-num">02</span>
                 <h3>Engenharia Civil</h3>
-                <p>Projetos e obras robustas que conectam estratégia de negócio à execução técnica sólida.</p>
+                <p>Mais do que executar obras, a Tropheus desenvolve soluções completas para conduzir cada empreendimento, da estrutura ao acabamento, com foco em produtividade, qualidade e previsibilidade. A combinação entre responsabilidade técnica registrada no CREA, certificações ISO 9001, ISO 14001 e ISO 45001, experiência prática em campo e uma cultura de melhoria contínua reduz retrabalhos, aumenta a eficiência operacional e garante maior confiabilidade na execução, permitindo que nossos clientes concentrem seus esforços no desenvolvimento do negócio enquanto a Tropheus entrega obras com segurança, qualidade e cumprimento de prazos.</p>
+                <p>Nossa estratégia está fundamentada no aumento contínuo da produtividade por meio de investimentos em novas tecnologias, equipamentos, ferramentas, capacitação permanente das equipes e gestão orientada por processos. Com uma visão de longo prazo e o compromisso de oferecer o mais alto padrão de execução da região, buscamos consolidar a Tropheus como líder no mercado capixaba de edificações, referência na construção de residências de alto padrão e a principal parceira em obras industriais e de infraestrutura no Espírito Santo.</p>
               </div>
-              <span class="hs-unit-link">ENTRE EM CONTATO &nbsp;&nbsp;→</span>
+              <a class="button button-ghost" href="https://tropheus.com.br/engenhariacivil/" target="_blank" rel="noopener" style="margin-top:20px; align-self:flex-start; flex-shrink:0; padding:0.8rem 1.4rem; font-size:0.88rem;">Visitar site da unidade →</a>
             </div>
           </div>
 
           <!-- SLIDE 3 -->
           <div class="units-slide">
-            <div class="units-slide-photo" style="background-image:url('assets/engenharia-ambiental.jpg')"></div>
+            <div class="units-slide-photo" style="background-image:url('assets/engenharia-industrial.png')"></div>
             <div class="units-slide-panel">
-              <div>
+              <div class="units-slide-text-scroll">
                 <span class="units-slide-num">03</span>
                 <h3>Engenharia Industrial</h3>
-                <p>Intervenções industriais pensadas para produtividade, segurança e integração com o chão de fábrica.</p>
+                <p>Projetos, montagem e serviços para grandes plantas industriais. Atua em paradas de manutenção, implantação de empreendimentos, engenharia de manutenção, operação técnica e fiscalização, atendendo os setores de mineração, óleo e gás, naval/offshore e indústria de base.</p>
+                <p>Mais do que fornecimento de mão de obra especializada, a unidade é uma plataforma de execução. Mobilizamos equipes técnicas certificadas, incluindo soldadores, caldeireiros, mecânicos e eletricistas, com gestão própria de SMS e qualidade, entregando desde o apoio à produção em estaleiros e refinarias até a montagem eletromecânica completa de novos ativos, sempre com rigor técnico, previsibilidade de prazo e conformidade às normas regulamentadoras do setor.</p>
               </div>
-              <span class="hs-unit-link">ENTRE EM CONTATO &nbsp;&nbsp;→</span>
             </div>
           </div>
 
@@ -3212,38 +3334,38 @@
           <div class="units-slide">
             <div class="units-slide-photo" style="background-image:url('assets/tecnologia-para-operacoes-industriais.png')"></div>
             <div class="units-slide-panel">
-              <div>
+              <div class="units-slide-text-scroll">
                 <span class="units-slide-num">04</span>
                 <h3>Tecnologias para Operações Industriais</h3>
-                <p>Soluções tecnológicas que automatizam processos industriais e conectam o chão de fábrica à gestão de operações.</p>
+                <p>Tecnologia aplicada à limpeza, conservação e remoção de resíduos industriais. Atua na mecanização, automação e robotização de operações industriais, substituindo atividades manuais por processos mais seguros, produtivos e sustentáveis. Seu portfólio reúne varredeiras mecânico-aspiradas e elétricas, aspiradores industriais, robôs de roçada, robôs de demolição e soluções especializadas para mineração, siderurgia e operações portuárias.</p>
+                <p>A combinação entre tecnologia especializada e conhecimento do chão de fábrica reduz a exposição humana a atividades de risco, aumenta a produtividade e contribui para operações mais eficientes, sustentáveis e alinhadas às exigências dos ambientes industriais.</p>
               </div>
-              <span class="hs-unit-link">ENTRE EM CONTATO &nbsp;&nbsp;→</span>
             </div>
           </div>
 
           <!-- SLIDE 5 -->
           <div class="units-slide">
-            <div class="units-slide-photo" style="background-image:url('assets/armazenagem-4.0.png')"></div>
+            <div class="units-slide-photo" style="background-image:url('assets/nexus.png')"></div>
             <div class="units-slide-panel">
-              <div>
+              <div class="units-slide-text-scroll">
                 <span class="units-slide-num">05</span>
-                <h3>Armazenagem 4.0</h3>
-                <p>Armazenagem inteligente que combina estrutura física com controle digital e disciplina operacional.</p>
+                <h3>Soluções para Armazéns Inteligentes</h3>
+                <p>Soluções integradas para armazéns, armazenagem e logística. Atua na implantação, automação e operação de centros logísticos, com estruturas porta-paletes, robôs autônomos, esteiras transportadoras, tecnologias de rastreamento por RFID e mão de obra especializada.</p>
+                <p>Mais do que fornecer tecnologia, a unidade estrutura operações logísticas de ponta a ponta. A integração entre infraestrutura, automação e operação aumenta a produtividade, reduz custos e amplia o controle sobre o fluxo de materiais e o inventário.</p>
               </div>
-              <span class="hs-unit-link">ENTRE EM CONTATO &nbsp;&nbsp;→</span>
             </div>
           </div>
 
           <!-- SLIDE 6 -->
           <div class="units-slide">
-            <div class="units-slide-photo" style="background-image:url('assets/gestao-ativos-ambientais.webp')"></div>
+            <div class="units-slide-photo" style="background-image:url('assets/gestao-ativos-ambientais.png')"></div>
             <div class="units-slide-panel">
-              <div>
+              <div class="units-slide-text-scroll">
                 <span class="units-slide-num">06</span>
                 <h3>Gestão de Ativos Ambientais</h3>
-                <p>Soluções para licenciamento, compensação e monetização de ativos com qualidade técnica e controle.</p>
+                <p>Gestão e estruturação de ativos ambientais de valor estratégico. Custodia uma área contígua de aproximadamente 2,8 milhões de m² na orla oeste do Rio de Janeiro, com frente atlântica e sobreposição a duas unidades de conservação, o Parque Natural Municipal de Grumari e o Parque Estadual da Pedra Branca, um dos maiores remanescentes contíguos de Mata Atlântica sob gestão privada na cidade.</p>
+                <p>Mais do que uma reserva ambiental, o ativo é uma plataforma de interesse público. Atuamos na fronteira entre conservação, regularização fundiária de interesse social e geração de valor por meio de serviços ecossistêmicos e mecanismos de compensação ambiental, sempre com rigor técnico, transparência e alinhamento às políticas públicas de conservação.</p>
               </div>
-              <span class="hs-unit-link">ENTRE EM CONTATO &nbsp;&nbsp;→</span>
             </div>
           </div>
 
@@ -3271,14 +3393,14 @@
             <div class="metod-tag">Headquarter</div>
             <div class="metod-icone">⬡</div>
             <h3>Gestão matricial</h3>
-            <p>Os líderes de cada unidade atuam de forma integrada nos eixos Financeiro, Comercial e Operacional — cruzando estrutura sem perder autonomia.</p>
+            <p>Os líderes de cada unidade atuam de forma integrada nos eixos Financeiro, Comercial e Operacional, cruzando estrutura sem perder autonomia.</p>
           </div>
 
           <div class="metod-card metod-card--destaque">
             <div class="metod-tag">Liderança comportamental</div>
             <div class="metod-icone">◈</div>
             <h3>O humano no centro</h3>
-            <p>O perfil comportamental do gestor orienta cada decisão. Antes da ferramenta, vem o ser humano — esse é o diferencial da Metodologia GPM.</p>
+            <p>O perfil comportamental do gestor orienta cada decisão. Antes da ferramenta, vem o ser humano, esse é o diferencial da Metodologia GPM.</p>
           </div>
 
           <div class="metod-card">
@@ -3290,12 +3412,9 @@
         </div>
 
         <div style="margin-top: 3rem; text-align: center;">
-          <a href="playbook.html" class="button button-primary" style="font-size: 16px; padding: 18px 48px; letter-spacing: 0.05em;">
+          <a href="playbook.html" class="button button-primary button-sharp glow-gold">
             Conhecer o Playbook GPM →
           </a>
-          <p style="margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em;">
-            Gratuito. Sem compromisso.
-          </p>
         </div>
       </div>
     </section>
@@ -3353,7 +3472,7 @@
             <p class="founder-assinatura">Eduardo Pitombo Mesquita</p>
 
             <div class="founder-texto">
-              <p>Fundador do Grupo GPM, focado na economia real do Brasil.<br>Empreendedor há mais de 20 anos.<br>Mestre em Administração pela FGV, especialista em comportamento empreendedor.</p>
+              <p>Fundador do Grupo GPM, dedicado ao desenvolvimento de empresas da Economia Real.<br>Empreendedor há mais de 20 anos.<br>Mestre em Administração pela FGV, especialista em comportamento empreendedor.</p>
               <p>Minha trajetória passou por quebrar, reestruturar e continuar construindo. Isso ensina o que teoria não alcança: empresa sobrevive de gente que decide bem em cenário de incerteza.</p>
               <p>Sou entusiasta de IA com uma convicção: a janela que a inteligência artificial abre só aproveita quem tem profundidade humana suficiente para transformar potencial artificial em resultado real.</p>
               <p>Na prática, isso significa integrar o que o mercado insiste em separar: comportamento e estratégia na mesma mesa, tecnologia e julgamento humano no mesmo processo.</p>
@@ -3395,9 +3514,9 @@
           <span class="linha-2">Mentoria Nexialista</span>
         </h2>
 
-        <p class="mentoria-sub">Feito para empreendedores que desejam desenvolver o potencial dos seus negócios com método, liderança e inteligência artificial.</p>
+        <p class="mentoria-sub">Desenvolvida para empreendedores que desejam ampliar o potencial de seus negócios com método, liderança e inteligência artificial.</p>
 
-        <a href="mentoria-formulario.html" class="mentoria-cta">Fale conosco</a>
+        <a href="mentoria.html" class="mentoria-cta">Fale conosco</a>
       </div>
     </section>
 
@@ -3405,30 +3524,17 @@
       <div class="site-container">
         <p class="closing-badge">— Contato</p>
         <h2 class="closing-titulo">Vamos conversar <em>sobre o seu negócio?</em></h2>
-        <p class="closing-sub">Fale com o Grupo GPM pelos canais abaixo, teremos o prazer em ouvir sobre a sua empresa.</p>
+        <p class="closing-sub">Fale com o Grupo GPM pelos canais abaixo, teremos o prazer de conhecer a sua empresa.</p>
 
         <div class="closing-info">
-          <a href="mailto:contato@grupogpm.com.br" class="closing-item">
+          <a href="mailto:contato@gpmintegracao.com.br" class="closing-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            contato@grupogpm.com.br
+            contato@gpmintegracao.com.br
           </a>
-
-          <span class="closing-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            XX
-          </span>
         </div>
       </div>
     </section>
   </main>
-  <!-- Botão flutuante WhatsApp -->
-  <a class="whatsapp-float" aria-hidden="true" tabindex="-1">
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.857L.057 23.882a.5.5 0 0 0 .61.61l6.102-1.447A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.686-.519-5.215-1.422l-.373-.217-3.87.918.944-3.788-.234-.386A9.964 9.964 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-    </svg>
-  </a>
-
   <div class="cursor"></div>
   <div class="cursor-ring"></div>
   <script>
@@ -3541,7 +3647,8 @@
 
     // ── Carrossel de Unidades ──
     // Scroll horizontal nativo por arraste/toque, em qualquer tamanho de tela.
-    // Navegação também disponível pelas setas e pelos pontos indicadores.
+    // Navegação também disponível pelas setas e pelos pontos indicadores,
+    // além do avanço automático contínuo entre os cards.
     (function () {
       const unitsContainer = document.querySelector('.units-carousel-container');
       const unitsSlides = Array.from(document.querySelectorAll('.units-slide'));
@@ -3554,7 +3661,7 @@
         const dot = document.createElement('button');
         dot.className = 'units-carousel-dot' + (i === 0 ? ' active' : '');
         dot.setAttribute('aria-label', 'Slide ' + (i + 1));
-        dot.addEventListener('click', () => goToUnitsSlide(i));
+        dot.addEventListener('click', () => interactUnits(i));
         unitsDotsContainer.appendChild(dot);
       });
 
@@ -3580,25 +3687,90 @@
         return nearest;
       }
 
-      function goToUnitsSlide(i) {
-        unitsSlides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      }
-
       function getUnitsCurrentIndex() {
         return nearestUnitsIndex(unitsContainer.scrollLeft);
       }
 
-      unitsContainer.addEventListener('scroll', () => setActiveUnitsDot(getUnitsCurrentIndex()));
+      // Transição por esmaecimento + leve rolamento lateral: o card atual
+      // some deslizando um pouco para um lado, a posição troca (enquanto
+      // invisível) e o próximo entra deslizando sutilmente do lado oposto.
+      const unitsTrack = document.querySelector('.units-carousel-track');
+      const UNITS_FADE_MS = 260;
+      const UNITS_SHIFT_PX = 22;
+      let unitsFadeTimer = null;
 
-      unitsPrevBtn?.addEventListener('click', () => goToUnitsSlide(Math.max(0, getUnitsCurrentIndex() - 1)));
-      unitsNextBtn?.addEventListener('click', () => goToUnitsSlide(Math.min(unitsSlides.length - 1, getUnitsCurrentIndex() + 1)));
+      function goToUnitsSlide(i, direction = 1) {
+        const slide = unitsSlides[i];
+        const target = slide.offsetLeft + slide.offsetWidth / 2 - unitsContainer.clientWidth / 2;
+        const outShift = direction * -UNITS_SHIFT_PX;
+
+        clearTimeout(unitsFadeTimer);
+        unitsTrack.style.opacity = '0';
+        unitsTrack.style.transform = `translateX(${outShift}px)`;
+
+        unitsFadeTimer = setTimeout(() => {
+          unitsContainer.scrollLeft = target;
+          setActiveUnitsDot(i);
+
+          unitsTrack.style.transition = 'none';
+          unitsTrack.style.transform = `translateX(${-outShift}px)`;
+          unitsTrack.offsetHeight; // força o reflow antes de reativar a transição
+          unitsTrack.style.transition = '';
+
+          requestAnimationFrame(() => {
+            unitsTrack.style.transform = 'translateX(0)';
+            unitsTrack.style.opacity = '1';
+          });
+        }, UNITS_FADE_MS);
+      }
+
+      // Avanço automático: passa para o próximo card sozinho, voltando ao
+      // início ao chegar no último. Qualquer interação manual (seta ou
+      // ponto) reinicia a contagem, sem nunca desligar o automático.
+      // Em telas de toque, o autoplay fica desligado — no celular o usuário
+      // navega arrastando o card, e um timer disparando sozinho no meio do
+      // gesto puxava o carrossel para outro lugar, dando sensação de travado.
+      const unitsIsTouch = window.matchMedia('(pointer: coarse)').matches;
+      let unitsTimer = null;
+      const UNITS_AUTOPLAY_DELAY = 7000;
+
+      function scheduleUnits() {
+        if (unitsIsTouch) return;
+        clearTimeout(unitsTimer);
+        unitsTimer = setTimeout(() => {
+          goToUnitsSlide((getUnitsCurrentIndex() + 1) % unitsSlides.length, 1);
+          scheduleUnits();
+        }, UNITS_AUTOPLAY_DELAY);
+      }
+
+      function interactUnits(i, direction) {
+        const current = getUnitsCurrentIndex();
+        goToUnitsSlide(i, direction ?? (i >= current ? 1 : -1));
+        scheduleUnits();
+      }
+
+      // No toque/arraste manual (mobile), o scroll nativo dispara continuamente.
+      // Sem esse debounce, o autoplay podia recontar — ou pior, disparar e puxar
+      // o card — no meio do gesto do usuário. Só reagenda os 7s depois que o
+      // scroll ficar parado por um instante, ou seja, depois que o usuário soltar.
+      let unitsScrollSettleTimer = null;
+      unitsContainer.addEventListener('scroll', () => {
+        setActiveUnitsDot(getUnitsCurrentIndex());
+        clearTimeout(unitsScrollSettleTimer);
+        unitsScrollSettleTimer = setTimeout(scheduleUnits, 400);
+      });
+
+      unitsPrevBtn?.addEventListener('click', () => interactUnits((getUnitsCurrentIndex() - 1 + unitsSlides.length) % unitsSlides.length, -1));
+      unitsNextBtn?.addEventListener('click', () => interactUnits((getUnitsCurrentIndex() + 1) % unitsSlides.length, 1));
+
+      scheduleUnits();
     })();
 
     const cursor = document.querySelector('.cursor');
     const cursorRing = document.querySelector('.cursor-ring');
 
     // Cursor muda para navy ao entrar em seções de fundo claro
-    document.querySelectorAll('.section-about').forEach(sec => {
+    document.querySelectorAll('.section-about, .section-tese, .section-closing').forEach(sec => {
       sec.addEventListener('mouseenter', () => {
         cursor?.classList.add('sobre-fundo-claro');
         cursorRing?.classList.add('sobre-fundo-claro');
@@ -3639,11 +3811,7 @@
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('width', '100%');
 
-    const projection = d3.geoMercator()
-      .center([-52, -14])
-      .scale(680)
-      .translate([width / 2, height / 2]);
-
+    const projection = d3.geoMercator();
     const path = d3.geoPath().projection(projection);
 
     const estadosGPM = ['Pará','Goiás','Minas Gerais',
@@ -3653,6 +3821,15 @@
     fetch('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson')
       .then(r => r.json())
       .then(geojson => {
+
+        // Encaixa a projeção no país inteiro (com uma margem), em vez de
+        // usar escala/centro fixos "no olho" — mantém o contorno do Brasil
+        // completo e visível, sem cortar nenhum estado nas bordas.
+        const mapPadding = 14;
+        projection.fitExtent(
+          [[mapPadding, mapPadding], [width - mapPadding, height - mapPadding]],
+          geojson
+        );
 
         svg.selectAll('path')
           .data(geojson.features)
@@ -3691,13 +3868,13 @@
           .filter(d => estadosGPM.includes(d.properties.name));
 
         const labelConfig = {
-          'Pará':             { label: 'PARÁ',            anchor: 'start', dx: 12,  dy: 4   },
-          'Goiás':            { label: 'GOIÁS',           anchor: 'start', dx: 12,  dy: -14 },
-          'Distrito Federal': { label: 'BRASÍLIA/DF',     anchor: 'end',   dx: -12, dy: 4   },
-          'Minas Gerais':     { label: 'MINAS GERAIS',    anchor: 'start', dx: 12,  dy: -8  },
-          'Espírito Santo':   { label: 'ESPÍRITO SANTO',  anchor: 'end',   dx: -12, dy: -14 },
-          'São Paulo':        { label: 'SÃO PAULO',       anchor: 'end',   dx: -12, dy: 18  },
-          'Rio de Janeiro':   { label: 'RIO DE JANEIRO',  anchor: 'end',   dx: -12, dy: 4   },
+          'Pará':             { label: 'PA',  anchor: 'start', dx: 12,  dy: 4   },
+          'Goiás':            { label: 'GO',  anchor: 'start', dx: 12,  dy: -14 },
+          'Distrito Federal': { label: 'DF',  anchor: 'end',   dx: -12, dy: 4   },
+          'Minas Gerais':     { label: 'MG',  anchor: 'start', dx: 12,  dy: -8  },
+          'Espírito Santo':   { label: 'ES',  anchor: 'end',   dx: -12, dy: -14 },
+          'São Paulo':        { label: 'SP',  anchor: 'end',   dx: -12, dy: 18  },
+          'Rio de Janeiro':   { label: 'RJ',  anchor: 'end',   dx: -12, dy: 4   },
         };
 
         centroids.forEach((d, i) => {
@@ -3759,14 +3936,14 @@
         <p class="footer-col-titulo">Grupo GPM</p>
         <div class="footer-links">
           <a href="#unidades">Unidades</a>
-          <a href="#mentoria">Mentoria Nexialista</a>
+          <a href="mentoria.html">Mentoria Nexialista</a>
           <a href="#contato">Contato</a>
         </div>
       </div>
       <div>
         <p class="footer-col-titulo">Redes sociais</p>
         <div class="footer-links">
-          <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.linkedin.com/company/grupogpm?originalSubdomain=br" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="https://www.instagram.com/gpmholding/" target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
       </div>

@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentoria Nexialista | Grupo GPM</title>
+  <meta name="description" content="Mentoria Nexialista do Grupo GPM: método, liderança e inteligência artificial aplicada à gestão de empresas da economia real.">
+  <link rel="icon" type="image/png" href="assets/logo-alfa.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --azul-marinho: #0a1628;
+      --azul-header: #051a3d;
+      --azul-medio: #0d1f3c;
+      --azul-claro: #112240;
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      --dourado-escuro: #8a6a2a;
+      --branco: #ffffff;
+      --branco-70: rgba(255,255,255,0.70);
+      --branco-40: rgba(255,255,255,0.40);
+      --borda-sutil: rgba(201,168,76,0.15);
+      --borda-hover: rgba(201,168,76,0.45);
+      --max-width: 1180px;
+    }
+
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    html { scroll-behavior: smooth; font-size: 17px; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--azul-marinho);
+      color: var(--branco);
+      line-height: 1.75;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .site-container {
+      width: min(100%, calc(100% - 2rem));
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    ::selection { background: var(--dourado); color: var(--azul-marinho); }
+
+    /* ── Entrada suave ao rolar ── */
+    .animate { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .animate.visible { opacity: 1; transform: translateY(0); }
+
+    .titulo-linha::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 1px;
+      background: var(--dourado);
+      transition: width 0.8s ease;
+      margin-top: 0.9rem;
+    }
+    .titulo-linha.visible::after { width: 64px; }
+
+    /* ── Cabeçalho ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(10,22,40,0.92);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 14px 0;
+    }
+
+    .brand { display: flex; align-items: center; gap: 0.6rem; }
+
+    .brand img { height: 40px; width: auto; object-fit: contain; }
+
+    .brand-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--branco);
+    }
+
+    .brand-text small {
+      display: block;
+      font-size: 0.6rem;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      color: var(--branco-40);
+      margin-top: 2px;
+    }
+
+    .nav-back {
+      font-size: 0.82rem;
+      color: var(--branco-70);
+      transition: color 0.2s ease;
+    }
+    .nav-back:hover { color: var(--dourado); }
+
+    .topbar-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 0.65rem 1.3rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, var(--dourado-brilho), var(--dourado) 60%, var(--dourado-escuro));
+      color: var(--azul-marinho);
+      white-space: nowrap;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .topbar-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(201,168,76,0.28); }
+
+    .topbar-links { display: flex; align-items: center; gap: 1.6rem; }
+
+    @media (max-width: 640px) {
+      .nav-back { display: none; }
+      .brand-text small { display: none; }
+    }
+
+    /* ── Botões ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--dourado-brilho), var(--dourado) 60%, var(--dourado-escuro));
+      color: var(--azul-marinho);
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(201,168,76,0.3); }
+
+    .btn-lg { padding: 1.05rem 2.5rem; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 10px; }
+    .btn-md { padding: 0.85rem 1.9rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.07em; }
+
+    .cta-row { display: flex; justify-content: center; margin: 2.75rem 0 0; }
+
+    .cta-note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--branco-40);
+      margin-top: 1rem;
+    }
+
+    /* ── Sections genéricas ── */
+    .section { padding: 6rem 0; }
+    .section-alt { background: var(--azul-medio); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      color: var(--dourado);
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      font-size: 0.8rem;
+      margin: 0 0 1.1rem;
+    }
+    .eyebrow::before { content: ''; display: block; width: 40px; height: 1px; background: rgba(255,255,255,0.15); }
+
+    .heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(2.1rem, 4vw, 3.1rem);
+      line-height: 1.1;
+      margin: 0 0 1.1rem;
+      max-width: 20ch;
+    }
+    .heading em { color: var(--dourado); font-style: italic; font-weight: 600; }
+
+    .lede {
+      max-width: 62ch;
+      color: var(--branco-70);
+      font-size: 1.08rem;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .section-head { text-align: center; margin: 0 auto 3.5rem; max-width: 700px; }
+    .section-head .lede { margin: 0 auto; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      padding: 5.5rem 0 6rem;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201,168,76,0.14), transparent 60%), var(--azul-marinho);
+    }
+
+    #hero-particles {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+
+    .hero .eyebrow { justify-content: center; }
+    .hero .eyebrow::before, .hero .eyebrow::after { content: ''; display: block; width: 40px; height: 1px; background: rgba(255,255,255,0.15); }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      margin: 0 0 1.4rem;
+    }
+    .hero h1 em { color: var(--dourado); font-style: italic; }
+
+    .hero .lede { margin: 0 auto; }
+
+    /* ── Rolagem de cards com ícone ── */
+    .card-scroll-wrap { position: relative; }
+
+    .card-scroll {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 0.25rem;
+    }
+    .card-scroll::-webkit-scrollbar { display: none; }
+
+    .card-scroll-arrows {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .card-arrow {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--borda-sutil);
+      background: transparent;
+      color: var(--dourado);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .card-arrow:hover { border-color: var(--borda-hover); background: rgba(201,168,76,0.08); }
+    .card-arrow svg { width: 18px; height: 18px; }
+
+    .mp-card {
+      flex: 0 0 300px;
+      scroll-snap-align: start;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.14);
+      border-top: 2px solid var(--dourado);
+      border-radius: 18px;
+      padding: 2.25rem 1.9rem;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .mp-card:hover {
+      transform: translateY(-6px);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(201,168,76,0.42);
+      border-top-color: var(--dourado-brilho);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.22), 0 0 0 1px rgba(201,168,76,0.1);
+    }
+
+    .mp-card svg {
+      width: 30px;
+      height: 30px;
+      color: var(--dourado);
+      margin-bottom: 1.3rem;
+    }
+
+    .mp-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--branco);
+      margin: 0 0 0.65rem;
+      line-height: 1.25;
+    }
+
+    .mp-card p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--branco-70);
+      margin: 0;
+    }
+
+    /* ── Para quem é ── */
+    .para-quem-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .para-quem-img-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .para-quem-img-wrap img {
+      width: 100%;
+      max-width: 480px;
+      -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 50%, transparent 100%);
+      mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 50%, transparent 100%);
+    }
+
+    .check-list { list-style: none; margin: 2rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; max-width: 62ch; }
+
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--branco-70);
+    }
+
+    .check-list svg {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      margin-top: 0.15rem;
+      color: var(--dourado);
+    }
+
+    /* ── O mentor ── */
+    .mentor-layout {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .mentor-foto-wrap { position: relative; }
+
+    .mentor-foto {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid var(--borda-sutil);
+    }
+
+    .mentor-info .eyebrow { margin-bottom: 0.5rem; }
+
+    .mentor-nome {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+      margin: 0 0 0.2rem;
+    }
+
+    .mentor-cargo {
+      font-size: 0.92rem;
+      color: var(--branco-40);
+      letter-spacing: 0.03em;
+      margin: 0 0 1.6rem;
+    }
+
+    .mentor-info p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--branco-70);
+      margin: 0 0 1.25rem;
+    }
+
+    .mentor-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--dourado-brilho);
+      border-left: 2px solid var(--dourado);
+      padding-left: 1.25rem;
+      margin: 1.75rem 0 0;
+      line-height: 1.4;
+    }
+
+    /* ── Como funciona ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+      margin-top: 3.5rem;
+    }
+
+    .step { position: relative; padding: 0 1.75rem; text-align: center; }
+
+    .step-num {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--dourado);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dourado);
+      background: var(--azul-marinho);
+      margin: 0 auto 1.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step::before {
+      content: '';
+      position: absolute;
+      top: 26px;
+      left: -50%;
+      width: 100%;
+      height: 1px;
+      background: rgba(201,168,76,0.25);
+      z-index: 0;
+    }
+    .step:first-child::before { display: none; }
+
+    .step h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 0 0 0.6rem;
+    }
+
+    .step p { font-size: 0.9rem; color: var(--branco-70); line-height: 1.7; margin: 0; max-width: 30ch; margin-inline: auto; }
+
+    @media (max-width: 860px) {
+      .steps { grid-template-columns: 1fr; gap: 2.5rem; }
+      .step::before { display: none; }
+    }
+
+    /* ── CTA final ── */
+    .section-final {
+      text-align: center;
+      background: radial-gradient(ellipse 70% 100% at 50% 100%, rgba(201,168,76,0.12), transparent 60%), var(--azul-medio);
+    }
+    .section-final .heading { margin-inline: auto; max-width: 22ch; }
+    .section-final .lede { margin: 0 auto; }
+
+    /* ── Rodapé (idêntico ao index.html) ── */
+    footer { background: #081121; padding: 3rem 0 2rem; }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.3fr 0.85fr 0.85fr 0.85fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .footer-logo { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-logo span { color: var(--branco-70); font-size: 0.95rem; letter-spacing: 0.06em; }
+
+    .footer-col-titulo {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--dourado);
+      margin: 0 0 1.1rem;
+    }
+
+    .footer-links { display: grid; gap: 0.8rem; }
+    .footer-links a { color: var(--branco-70); font-size: 0.95rem; transition: color 0.2s ease; }
+    .footer-links a:hover { color: var(--dourado); }
+
+    .footer-bottom {
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--branco-40);
+      font-size: 0.92rem;
+    }
+
+    .footer-legal-links a { color: var(--branco-40); transition: color 0.2s ease; }
+    .footer-legal-links a:hover { color: var(--dourado); }
+
+    /* ── Responsivo ── */
+    @media (max-width: 980px) {
+      .mentor-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .mentor-foto-wrap { max-width: 340px; margin: 0 auto; }
+      .para-quem-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .para-quem-img-wrap { max-width: 380px; margin: 0 auto; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .section { padding: 4rem 0; }
+      .mp-card { flex-basis: 82vw; }
+      .hero { padding: 3.5rem 0 4rem; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-logo { align-items: center; }
+      .footer-bottom { justify-content: center; text-align: center; }
+      .btn-lg { padding: 0.95rem 1.8rem; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="site-container topbar">
+      <a class="brand" href="index.html">
+        <img src="assets/logo-alfa.png" alt="Grupo GPM">
+        <span class="brand-text">GRUPO GPM<small>MENTORIA NEXIALISTA</small></span>
+      </a>
+      <div class="topbar-links">
+        <a class="nav-back" href="index.html">← Voltar ao site</a>
+        <a class="topbar-cta" href="#inscreva-se">Quero me inscrever</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1. HERO -->
+    <section class="hero">
+      <canvas id="hero-particles"></canvas>
+      <div class="site-container hero-inner">
+        <h1>Mentoria <em>Nexialista</em></h1>
+        <p class="lede">Para empreendedores que desejam ampliar o potencial de seus negócios com método, liderança e inteligência artificial.</p>
+        <div class="cta-row">
+          <a class="btn btn-gold btn-lg" href="https://forms.gle/UFvUrSbM4izxHkzA7" target="_blank" rel="noopener">Iniciar diagnóstico</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. O QUE A MENTORIA OFERECE -->
+    <section class="section">
+      <div class="site-container">
+        <div class="section-head">
+          <div class="eyebrow" style="justify-content:center;">A Mentoria</div>
+          <h2 class="heading" style="margin-inline:auto; max-width:24ch;">Uma máquina de gestão mensurável e replicável</h2>
+          <p class="lede">Você será acompanhado por um mentor que entende os desafios da economia real e sabe como destravá-los, com metodologia clara, prática e atual:</p>
+        </div>
+
+        <div class="card-scroll-wrap">
+        <div class="card-scroll" id="scroll-oferece">
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/><path d="m9 17.5 1.8 1.8L14.5 15.5" stroke="var(--dourado-brilho)"/></svg>
+            <h3>Diagnóstico completo do negócio</h3>
+            <p>Mapeamento do estágio real da sua empresa em gestão, processos, liderança e uso de tecnologia.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg>
+            <h3>Metodologia Shoshin aplicada</h3>
+            <p>Framework prático para estruturar rotinas, definir KPIs e construir processos que funcionam sem a presença constante do gestor.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v6M12 13 6.5 17.5M12 13l5.5 4.5"/></svg>
+            <h3>IA aplicada à operação real</h3>
+            <p>Implementação concreta de inteligência artificial no dia a dia do negócio, não teoria.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M15.5 20c0-2.8 1.9-4.8 4-4.8"/></svg>
+            <h3>Formação de lideranças</h3>
+            <p>Desenvolvimento de líderes intermediários que multiplicam a cultura e sustentam o crescimento.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><rect x="6" y="12" width="3" height="7"/><rect x="11" y="8" width="3" height="11"/><rect x="16" y="4" width="3" height="15"/></svg>
+            <h3>Análise de cases reais</h3>
+            <p>Discussão de cenários do mercado para estimular visão estratégica e tomada de decisão baseada em dados.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17 9 11l4 3 7-8" stroke="var(--dourado-brilho)"/><path d="M15 6h5v5"/></svg>
+            <h3>Acompanhamento com métricas</h3>
+            <p>KPIs definidos e monitoramento contínuo para garantir que o resultado aconteça.</p>
+          </div>
+        </div>
+        <div class="card-scroll-arrows">
+          <button class="card-arrow" type="button" data-scroll-target="scroll-oferece" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="card-arrow" type="button" data-scroll-target="scroll-oferece" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-gold btn-md" href="https://forms.gle/UFvUrSbM4izxHkzA7" target="_blank" rel="noopener">Quero participar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. RESULTADOS PRÁTICOS -->
+    <section class="section section-alt">
+      <div class="site-container">
+        <div class="section-head">
+          <div class="eyebrow" style="justify-content:center;">Resultados</div>
+          <h2 class="heading" style="margin-inline:auto; max-width:26ch;">Método, presença e resultado medido no dia a dia</h2>
+          <p class="lede">Ganhe clareza, estrutura e ferramentas para escalar com governança e resultado consistente:</p>
+        </div>
+
+        <div class="card-scroll-wrap">
+        <div class="card-scroll" id="scroll-resultados">
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.8 7.3 11 16M16.2 7.3 13 16M8 6h8"/></svg>
+            <h3>Estruturação de processos</h3>
+            <p>Saia da dependência do fundador e construa uma operação que funciona com método.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M6 16V9M11 16V5M16 16v-4" stroke="var(--dourado-brilho)"/></svg>
+            <h3>Gestão por indicadores</h3>
+            <p>Decisões baseadas em dados reais, não em feeling ou intuição.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v3"/><circle cx="5" cy="17" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="19" cy="17" r="2"/><path d="M5 15v-2h14v2"/></svg>
+            <h3>Delegação com clareza</h3>
+            <p>Defina papéis, rotinas e métricas para cada nível da operação.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M6 6l1.5 1.5M16.5 16.5 18 18M18 6l-1.5 1.5M7.5 16.5 6 18"/><circle cx="12" cy="12" r="4.2"/><path d="m19.5 4.5.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" fill="var(--dourado-brilho)" stroke="none"/></svg>
+            <h3>Automação inteligente</h3>
+            <p>Ferramentas de IA que ampliam a capacidade do time sem substituí-lo.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4v5c0 5-3.5 7.8-8 9-4.5-1.2-8-4-8-9V7z"/><path d="M9 12h6M9 15h6M9 9h6"/></svg>
+            <h3>Cultura replicável</h3>
+            <p>Construa um modelo de gestão que pode ser implantado em qualquer unidade do negócio.</p>
+          </div>
+          <div class="mp-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 1.2 7 1.2 7 1.2v6.3c0 4.8-3 7.6-7 9.5-4-1.9-7-4.7-7-9.5V4.2S8 3 12 3z"/><path d="m9.3 12 1.8 1.8 3.6-3.8" stroke="var(--dourado-brilho)"/></svg>
+            <h3>Escala com governança</h3>
+            <p>Cresça sem perder controle, com método e acompanhamento constante.</p>
+          </div>
+        </div>
+        <div class="card-scroll-arrows">
+          <button class="card-arrow" type="button" data-scroll-target="scroll-resultados" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="card-arrow" type="button" data-scroll-target="scroll-resultados" data-dir="1" aria-label="Próximo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-gold btn-md" href="https://forms.gle/UFvUrSbM4izxHkzA7" target="_blank" rel="noopener">Iniciar diagnóstico</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PARA QUEM É -->
+    <section class="section">
+      <div class="site-container">
+        <div class="para-quem-layout">
+          <div>
+            <div class="eyebrow">Para quem é</div>
+            <h2 class="heading">Empreendedores da Economia Real</h2>
+            <p class="lede">A Mentoria Nexialista foi desenhada para empresários que já têm resultado, mas querem construir um modelo de negócio que funcione com método, não com improviso.</p>
+
+            <ul class="check-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 2.5 2.5L16.5 9"/></svg>
+                <span>Donos de empresas familiares que sentem que o crescimento depende demais deles</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 2.5 2.5L16.5 9"/></svg>
+                <span>Gestores de operações industriais, logísticas ou de serviços que precisam estruturar processos</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 2.5 2.5L16.5 9"/></svg>
+                <span>Empreendedores que querem usar IA de forma prática, não apenas conceitual</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 2.5 2.5L16.5 9"/></svg>
+                <span>Empresários com faturamento consolidado que buscam escala com governança</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 2.5 2.5L16.5 9"/></svg>
+                <span>Líderes que entendem que resultado real vem de presença, método e constância</span>
+              </li>
+            </ul>
+
+            <div class="cta-row" style="justify-content:flex-start;">
+              <a class="btn btn-gold btn-md" href="https://forms.gle/UFvUrSbM4izxHkzA7" target="_blank" rel="noopener">Quero participar</a>
+            </div>
+          </div>
+
+          <div class="para-quem-img-wrap">
+            <img src="assets/mentoria-praqueme.png" alt="Empreendedores da economia real, guiados por método e visão estratégica">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. O MENTOR -->
+    <section class="section">
+      <div class="site-container">
+        <div class="mentor-layout">
+          <div class="mentor-foto-wrap">
+            <img class="mentor-foto" src="assets/eduardo-perfil.jpg" alt="Eduardo Pitombo Mesquita — Fundador e Gestor do Grupo GPM">
+          </div>
+          <div class="mentor-info">
+            <div class="eyebrow">O mentor</div>
+            <p class="mentor-nome">Eduardo Pitombo Mesquita</p>
+            <p class="mentor-cargo">Fundador e Gestor — Grupo GPM</p>
+            <p>Fundador do Grupo GPM em 2015, Eduardo construiu um ecossistema de seis empresas da economia real em sete estados brasileiros. Sua abordagem combina gestão por método, formação de lideranças e aplicação prática de inteligência artificial em operações industriais, logísticas e ambientais.</p>
+            <p>A Mentoria Nexialista nasce da experiência concreta de quem faz gestão no dia a dia, não de quem teoriza sobre ela. Cada ferramenta ensinada foi antes testada na operação do próprio grupo.</p>
+            <p class="mentor-quote">"Essência humana. Potencial artificial."</p>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-gold btn-md" href="https://forms.gle/UFvUrSbM4izxHkzA7" target="_blank" rel="noopener">Iniciar diagnóstico</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. COMO FUNCIONA -->
+    <section class="section section-alt">
+      <div class="site-container">
+        <div class="section-head" style="margin-bottom:0;">
+          <div class="eyebrow" style="justify-content:center;">O processo</div>
+          <h2 class="heading" style="margin-inline:auto;">Do diagnóstico ao resultado</h2>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3>Diagnóstico</h3>
+            <p>Você preenche o questionário de auditoria. Mapeamos o estágio real do seu negócio em gestão, liderança, processos e uso de tecnologia.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3>Imersão</h3>
+            <p>Sessões práticas com Eduardo, aplicando a Metodologia Shoshin ao seu contexto. Definição de KPIs, estruturação de rotinas e implementação de IA na operação.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3>Execução</h3>
+            <p>Acompanhamento contínuo com métricas definidas. O objetivo é construir uma máquina de gestão que funcione com ou sem a sua presença constante.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. CTA FINAL -->
+    <section class="section section-final" id="inscreva-se">
+      <div class="site-container">
+        <h2 class="heading">Pronto para estruturar o crescimento do seu negócio?</h2>
+        <p class="lede">O primeiro passo é o diagnóstico. Preencha o questionário e receba uma análise personalizada sobre o estágio atual da sua empresa.</p>
+        <div class="cta-row">
+          <a class="btn btn-gold btn-lg" href="https://forms.gle/UFvUrSbM4izxHkzA7" target="_blank" rel="noopener">Preencher questionário</a>
+        </div>
+        <p class="cta-note">Questionário gratuito — leva cerca de 10 minutos</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 9. RODAPÉ -->
+  <footer>
+    <div class="site-container footer-inner">
+      <div class="footer-logo">
+        <a class="brand" href="index.html">
+          <img src="assets/logo-gpm.png" alt="Logo Grupo GPM" style="width:52px; height:auto; object-fit:contain;">
+        </a>
+        <span>Essência humana, potencial artificial.</span>
+        <span>gpmintegracao.com.br</span>
+      </div>
+      <div>
+        <p class="footer-col-titulo">Institucional</p>
+        <div class="footer-links">
+          <a href="index.html#sobre">Nossa Tese</a>
+          <a href="index.html#fundador">Fundador</a>
+          <a href="index.html#metodologia">Metodologia</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-titulo">Grupo GPM</p>
+        <div class="footer-links">
+          <a href="index.html#unidades">Unidades</a>
+          <a href="#inscreva-se">Mentoria Nexialista</a>
+          <a href="index.html#contato">Contato</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-titulo">Redes sociais</p>
+        <div class="footer-links">
+          <a href="https://www.linkedin.com/company/grupogpm?originalSubdomain=br" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.instagram.com/gpmholding/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="site-container footer-bottom">
+      <span>© 2026 Grupo GPM</span>
+      <span>contato@gpmintegracao.com.br</span>
+      <span class="footer-legal-links">
+        <a href="politica-privacidade.html">Política de Privacidade</a> ·
+        <a href="politica-cookies.html">Política de Cookies</a> ·
+        <a href="termos-de-uso.html">Termos de Uso</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    // ── Entrada suave ao rolar (mesmo padrão do index.html) ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.querySelectorAll('.titulo-linha').forEach((t) => t.classList.add('visible'));
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('section').forEach((section) => {
+      section.classList.add('animate');
+      observer.observe(section);
+    });
+
+    // ── Setas dos carrosséis de cards ──
+    document.querySelectorAll('.card-arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const track = document.getElementById(btn.dataset.scrollTarget);
+        const dir = Number(btn.dataset.dir);
+        const card = track?.querySelector('.mp-card');
+        const step = card ? card.offsetWidth + 24 : 300;
+        track?.scrollBy({ left: dir * step, behavior: 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.heading').forEach((h) => h.classList.add('titulo-linha'));
+
+    // ── Canvas de partículas douradas no hero ──
+    (function () {
+      const canvas = document.getElementById('hero-particles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const heroSection = canvas.closest('.hero');
+      let particles = [];
+      let width, height;
+
+      function resize() {
+        width = canvas.width = heroSection.offsetWidth;
+        height = canvas.height = heroSection.offsetHeight;
+      }
+
+      function createParticles() {
+        const count = Math.min(70, Math.floor((width * height) / 18000));
+        particles = Array.from({ length: count }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 1.6 + 0.4,
+          vx: (Math.random() - 0.5) * 0.15,
+          vy: (Math.random() - 0.5) * 0.15,
+          a: Math.random() * 0.5 + 0.15,
+        }));
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = width; if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height; if (p.y > height) p.y = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(201,168,76,${p.a})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(tick);
+      }
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      resize();
+      createParticles();
+      if (!reduceMotion) requestAnimationFrame(tick);
+      window.addEventListener('resize', () => { resize(); createParticles(); });
+    })();
+  </script>
+
+</body>
+</html>
