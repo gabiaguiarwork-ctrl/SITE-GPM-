@@ -2915,53 +2915,58 @@
     }
 
     @media (max-width: 640px) {
-      /* Sem isso, todo card "estica" para acompanhar a altura do mais alto
-         do grupo (o de introdução) — com o card de texto compactado, isso
-         sobrava como espaço vazio embaixo do texto. */
+      /* No mobile, o carrossel horizontal (arrastar/espiar a próxima aba)
+         não é uma boa experiência de leitura — vira uma lista vertical
+         simples: cada unidade inteira, uma abaixo da outra, rolando a
+         página normalmente, sem cards cortados na borda nem texto minúsculo. */
+      .units-carousel-container {
+        overflow: visible;
+        scroll-snap-type: none;
+      }
+
       .units-carousel-track {
-        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .units-slide {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: 0;
       }
 
       .units-slide-intro {
-        height: auto;
-        padding: 22px 20px;
+        padding: 28px 24px;
       }
 
       .units-intro-heading {
-        font-size: 26px;
-        margin-bottom: 8px !important;
+        font-size: 28px;
       }
 
-      .units-slide-intro p {
-        font-size: 13.5px !important;
-        line-height: 1.55 !important;
-      }
-
+      /* "Deslize para conhecer" não faz sentido sem swipe — a lista já entrega isso. */
       .units-slide-intro > div:last-child {
-        margin-top: 14px !important;
+        display: none;
       }
 
       .units-slide:not(.units-slide-intro) {
         flex-direction: column;
-        height: auto;
       }
 
-      /* Sem foto no mobile: card mais enxuto, direto ao texto. */
+      /* Sem foto no mobile: card direto ao texto. */
       .units-slide-photo {
         display: none;
       }
 
       .units-slide-panel {
         padding: 24px 20px;
-        gap: 10px;
+        gap: 14px;
       }
 
-      /* Card sem altura fixa (height:auto) mais o texto mais longo do grupo
-         (Gestão de Ativos Ambientais) faziam o card mais alto ditar a altura
-         de TODOS os outros na mesma linha do carrossel. Trava uma altura
-         máxima de texto e volta a rolar internamente, como no desktop. */
       .units-slide-text-scroll {
-        max-height: 190px;
+        max-height: none;
+        overflow: visible;
       }
 
       .units-slide-num {
@@ -2970,20 +2975,18 @@
       }
 
       .units-slide-panel h3 {
-        font-size: 20px;
+        font-size: 22px;
         margin: 0 0 10px;
       }
 
       .units-slide-panel p {
-        font-size: 13.5px;
-        line-height: 1.55;
+        font-size: 15px;
+        line-height: 1.7;
       }
 
-      /* CTA extra (ex.: "Visitar site da unidade") — compacta junto com o resto. */
-      .units-slide-panel .button {
-        margin-top: 0 !important;
-        padding: 0.55rem 1rem !important;
-        font-size: 0.78rem !important;
+      /* Sem swipe, as setas/bolinhas de navegação não fazem mais sentido. */
+      .units-carousel-nav {
+        display: none;
       }
     }
 
