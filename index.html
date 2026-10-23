@@ -3015,6 +3015,39 @@
       }
     }
 
+    /* Celulares estreitos: botões longos (ex.: "Conhecer o Playbook GPM →")
+       quebram linha em vez de passar da largura da tela. */
+    @media (max-width: 420px) {
+      a.button.button-sharp {
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+      }
+    }
+
+    /* ── Menu: item da Academia de Virtudes (símbolo + texto dourado) ── */
+    .menu-academia { display: inline-flex; align-items: center; gap: 0.45rem; color: #c9a45c !important; white-space: nowrap; }
+    .menu-academia:hover { color: #e2c88e !important; }
+    .menu-academia img { width: 20px; height: 20px; }
+    .mobile-menu .menu-academia { display: flex; }
+    /* com o item da Academia, o menu completo só cabe acima de 1200px: abaixo disso, hambúrguer */
+    @media (max-width: 1200px) { .menu { display: none; } .hamburger { display: inline-flex; } }
+
+    /* ── Faixa da Academia de Virtudes (logo abaixo do hero) ── */
+    .faixa-academia { padding: 0; background: #08142E; border-top: 1px solid rgba(201,164,92,.35); border-bottom: 1px solid rgba(201,164,92,.35); }
+    .faixa-academia__inner { max-width: 1120px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 18px; }
+    .faixa-academia__inner > picture img { width: 40px; height: 40px; }
+    .faixa-academia__texto { flex: 1; display: flex; flex-direction: column; gap: 2px; line-height: 1.45; }
+    .faixa-academia__texto strong { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.2; color: #E2C88E; }
+    .faixa-academia__texto span { font-size: 14px; color: #B9C0CF; font-variant-numeric: lining-nums; }
+    .faixa-academia a { color: #C9A45C; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; padding: 10px 0; }
+    .faixa-academia a:hover { color: #E2C88E; }
+    .faixa-academia a:focus-visible { outline: 2px solid #E2C88E; outline-offset: 4px; border-radius: 4px; }
+    @media (max-width: 640px) {
+      .faixa-academia__inner { flex-direction: column; text-align: center; gap: 10px; padding: 22px 20px; }
+      .faixa-academia a { padding: 6px 0 0; }
+    }
+
   </style>
 </head>
 <body>
@@ -3054,6 +3087,7 @@
         </div>
 
         <a href="#metodologia">Metodologia</a>
+        <a class="menu-academia" href="academiadevirtudes/"><picture><source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="#contato">Contato</a>
       </nav>
 
@@ -3090,6 +3124,7 @@
         </div>
 
         <a href="#metodologia">Metodologia</a>
+        <a class="menu-academia" href="academiadevirtudes/"><picture><source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="#contato">Contato</a>
         <a href="mentoria.html" class="button button-primary mobile-menu-cta"><span>Como se tornar um <strong>Nexialista</strong></span></a>
       </div>
@@ -3132,6 +3167,20 @@
       </div>
     </section>
 
+    <!-- Faixa da Academia de Virtudes -->
+    <section class="faixa-academia" aria-label="Academia de Virtudes">
+      <div class="faixa-academia__inner">
+        <picture>
+          <source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp">
+          <img src="assets/academia-de-virtudes-simbolo.png" alt="" width="40" height="40" loading="lazy" decoding="async">
+        </picture>
+        <div class="faixa-academia__texto">
+          <strong>Academia de Virtudes</strong>
+          <span>O Encontro 1 aconteceu em 23 de outubro. Conheça o ciclo e entre na lista do Encontro 2.</span>
+        </div>
+        <a href="academiadevirtudes/">Conhecer a Academia →</a>
+      </div>
+    </section>
     <section id="sobre" class="section section-about">
       <div class="site-container">
         <div class="posic-layout">
@@ -3548,6 +3597,7 @@
       </div>
     </section>
   </main>
+
   <div class="cursor"></div>
   <div class="cursor-ring"></div>
   <script>

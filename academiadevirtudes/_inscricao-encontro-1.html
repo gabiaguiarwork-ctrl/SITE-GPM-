@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academia de Virtudes · Grupo GPM</title>
+
+  <script>
+    /* =====================================================================
+       CONFIGURAÇÃO DA PÁGINA — edite os valores aqui.
+       (As tags de prévia do link — og:title / og:description, mais abaixo —
+       são lidas pelo WhatsApp sem JavaScript; se mudar nome, data ou local,
+       atualize-as também.)
+       ===================================================================== */
+
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xoejvbdd';
+
+    // Nome desta aula (hero, cards, confirmação, assunto do e-mail, agenda).
+    const AULA_NOME = 'Aula inaugural';
+
+    // Início da aula: a faixa do topo conta até aqui e some quando chega a hora.
+    const EVENTO_INICIO = '2026-10-23T09:00:00-03:00';
+
+    // Aparece abaixo do botão do hero como "Inscrições até <prazo>".
+    const PRAZO_INSCRICAO = '15 de outubro';
+
+    const LOCAL_NOME = 'Barra Space Center · Auditório';
+    const LOCAL_ENDERECO = 'Av. das Américas, 1155 · Barra da Tijuca, Rio de Janeiro';
+    const LOCAL_MAPA_URL = 'https://www.google.com/maps/search/?api=1&query=Barra+Space+Center+Av.+das+Am%C3%A9ricas+1155+Rio+de+Janeiro';
+
+    // Instituição da ação beneficente. O texto fica "…será doado à <nome>, que apoia…".
+    const PROVIDA_NOME = 'Rede Colaborativa Pró-Vida';
+    const PROVIDA_URL = 'https://redeprovida.com/';
+
+    const ITENS_DOACAO = ['Fraldas', 'Lenços umedecidos', 'Roupas de bebê', 'Chupetas'];
+
+    // Ex.: '21 de novembro' / '12 de dezembro'. Vazio mostra só o mês.
+    const ENCONTRO_2_DATA = '';
+    const ENCONTRO_3_DATA = '';
+
+    // WhatsApp do Suporte (número da Gabriela; botões "Falar no WhatsApp" e botão flutuante).
+    const WHATSAPP_URL = 'https://wa.me/5521966474253?text=Ol%C3%A1%2C%20Gabriela!%20Tenho%20d%C3%BAvidas%20sobre%20como%20participar%20da%20Academia%20de%20Virtudes.';
+
+    /* Símbolo da Academia: provisório (tem halo nas bordas). Quando o .svg
+       chegar, troque os <picture> com a classe "av-simbolo" no HTML. */
+  </script>
+
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Academia de Virtudes · Aula inaugural: Os 4 perfis diante da inteligência artificial, com Eduardo Pitombo Mesquita, em 23 de outubro de 2026, no Barra Space Center (Rio de Janeiro). Inscrições encerradas. Em breve, informações sobre o próximo evento.">
+  <meta name="theme-color" content="#0a1628">
+
+  <!-- Prévia do link (WhatsApp, LinkedIn etc.). A imagem precisa de URL absoluta. -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Grupo GPM">
+  <meta property="og:url" content="https://gpmintegracao.com.br/academiadevirtudes/">
+  <meta property="og:title" content="Academia de Virtudes · Aula inaugural">
+  <meta property="og:description" content="Os 4 perfis diante da inteligência artificial. Aula inaugural realizada em 23 de outubro de 2026, no Barra Space Center (Rio de Janeiro). Inscrições encerradas. Em breve, informações sobre o próximo evento.">
+  <meta property="og:image" content="https://gpmintegracao.com.br/assets/academia-de-virtudes-og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Logo da Academia de Virtudes sobre fundo azul-marinho">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="../assets/logo-alfa.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="../assets/academia-hero-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
+  <link rel="preload" as="image" href="../assets/academia-hero-desktop.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
+
+  <style>
+    :root {
+      --azul-marinho: #0a1628;
+      --azul-medio: #0d1f3c;
+      --azul-arte: #011838;
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      /* dourado mais escuro para TEXTO sobre fundo claro (contraste AA) */
+      --dourado-texto-claro: #7a5c20;
+      --marfim: #f5efe3;
+      --off-white: #f5f0e8;
+      --branco: #ffffff;
+      --branco-70: rgba(255, 255, 255, 0.70);
+      --branco-40: rgba(255, 255, 255, 0.40);
+      --texto-suave: rgba(245, 239, 227, 0.80);
+      --texto-fraco: rgba(245, 239, 227, 0.66);
+      --texto-escuro: #2f3647;
+      --texto-escuro-suave: #4f5668;
+      --borda-sutil: rgba(201, 168, 76, 0.18);
+      --borda-hover: rgba(201, 168, 76, 0.45);
+      --erro: #f2a594;
+      --max-width: 1180px;
+    }
+
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--azul-marinho); color: var(--marfim); line-height: 1.7; font-size: 16px; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    h1, h2, h3, h4, p, ul, ol, blockquote, figure, fieldset { margin: 0; }
+    ul, ol { padding: 0; list-style: none; }
+    [hidden] { display: none !important; }
+
+    /* Cormorant usa algarismos "antigos" por padrão (10h vira "ıoh"); força os alinhados */
+    .av-hero-title, .av-h2, .av-h3, .av-lead, .av-quote, .av-encontro-titulo, .av-perfil-nome,
+    .av-perfis-pergunta, .av-agenda time, .av-condutor-nome, .av-confirmacao-titulo {
+      font-variant-numeric: lining-nums;
+    }
+
+    :focus-visible { outline: 2px solid var(--dourado-brilho); outline-offset: 3px; border-radius: 4px; }
+    .av-section--light :focus-visible { outline-color: var(--dourado-texto-claro); }
+
+    .av-skip {
+      position: absolute; left: 1rem; top: -100px; z-index: 100;
+      background: var(--dourado); color: var(--azul-marinho); font-weight: 600;
+      padding: 0.75rem 1rem; border-radius: 8px;
+    }
+    .av-skip:focus { top: 1rem; }
+
+    .visually-hidden {
+      position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Header e footer: mesmos das páginas de unidade do site GPM ── */
+    .site-container { width: min(100%, calc(100% - 2rem)); max-width: var(--max-width); margin: 0 auto; }
+    header { position: sticky; top: 0; z-index: 30; background: rgba(10,22,40,0.92); border-bottom: 1px solid rgba(201,168,76,0.12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; position: relative; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 0 8px rgba(201,168,76,0.3)); transition: filter 0.3s ease; }
+    .brand:hover img { filter: drop-shadow(0 0 14px rgba(201,168,76,0.6)); }
+    .logo-text { font-size: 15px; font-weight: 600; letter-spacing: 0.1em; color: #fff; line-height: 1.2; }
+    .logo-text small { display: block; font-size: 9px; letter-spacing: 0.2em; color: rgba(201,168,76,0.8); margin-top: 2px; font-weight: 400; }
+    .menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.6rem; font-size: 0.95rem; color: var(--branco-70); }
+    .menu a:hover { color: var(--dourado); }
+    .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+    .hamburger { display: none; background: none; border: 1px solid rgba(255,255,255,0.12); width: 44px; height: 44px; border-radius: 50%; color: var(--branco); cursor: pointer; align-items: center; justify-content: center; }
+    .hamburger span { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 1px; position: relative; }
+    .hamburger span::before, .hamburger span::after { content: ''; position: absolute; left: 0; width: 100%; height: 2px; background: currentColor; border-radius: 1px; }
+    .hamburger span::before { top: -6px; }
+    .hamburger span::after { top: 6px; }
+    .mobile-menu { display: none; position: absolute; top: 100%; right: 1rem; left: 1rem; background: rgba(10,22,40,0.98); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 1.5rem; backdrop-filter: blur(16px); z-index: 20; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a { display: block; margin-bottom: 1rem; color: var(--branco-70); font-size: 1rem; }
+    .mobile-menu a:last-child { margin-bottom: 0; }
+
+    footer { background: #081121; padding: 3rem 0 2rem; }
+    .footer-inner { display: grid; grid-template-columns: 1.2fr 0.9fr 0.9fr; gap: 2rem; align-items: start; }
+    .footer-logo { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-logo span { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links { display: grid; gap: 0.8rem; }
+    .footer-links a { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links a:hover { color: var(--dourado); }
+    .footer-bottom { margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; color: rgba(255,255,255,0.62); font-size: 0.92rem; }
+
+    /* ── Botões: mesmos do site ── */
+    .button { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; padding: 1rem 1.75rem; font-size: 0.95rem; font-family: inherit; border: 0; cursor: pointer; transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease; }
+    .button-primary { background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho)); color: var(--azul-marinho); box-shadow: 0 18px 40px rgba(201,168,76,0.16); }
+    .button-primary:hover { transform: translateY(-2px); background: var(--dourado-brilho); }
+    .button-ghost { border: 1px solid rgba(255,255,255,0.22); color: var(--marfim); background: transparent; }
+    .button-ghost:hover { border-color: var(--dourado); color: var(--dourado-brilho); }
+    .button[disabled] { opacity: 0.7; cursor: progress; transform: none; }
+
+    /* ── Estrutura da página ── */
+    .av-section { padding: 4.25rem 0; }
+    .av-section--light { background: var(--off-white); color: var(--texto-escuro); }
+    .av-section--deep { background: var(--azul-medio); }
+    .av-container { width: min(100% - 2.5rem, 720px); margin-inline: auto; }
+    .av-container--wide { width: min(100% - 2.5rem, 1040px); }
+
+    .av-eyebrow { display: inline-flex; align-items: center; gap: 0.85rem; font-size: 0.74rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dourado); }
+    .av-eyebrow::before { content: ''; width: 32px; height: 1px; background: currentColor; opacity: 0.7; }
+    .av-eyebrow--center::after { content: ''; width: 32px; height: 1px; background: currentColor; opacity: 0.7; }
+    .av-section--light .av-eyebrow { color: var(--dourado-texto-claro); }
+
+    .av-h2 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(1.95rem, 6.4vw, 2.75rem); line-height: 1.12; letter-spacing: -0.01em; margin: 0.85rem 0 1.25rem; color: var(--marfim); }
+    .av-section--light .av-h2 { color: var(--azul-marinho); }
+    .av-h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.55rem; line-height: 1.2; color: var(--marfim); margin: 2.75rem 0 1.25rem; }
+    .av-section--light .av-h3 { color: var(--azul-marinho); }
+    .av-text { font-size: 1.02rem; line-height: 1.85; color: var(--texto-suave); }
+    .av-text + .av-text { margin-top: 1rem; }
+    .av-section--light .av-text { color: var(--texto-escuro-suave); }
+    .av-center { text-align: center; }
+    .av-rule { width: 56px; height: 1px; border: 0; background: var(--dourado); margin: 2.25rem auto; opacity: 0.8; }
+    .av-link { text-decoration: underline; text-decoration-color: rgba(201,168,76,0.55); text-underline-offset: 4px; }
+    .av-link:hover { color: var(--dourado-brilho); }
+
+    /* ── 1. Hero: foto do auditório em tela cheia ── */
+    /* altura do header fixo no topo; o hero ocupa o resto da tela */
+    /* altura do header; o JS mede a altura real e atualiza */
+    :root { --header-h: 77px; }
+
+    /* ── Faixa com contagem regressiva (dentro do header, presa no topo) ── */
+    .av-ticker {
+      position: relative; display: block; overflow: hidden; height: 34px;
+      background: linear-gradient(90deg, #b8963f, var(--dourado-brilho) 50%, #b8963f);
+      color: var(--azul-marinho); font-size: 0.8rem; font-weight: 500; line-height: 34px; white-space: nowrap;
+    }
+    .av-ticker:focus-visible { outline: 2px solid var(--branco); outline-offset: -3px; border-radius: 0; }
+    .av-ticker-trilho { display: inline-flex; width: max-content; }
+    .av-ticker-grupo, .av-ticker-item { display: inline-flex; align-items: center; }
+    .av-ticker-item > span { padding: 0 0.9rem; }
+    .av-ticker-item i { font-style: normal; font-size: 0.65rem; opacity: 0.7; }
+    .av-ticker b { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .av-ticker-cta { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .av-ticker-fixo { display: none; }
+    @media (prefers-reduced-motion: no-preference) {
+      .av-ticker-trilho { animation: avTicker 45s linear infinite; }
+      .av-ticker:hover .av-ticker-trilho, .av-ticker:focus-visible .av-ticker-trilho { animation-play-state: paused; }
+    }
+    @keyframes avTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    /* "reduzir movimento": texto parado e curto, centralizado */
+    @media (prefers-reduced-motion: reduce) {
+      .av-ticker { text-align: center; }
+      .av-ticker-trilho { display: none; }
+      .av-ticker-fixo { display: inline; }
+    }
+    .av-hero {
+      position: relative; isolation: isolate; overflow: hidden;
+      min-height: calc(100vh - var(--header-h));
+      min-height: calc(100svh - var(--header-h));
+      display: flex; align-items: center;
+      padding: 2rem 0 2.5rem; text-align: center;
+      background: #0b1a3a;
+    }
+    .av-hero-bg, .av-hero-bg img { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .av-hero-bg { z-index: -2; }
+    .av-hero-bg img { object-fit: cover; object-position: center; max-width: none; }
+    /* overlay: azul-marinho ~70%, mais escuro no centro (atrás do texto) e na base */
+    .av-hero::before {
+      content: ''; position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 75% 60% at 50% 50%, rgba(6, 14, 32, 0.55) 0%, rgba(6, 14, 32, 0) 72%),
+        linear-gradient(to bottom, rgba(6, 14, 32, 0) 62%, rgba(6, 14, 32, 0.85) 100%),
+        rgba(11, 26, 58, 0.70);
+    }
+    .av-hero .av-container { width: min(100% - 2.5rem, 880px); }
+    .av-selo { display: inline-flex; align-items: center; gap: 0.7rem; margin-bottom: 1.4rem; }
+    .av-selo img { width: 36px; height: 36px; object-fit: contain; }
+    .av-selo span { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dourado-brilho); text-align: left; line-height: 1.5; }
+    .av-hero-title { margin: 0 auto 1.1rem; font-size: clamp(2.25rem, 10vw, 2.5rem); line-height: 1.08; text-wrap: balance; }
+    .av-hero-title .l1 { display: block; font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: -0.025em; color: var(--branco); }
+    .av-hero-title .l2 { display: block; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 600; font-size: 1.12em; line-height: 1.02; color: var(--dourado-brilho); }
+    .av-hero-apoio { max-width: 34ch; margin: 0 auto 1.25rem; text-wrap: balance; font-size: 1.02rem; line-height: 1.6; color: rgba(255, 255, 255, 0.82); }
+    .av-hero-info { margin: 0 auto 1.6rem; font-size: 0.88rem; line-height: 1.7; color: rgba(255, 255, 255, 0.88); }
+    .av-hero-info span { white-space: nowrap; }
+    .av-hero-info a { color: var(--dourado-brilho); text-decoration: underline; text-decoration-color: rgba(226, 196, 106, 0.55); text-underline-offset: 4px; }
+    .av-hero-info a:hover { color: #fff; }
+    .av-cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 100%; max-width: 320px; min-height: 52px; padding: 0.9rem 1.75rem;
+      border-radius: 10px; font-weight: 600; font-size: 1rem; color: var(--azul-marinho);
+      background: linear-gradient(135deg, #d4b45a 0%, var(--dourado-brilho) 55%, #d1af55 100%);
+      box-shadow: 0 14px 34px rgba(201, 168, 76, 0.22);
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+    .av-cta:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    /* selo "Inscrições encerradas" (não é botão: sem gradiente nem sombra) */
+    .av-encerrado {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0.7rem 1.6rem;
+      border: 1px solid rgba(226, 196, 106, 0.55); border-radius: 10px;
+      font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em; color: var(--dourado-brilho);
+      background: rgba(10, 22, 40, 0.45);
+    }
+    .av-hero-prazo { margin-top: 0.85rem; font-size: 0.82rem; color: rgba(255, 255, 255, 0.75); }
+    @media (max-width: 767px) {
+      /* selo numa linha só e local em linha própria (sem "·" solto no fim da linha) */
+      .av-selo span { font-size: 0.64rem; letter-spacing: 0.15em; white-space: nowrap; }
+      .av-selo img { width: 30px; height: 30px; }
+      .av-hero-info-sep { display: none; }
+      .av-hero-info-local { display: block; }
+    }
+
+    /* ── 2. O que é ── */
+    .av-quote { position: relative; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: clamp(1.55rem, 5.6vw, 2.15rem); line-height: 1.3; color: var(--azul-marinho); padding-top: 1.5rem; margin: 0.5rem 0 1.75rem; }
+    .av-quote::before { content: ''; position: absolute; top: 0; left: 0; width: 44px; height: 1px; background: var(--dourado); }
+    .av-encontros { display: grid; gap: 1rem; counter-reset: none; }
+    .av-encontro { border: 1px solid rgba(10,22,40,0.14); border-radius: 14px; padding: 1.35rem 1.4rem; display: grid; gap: 0.35rem; color: var(--texto-escuro-suave); }
+    .av-encontro--atual { border-color: var(--dourado); background: #fffdf8; box-shadow: 0 14px 36px rgba(10,22,40,0.07); color: var(--texto-escuro); }
+    .av-encontro-num { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--dourado-texto-claro); }
+    .av-encontro-titulo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.45rem; line-height: 1.2; color: var(--azul-marinho); }
+    .av-encontro:not(.av-encontro--atual) .av-encontro-titulo { color: #3d4559; }
+    .av-encontro-rodape { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.35rem; font-size: 0.95rem; }
+    .av-badge { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.3rem 0.65rem; border-radius: 999px; border: 1px solid rgba(10,22,40,0.2); color: var(--texto-escuro-suave); }
+
+    /* ── 3 e 4. Primeiro encontro + perfis ── */
+    .av-lead { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(1.95rem, 6.4vw, 2.6rem); line-height: 1.15; color: var(--marfim); margin: 0.85rem 0 1.25rem; }
+    .av-lead em { color: var(--dourado-brilho); font-weight: 500; }
+    .av-perfis { display: grid; gap: 1rem; margin-top: 0.5rem; }
+    .av-perfil { border: 1px solid var(--borda-sutil); border-radius: 14px; padding: 1.5rem 1.4rem; background: rgba(255,255,255,0.025); transition: border-color 0.3s ease; }
+    .av-perfil:hover { border-color: var(--borda-hover); }
+    .av-perfil-num { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.24em; color: var(--dourado); }
+    .av-perfil-nome { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.55rem; line-height: 1.2; color: var(--marfim); margin: 0.4rem 0 0.5rem; }
+    .av-perfil p { font-size: 0.97rem; line-height: 1.7; color: var(--texto-suave); }
+    .av-perfis-pergunta { margin-top: 2rem; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.3rem; line-height: 1.45; color: var(--texto-suave); text-align: center; }
+
+    /* ── 5. Programação ── */
+    .av-agenda { position: relative; margin-top: 0.75rem; }
+    .av-agenda::before { content: ''; position: absolute; left: 4.3rem; top: 1.4rem; bottom: 1.4rem; width: 1px; background: rgba(122,92,32,0.35); }
+    .av-agenda li { position: relative; display: grid; grid-template-columns: 3.2rem 1fr; gap: 2.4rem; padding: 0.85rem 0; align-items: baseline; }
+    .av-agenda li::before { content: ''; position: absolute; left: calc(4.3rem - 3px); top: 1.4rem; width: 7px; height: 7px; border-radius: 50%; background: var(--dourado); box-shadow: 0 0 0 4px var(--off-white); }
+    .av-agenda time { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.5rem; line-height: 1; color: var(--dourado-texto-claro); text-align: right; }
+    .av-agenda-momento { font-size: 1.02rem; color: var(--texto-escuro); font-weight: 500; }
+    .av-dinamica { margin-top: 0.6rem; padding: 1rem 1.1rem; border-left: 2px solid var(--dourado); background: rgba(201,168,76,0.08); border-radius: 0 10px 10px 0; font-size: 0.95rem; line-height: 1.7; color: var(--texto-escuro-suave); font-weight: 400; }
+
+    /* ── 6. Quem conduz ── */
+    .av-condutor { display: grid; gap: 2rem; grid-template-areas: "foto" "texto" "card"; }
+    .av-condutor-foto {
+      grid-area: foto; justify-self: center; width: 220px; height: auto; aspect-ratio: 4 / 5;
+      object-fit: cover; object-position: center 25%; border-radius: 12px;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+    }
+    /* ~60 caracteres por linha */
+    .av-condutor-texto { grid-area: texto; max-width: 33rem; }
+    .av-condutor-nome { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: clamp(2rem, 7vw, 2.6rem); line-height: 1.12; color: var(--branco); margin-top: 0.85rem; }
+    .av-condutor-destaque { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: clamp(1.35rem, 4.6vw, 1.6rem); line-height: 1.3; color: var(--dourado-brilho); margin-top: 0.3rem; }
+    .av-condutor-divisor { width: 48px; height: 1px; border: 0; background: var(--dourado); opacity: 0.8; margin: 1.25rem 0 1.4rem; }
+    .av-condutor-bio { font-size: 1rem; line-height: 1.8; color: rgba(255, 255, 255, 0.8); }
+    .av-condutor-bio + .av-condutor-bio { margin-top: 1rem; }
+
+    .av-condutor-card {
+      grid-area: card; padding: 1.5rem 1.4rem 1.1rem; border-radius: 14px;
+      background: var(--azul-medio); border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+    .av-indicadores { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 1.1rem; margin: 0; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(201, 168, 76, 0.14); }
+    /* rótulos alinhados pela base de cada linha, mesmo quando um valor quebra em 2 linhas */
+    .av-indicadores > div { display: flex; flex-direction: column; }
+    .av-indicadores dt { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.45rem; line-height: 1.1; color: var(--dourado-brilho); font-variant-numeric: lining-nums; }
+    .av-indicadores dd { margin: auto 0 0; padding-top: 0.4rem; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.14em; line-height: 1.45; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); }
+    /* LinkedIn: ícone em contorno, discreto; área de toque de 44px */
+    .av-linkedin {
+      position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+      margin: 0.75rem 0 0 -6px; color: #c9a45c; opacity: 0.6; transition: opacity 0.25s ease;
+    }
+    .av-linkedin::before { content: ''; position: absolute; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(201, 164, 92, 0.3); }
+    .av-linkedin:hover, .av-linkedin:focus, .av-linkedin:focus-visible { opacity: 1; }
+    .av-linkedin svg { width: 16px; height: 16px; }
+
+    /* ── 7. Doação ── */
+    .av-itens { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.6rem 0 1.4rem; }
+    .av-itens li { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.55rem 1rem; border: 1px solid rgba(10,22,40,0.18); border-radius: 999px; font-size: 0.93rem; color: var(--texto-escuro); background: #fffdf8; }
+    .av-itens li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--dourado); }
+    .av-nota { font-size: 0.88rem; color: var(--texto-escuro-suave); }
+    .av-instituicao { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(10,22,40,0.1); }
+    .av-instituicao-logo { display: block; flex-shrink: 0; border-radius: 50%; }
+    .av-instituicao-logo img { height: 48px; width: 48px; }
+    .av-instituicao a.av-link { font-size: 0.93rem; color: var(--texto-escuro); }
+    .av-instituicao a.av-link:hover { color: var(--dourado-texto-claro); }
+
+    /* ── WhatsApp do Suporte ── */
+    .av-duvidas { margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid var(--borda-sutil); display: grid; justify-items: center; gap: 0.85rem; text-align: center; }
+    .av-duvidas p { color: var(--texto-suave); font-size: 0.95rem; }
+    .av-confirmacao .av-duvidas p { margin-top: 0; }
+    .button-whats { gap: 0.6rem; min-height: 48px; border-radius: 10px; }
+    .button-whats svg { width: 20px; height: 20px; flex-shrink: 0; color: #25d366; }
+    .av-confirmacao .av-duvidas .button { margin-top: 0; }
+    .av-wa-float {
+      position: fixed; right: 16px; bottom: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 40;
+      width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+      /* verde do WhatsApp um pouco mais escuro: ícone branco com contraste >= 3:1 */
+      background: #1fa855; color: #fff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 2px 6px rgba(0, 0, 0, 0.18);
+      transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .av-wa-float:hover { transform: scale(1.06); }
+    .av-wa-float svg { width: 30px; height: 30px; }
+    @media (max-width: 767px) {
+      /* no celular, some enquanto o formulário está na tela (não cobre o botão de envio) */
+      .av-wa-float.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+      /* espaço no fim do rodapé para o botão flutuante não cobrir o texto */
+      footer { padding-bottom: 6rem; }
+    }
+
+    /* ── 8. Formulário ── */
+    #inscricao { scroll-margin-top: calc(var(--header-h) + 12px); }
+    #av-confirmacao { scroll-margin-top: calc(var(--header-h) + 24px); }
+    .av-form-intro { color: var(--texto-suave); margin-bottom: 2rem; }
+    .av-compartilhar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.9rem; margin: -0.25rem 0 1.25rem; font-size: 0.88rem; line-height: 1.6; color: var(--texto-fraco); }
+    .av-compartilhar p { flex: 1 1 260px; }
+    .av-copiar {
+      display: inline-flex; align-items: center; gap: 0.45rem; min-height: 40px; padding: 0.45rem 0.9rem;
+      font: inherit; font-size: 0.85rem; font-weight: 500; color: var(--dourado-brilho); cursor: pointer;
+      background: transparent; border: 1px solid rgba(201, 168, 76, 0.35); border-radius: 999px;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .av-copiar:hover { border-color: var(--dourado); color: #fff; }
+    .av-copiar svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .av-copiar.is-copiado { border-color: var(--dourado); }
+    .av-hint--below { margin-top: 0; }
+    .av-form { display: grid; gap: 1.35rem; color-scheme: dark; }
+    .av-field { display: grid; gap: 0.45rem; }
+    .av-field[hidden] { display: none; }
+    .av-label, .av-fieldset legend { font-size: 0.95rem; font-weight: 500; color: var(--marfim); line-height: 1.45; }
+    .av-req { color: var(--dourado-brilho); margin-left: 0.15rem; }
+    .av-hint { font-size: 0.85rem; color: var(--texto-fraco); margin-top: -0.2rem; }
+    .av-input, .av-select, .av-textarea {
+      width: 100%; font: inherit; font-size: 16px; /* 16px evita zoom automático no iPhone */
+      color: var(--marfim); background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 0.85rem 1rem; min-height: 50px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .av-input::placeholder, .av-textarea::placeholder { color: rgba(245,239,227,0.45); }
+    .av-input:focus, .av-select:focus, .av-textarea:focus { outline: none; border-color: var(--dourado); box-shadow: 0 0 0 3px rgba(201,168,76,0.28); }
+    .av-textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+    .av-select {
+      color-scheme: dark; appearance: none; -webkit-appearance: none; padding-right: 2.75rem; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23c9a84c' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 1rem center;
+    }
+    .av-select option { background: var(--azul-medio); color: var(--marfim); }
+    [aria-invalid="true"].av-input, [aria-invalid="true"].av-select, [aria-invalid="true"].av-textarea { border-color: var(--erro); }
+    .av-error { font-size: 0.87rem; color: var(--erro); }
+    .av-error:empty { display: none; }
+
+    .av-fieldset { border: 0; padding: 0; display: grid; gap: 0.6rem; min-width: 0; }
+    .av-fieldset legend { padding: 0; margin-bottom: 0.6rem; }
+    .av-options { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .av-options--stack { flex-direction: column; }
+    .av-option { display: flex; align-items: center; gap: 0.7rem; min-height: 48px; padding: 0.7rem 1rem; border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; cursor: pointer; background: rgba(255,255,255,0.03); transition: border-color 0.2s ease, background 0.2s ease; }
+    .av-options:not(.av-options--stack) .av-option { flex: 1 1 120px; }
+    .av-option:hover { border-color: var(--borda-hover); }
+    .av-option:has(input:checked) { border-color: var(--dourado); background: rgba(201,168,76,0.1); }
+    .av-option input { width: 18px; height: 18px; margin: 0; accent-color: var(--dourado); flex-shrink: 0; }
+    .av-fieldset.is-invalid .av-option { border-color: var(--erro); }
+
+    .av-consent { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; font-size: 0.93rem; line-height: 1.6; color: var(--texto-suave); }
+    .av-consent input { width: 20px; height: 20px; margin: 0.15rem 0 0; accent-color: var(--dourado); flex-shrink: 0; }
+
+    .av-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+    .av-submit { width: 100%; min-height: 56px; font-size: 1rem; margin-top: 0.4rem; }
+    .av-form-status { padding: 0.9rem 1rem; border: 1px solid var(--erro); border-radius: 10px; color: var(--erro); font-size: 0.93rem; line-height: 1.6; background: rgba(242,165,148,0.06); }
+    .av-form-status[hidden] { display: none; }
+
+    .av-confirmacao { text-align: center; border: 1px solid var(--dourado); border-radius: 18px; padding: 2.5rem 1.5rem; background: rgba(201,168,76,0.05); }
+    .av-confirmacao:focus { outline: none; }
+    .av-confirmacao:focus-visible { outline: 2px solid var(--dourado-brilho); outline-offset: 4px; }
+    .av-confirmacao .av-simbolo { display: block; }
+    .av-confirmacao-simbolo { width: 72px; height: 72px; object-fit: contain; margin: 0 auto 1.25rem; }
+    .av-confirmacao-titulo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2rem; line-height: 1.15; color: var(--marfim); }
+    .av-confirmacao p { margin-top: 1rem; color: var(--texto-suave); }
+    .av-confirmacao-meta { color: var(--dourado-brilho) !important; font-weight: 500; }
+    .av-confirmacao-local { line-height: 1.6; }
+    .av-confirmacao-local strong { display: block; color: var(--marfim); font-weight: 500; }
+    .av-confirmacao-local a { display: inline-block; margin-top: 0.3rem; color: var(--dourado-brilho); }
+    .av-confirmacao .button { margin-top: 1.75rem; }
+
+    /* ── Entrada suave (só com JS e sem "reduzir movimento") ── */
+    .av-motion .av-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .av-motion .av-reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
+
+    @media (min-width: 640px) {
+      .av-section { padding: 5.5rem 0; }
+      .av-perfis { grid-template-columns: repeat(2, 1fr); }
+      .av-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.35rem; }
+      .av-confirmacao { padding: 3rem 2.5rem; }
+    }
+
+    @media (min-width: 760px) {
+      .av-encontros { grid-template-columns: 1.2fr 1fr 1fr; align-items: stretch; }
+    }
+
+    @media (min-width: 768px) {
+      .av-hero { min-height: 88vh; padding: 4rem 0 4.5rem; }
+      .av-selo { margin-bottom: 1.75rem; }
+      .av-selo img { width: 40px; height: 40px; }
+      .av-selo span { font-size: 0.74rem; letter-spacing: 0.28em; }
+      .av-hero-title { font-size: clamp(3rem, 5vw, 3.875rem); margin-bottom: 1.4rem; }
+      .av-hero-apoio { font-size: 1.15rem; max-width: 48ch; }
+      .av-hero-info { font-size: 0.95rem; margin-bottom: 2rem; }
+
+      /* Quem conduz: foto + card à esquerda, texto à direita */
+      .av-condutor { grid-template-columns: 300px 1fr; grid-template-areas: "foto texto" "card texto"; column-gap: clamp(2.5rem, 6vw, 4.5rem); row-gap: 1.25rem; align-items: start; }
+      .av-condutor-foto { width: 300px; justify-self: stretch; }
+      .av-condutor-texto { align-self: center; }
+      .av-condutor-bio { font-size: 1.06rem; }
+    }
+
+    @media (min-width: 1024px) {
+      .av-perfis { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 639px) {
+      .av-form-grid { display: grid; gap: 1.35rem; }
+    }
+
+    /* em celular estreito a frase do logo quebrava em 2 linhas (igual à home, ela some aqui) */
+    @media (max-width: 420px) {
+      .logo-text small { display: none; }
+    }
+
+    @media (max-width: 980px) {
+      .menu, .topbar-actions { display: none; }
+      .hamburger { display: inline-flex; }
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="av-skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header>
+    <div class="site-container topbar">
+      <a class="brand" href="../index.html">
+        <img src="../assets/logo-gpm.png" alt="Logo Grupo GPM" width="48" height="48">
+        <span class="logo-text">GRUPO GPM<small>ESSÊNCIA HUMANA. POTENCIAL ARTIFICIAL</small></span>
+      </a>
+      <button class="hamburger" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
+      <nav class="menu" aria-label="Menu principal">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+        <a href="../mentoria.html">Mentoria</a>
+        <a href="../index.html#contato">Contato</a>
+      </nav>
+      <div class="topbar-actions">
+        <a class="button button-primary" href="../mentoria.html">Mentoria Nexialista</a>
+      </div>
+      <nav class="mobile-menu" id="mobileMenu" aria-label="Menu principal (celular)">
+        <a href="../index.html#inicio">Início</a>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+        <a href="../mentoria.html">Mentoria</a>
+        <a href="../index.html#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- 1. Hero -->
+    <section class="av-hero" aria-labelledby="av-titulo">
+      <picture class="av-hero-bg">
+        <source media="(max-width: 767px)" srcset="../assets/academia-hero-mobile.webp" type="image/webp">
+        <source media="(min-width: 768px)" srcset="../assets/academia-hero-desktop.webp" type="image/webp">
+        <source media="(max-width: 767px)" srcset="../assets/auditorio-vertical.png">
+        <img src="../assets/auditorio-horizontal.png" alt="" width="1672" height="941" fetchpriority="high" decoding="async">
+      </picture>
+
+      <div class="av-container">
+        <p class="av-selo">
+          <picture class="av-simbolo">
+            <source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp">
+            <img src="../assets/academia-de-virtudes-simbolo.png" alt="" width="40" height="40" decoding="async">
+          </picture>
+          <span>Academia de Virtudes · <span data-config="aula">Aula inaugural</span></span>
+        </p>
+
+        <h1 class="av-hero-title" id="av-titulo">
+          <span class="l1">Os 4 perfis diante da</span>
+          <span class="l2">inteligência artificial.</span>
+        </h1>
+
+        <p class="av-hero-apoio">A IA não corrige comportamento: ela amplifica quem você já é.</p>
+
+        <p class="av-hero-info">
+          <span>Sexta-feira, 23 de outubro</span> · <span>9h às 14h</span><span class="av-hero-info-sep"> · </span><span class="av-hero-info-local"><a href="https://www.google.com/maps/search/?api=1&amp;query=Barra+Space+Center+Av.+das+Am%C3%A9ricas+1155+Rio+de+Janeiro" target="_blank" rel="noopener" data-config="mapa">Barra Space Center</a></span>
+        </p>
+
+        <p class="av-encerrado">Inscrições encerradas</p>
+        <p class="av-hero-prazo">Em breve, informações sobre o próximo evento.</p>
+      </div>
+    </section>
+
+    <!-- 2. O que é a Academia de Virtudes -->
+    <section class="av-section av-section--light" id="academia" aria-labelledby="av-academia-titulo">
+      <div class="av-container av-reveal">
+        <p class="av-eyebrow">A Academia</p>
+        <h2 class="av-h2" id="av-academia-titulo">O que é a Academia de Virtudes</h2>
+
+        <blockquote class="av-quote">
+          <p>O trabalho é o lugar de desenvolver virtudes e afastar vícios.</p>
+        </blockquote>
+
+        <p class="av-text">A Academia de Virtudes é um ciclo de encontros conduzido por Eduardo Pitombo sobre comportamento humano, estratégia e tecnologia. A proposta não é ensinar ferramentas, e sim olhar para quem as usa e entender que desenvolvimento humano transforma potencial artificial em resultado real.</p>
+
+        <h3 class="av-h3">As aulas de 2026</h3>
+      </div>
+      <div class="av-container av-container--wide av-reveal">
+        <ol class="av-encontros">
+          <li class="av-encontro av-encontro--atual">
+            <span class="av-encontro-num" data-config="aula">Aula inaugural</span>
+            <h4 class="av-encontro-titulo">Os 4 perfis diante da IA</h4>
+            <div class="av-encontro-rodape"><span>23 de outubro</span></div>
+          </li>
+          <li class="av-encontro">
+            <span class="av-encontro-num">Aula II</span>
+            <h4 class="av-encontro-titulo">Essência Humana</h4>
+            <div class="av-encontro-rodape"><span data-config="encontro2-data">Novembro</span><span class="av-badge">Em breve</span></div>
+          </li>
+          <li class="av-encontro">
+            <span class="av-encontro-num">Aula III</span>
+            <h4 class="av-encontro-titulo">Potencial Artificial</h4>
+            <div class="av-encontro-rodape"><span data-config="encontro3-data">Dezembro</span><span class="av-badge">Em breve</span></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 3. O primeiro encontro + 4. Os 4 perfis -->
+    <section class="av-section" id="encontro" aria-labelledby="av-encontro-titulo">
+      <div class="av-container av-reveal">
+        <p class="av-eyebrow">O primeiro encontro</p>
+        <h2 class="av-lead" id="av-encontro-titulo">A IA não corrige comportamento: <em>ela amplifica quem o profissional já é.</em></h2>
+        <p class="av-text">Com base sólida, acelera o resultado. Com base rasa, acelera o erro.</p>
+        <p class="av-text">Neste primeiro encontro, Eduardo apresenta os quatro perfis com que nos relacionamos com a inteligência artificial e convida cada participante a reconhecer onde está hoje e para onde quer ir.</p>
+
+        <h3 class="av-h3">Os 4 perfis</h3>
+      </div>
+      <div class="av-container av-container--wide av-reveal">
+        <ol class="av-perfis">
+          <li class="av-perfil">
+            <span class="av-perfil-num" aria-hidden="true">01</span>
+            <h4 class="av-perfil-nome">O Reativo</h4>
+            <p>Resiste ou nega a mudança e tende a voltar à zona de conforto.</p>
+          </li>
+          <li class="av-perfil">
+            <span class="av-perfil-num" aria-hidden="true">02</span>
+            <h4 class="av-perfil-nome">O Usuário Google</h4>
+            <p>Usa a IA como busca rasa e automação básica.</p>
+          </li>
+          <li class="av-perfil">
+            <span class="av-perfil-num" aria-hidden="true">03</span>
+            <h4 class="av-perfil-nome">O Especialista</h4>
+            <p>Usa a IA com profundidade, mas dentro do próprio silo.</p>
+          </li>
+          <li class="av-perfil">
+            <span class="av-perfil-num" aria-hidden="true">04</span>
+            <h4 class="av-perfil-nome">O Nexialista</h4>
+            <p>Cruza os silos e usa a IA para fortalecer a decisão humana.</p>
+          </li>
+        </ol>
+        <p class="av-perfis-pergunta">Qual deles representa você hoje?</p>
+      </div>
+    </section>
+
+    <!-- 5. Programação -->
+    <section class="av-section av-section--light" id="programacao" aria-labelledby="av-programacao-titulo">
+      <div class="av-container av-reveal">
+        <p class="av-eyebrow">Sexta-feira, 23 de outubro</p>
+        <h2 class="av-h2" id="av-programacao-titulo">Programação</h2>
+
+        <ol class="av-agenda">
+          <li><time datetime="2026-10-23T09:00-03:00">9h</time><span class="av-agenda-momento">Café da manhã e recepção</span></li>
+          <li><time datetime="2026-10-23T10:00-03:00">10h</time><span class="av-agenda-momento">Palestra: os 4 perfis diante da IA</span></li>
+          <li><time datetime="2026-10-23T11:00-03:00">11h</time><span class="av-agenda-momento">Perguntas e conversa</span></li>
+          <li>
+            <time datetime="2026-10-23T12:00-03:00">12h</time>
+            <div class="av-agenda-momento">
+              Dinâmica: desafios reais resolvidos ao vivo
+              <p class="av-dinamica">Traga um desafio real, do trabalho, da sua empresa ou da vida pessoal. Eduardo vai mostrar ao vivo como o resolveria com o próprio raciocínio, prompts e ferramentas.</p>
+            </div>
+          </li>
+          <li><time datetime="2026-10-23T14:00-03:00">14h</time><span class="av-agenda-momento">Encerramento</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 6. Quem conduz -->
+    <section class="av-section" id="quem-conduz" aria-labelledby="av-condutor-titulo">
+      <div class="av-container av-container--wide av-reveal">
+        <div class="av-condutor">
+          <img class="av-condutor-foto" src="../assets/eduardo-perfil.jpg" alt="Eduardo Pitombo Mesquita" width="852" height="852" loading="lazy" decoding="async">
+
+          <div class="av-condutor-texto">
+            <p class="av-eyebrow">Quem conduz</p>
+            <h2 class="av-condutor-nome" id="av-condutor-titulo">Eduardo Pitombo Mesquita</h2>
+            <p class="av-condutor-destaque">Nexialista antifrágil.</p>
+            <hr class="av-condutor-divisor">
+            <p class="av-condutor-bio">Fundador do Grupo GPM, empreendedor há mais de 20 anos e mestre em Administração pela FGV. Sua trajetória passou por quebrar, reestruturar e continuar construindo, e ensinou o que a teoria não alcança: empresa sobrevive de gente que decide bem em cenário de incerteza.</p>
+            <p class="av-condutor-bio">Nesta aula, Eduardo mostra como integra comportamento, estratégia e tecnologia na prática, e por que só a profundidade humana transforma potencial artificial em resultado real.</p>
+          </div>
+
+          <div class="av-condutor-card">
+            <dl class="av-indicadores">
+              <div><dt>20+</dt><dd>Anos empreendendo</dd></div>
+              <div><dt>FGV</dt><dd>Mestre em Administração</dd></div>
+              <div><dt>Economia Real</dt><dd>Foco de atuação</dd></div>
+              <div><dt>IA</dt><dd>Aplicada à gestão</dd></div>
+            </dl>
+            <a class="av-linkedin" href="https://br.linkedin.com/in/eduardo-pitombo-mesquita-737b3132" target="_blank" rel="noopener" aria-label="LinkedIn de Eduardo Pitombo Mesquita">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Ação beneficente -->
+    <section class="av-section av-section--light" id="doacao" aria-labelledby="av-doacao-titulo">
+      <div class="av-container av-reveal">
+        <p class="av-eyebrow">Ação beneficente</p>
+        <h2 class="av-h2" id="av-doacao-titulo">Sua entrada é uma doação</h2>
+        <p class="av-text">A participação é gratuita. Para participar, cada convidado deve levar ao menos um item para bebês e mães, que será doado à <strong data-config="provida-nome">Rede Colaborativa Pró-Vida</strong>, que apoia mulheres em situação de vulnerabilidade durante a gestação e o pós-parto.</p>
+
+        <ul class="av-itens" data-config="itens-doacao" aria-label="Itens sugeridos para doação">
+          <li>Fraldas</li>
+          <li>Lenços umedecidos</li>
+          <li>Roupas de bebê</li>
+          <li>Chupetas</li>
+        </ul>
+        <p class="av-nota">Não recebemos doações em dinheiro. Basta um item por pessoa.</p>
+
+        <div class="av-instituicao">
+          <a class="av-instituicao-logo" href="https://redeprovida.com/" target="_blank" rel="noopener" data-config="provida-url">
+            <img src="../assets/logo-provida.png" alt="Logo da Rede Colaborativa Pró-Vida" width="48" height="48" loading="lazy" decoding="async">
+          </a>
+          <a class="av-link" href="https://redeprovida.com/" target="_blank" rel="noopener" data-config="provida-url">Conheça a Rede Pró-Vida</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Inscrição -->
+    <section class="av-section av-section--deep" id="inscricao" aria-labelledby="av-inscricao-titulo">
+      <div class="av-container">
+        <p class="av-eyebrow">Inscrição</p>
+        <h2 class="av-h2" id="av-inscricao-titulo">Inscrições encerradas</h2>
+        <p class="av-text">Obrigado a todos que participaram da aula inaugural da Academia de Virtudes. Em breve, informações sobre o próximo evento.</p>
+        <div class="av-duvidas">
+          <p>Dúvidas? Fale com o Suporte</p>
+          <a class="button button-ghost button-whats" href="https://wa.me/5521966474253?text=Ol%C3%A1%2C%20Gabriela!%20Tenho%20d%C3%BAvidas%20sobre%20como%20participar%20da%20Academia%20de%20Virtudes." target="_blank" rel="noopener" data-config="whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Falar no WhatsApp
+          </a>
+        </div>
+
+        <!-- Formulário de inscrição GUARDADO (inativo: não aparece nem envia nada).
+             Para reabrir, troque o bloco "Inscrições encerradas" acima pelo conteúdo deste <template>. -->
+        <template id="av-inscricao-aberta">
+        <h2 class="av-h2">Confirme sua presença</h2>
+        <div class="av-compartilhar">
+          <p>Cada participante faz a própria inscrição. Quer levar alguém? Envie este link para a pessoa se inscrever.</p>
+          <button class="av-copiar" type="button" id="av-copiar-link" data-link="https://gpmintegracao.com.br/academiadevirtudes/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span>Copiar link</span>
+          </button>
+          <span class="visually-hidden" id="av-copiar-status" aria-live="polite"></span>
+        </div>
+        <p class="av-form-intro" id="av-form-intro">Preencha os dados abaixo. Os campos marcados com <span class="av-req" aria-hidden="true">*</span><span class="visually-hidden">asterisco</span> são obrigatórios.</p>
+
+        <!-- action = mesmo valor de FORMSPREE_ENDPOINT (usado só se o JavaScript não carregar) -->
+        <form class="av-form" id="av-form" action="https://formspree.io/f/xoejvbdd" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Inscrição · Academia de Virtudes · Aula inaugural" data-config="subject">
+          <div class="av-hp" aria-hidden="true">
+            <label for="f-gotcha">Não preencha este campo</label>
+            <input type="text" id="f-gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="av-field">
+            <label class="av-label" for="f-nome">Nome completo<span class="av-req" aria-hidden="true">*</span></label>
+            <input class="av-input" id="f-nome" name="nome" type="text" autocomplete="name" autocapitalize="words" required aria-describedby="err-nome"
+                   data-msg-required="Informe seu nome completo.">
+            <p class="av-error" id="err-nome"></p>
+          </div>
+
+          <div class="av-form-grid">
+            <div class="av-field">
+              <label class="av-label" for="f-whatsapp">WhatsApp<span class="av-req" aria-hidden="true">*</span></label>
+              <input class="av-input" id="f-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(21) 99999-9999" required aria-describedby="err-whatsapp" data-mask="phone"
+                     data-msg-required="Informe seu WhatsApp com DDD."
+                     data-msg-invalid="Confira o número: use o formato (21) 99999-9999.">
+              <p class="av-error" id="err-whatsapp"></p>
+            </div>
+
+            <div class="av-field">
+              <label class="av-label" for="f-email">E-mail<span class="av-req" aria-hidden="true">*</span></label>
+              <input class="av-input" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="err-email"
+                     data-msg-required="Informe seu e-mail."
+                     data-msg-invalid="Confira o e-mail informado.">
+              <p class="av-error" id="err-email"></p>
+            </div>
+          </div>
+
+          <div class="av-form-grid">
+            <div class="av-field">
+              <label class="av-label" for="f-empresa">Empresa</label>
+              <input class="av-input" id="f-empresa" name="empresa" type="text" autocomplete="organization">
+            </div>
+            <div class="av-field">
+              <label class="av-label" for="f-cargo">Cargo</label>
+              <input class="av-input" id="f-cargo" name="cargo" type="text" autocomplete="organization-title">
+            </div>
+          </div>
+
+          <fieldset class="av-fieldset" id="grupo-equipe" aria-describedby="err-equipe_gpm">
+            <legend>Você faz parte da equipe GPM?<span class="av-req" aria-hidden="true">*</span></legend>
+            <div class="av-options">
+              <label class="av-option"><input type="radio" name="equipe_gpm" value="Sim" required> Sim</label>
+              <label class="av-option"><input type="radio" name="equipe_gpm" value="Não" required> Não</label>
+            </div>
+            <p class="av-error" id="err-equipe_gpm"></p>
+          </fieldset>
+
+          <div class="av-field" id="campo-convidado" hidden>
+            <label class="av-label" for="f-convidado">Você foi convidado(a) por quem?<span class="av-req" aria-hidden="true">*</span></label>
+            <input class="av-input" id="f-convidado" name="convidado_por" type="text" autocapitalize="words" placeholder="Nome de quem te convidou" disabled aria-describedby="hint-convidado err-convidado"
+                   data-msg-required="Informe quem te convidou.">
+            <p class="av-hint av-hint--below" id="hint-convidado">Pode ser alguém da equipe GPM ou o próprio Eduardo.</p>
+            <p class="av-error" id="err-convidado"></p>
+          </div>
+
+          <div class="av-field">
+            <label class="av-label" for="f-item">Qual item você vai levar?<span class="av-req" aria-hidden="true">*</span></label>
+            <select class="av-select" id="f-item" name="item_doacao" data-config="select-doacao" required aria-describedby="err-item"
+                    data-msg-required="Escolha o item que você vai levar.">
+              <option value="">Selecione</option>
+              <option>Fraldas</option>
+              <option>Lenços umedecidos</option>
+              <option>Roupas de bebê</option>
+              <option>Chupetas</option>
+              <option>Outro</option>
+            </select>
+            <p class="av-error" id="err-item"></p>
+          </div>
+
+          <fieldset class="av-fieldset">
+            <legend>Hoje, qual perfil mais representa sua relação com a inteligência artificial?</legend>
+            <div class="av-options av-options--stack">
+              <label class="av-option"><input type="radio" name="perfil_ia" value="Reativo"> Reativo</label>
+              <label class="av-option"><input type="radio" name="perfil_ia" value="Usuário Google"> Usuário Google</label>
+              <label class="av-option"><input type="radio" name="perfil_ia" value="Especialista"> Especialista</label>
+              <label class="av-option"><input type="radio" name="perfil_ia" value="Nexialista"> Nexialista</label>
+              <label class="av-option"><input type="radio" name="perfil_ia" value="Ainda não sei"> Ainda não sei</label>
+            </div>
+          </fieldset>
+
+          <div class="av-field">
+            <label class="av-label" for="f-desafio">Tem um desafio real que gostaria de levar para a dinâmica?</label>
+            <p class="av-hint" id="hint-desafio">Pode ser pessoal ou de qualquer empresa.</p>
+            <textarea class="av-textarea" id="f-desafio" name="desafio" rows="4" maxlength="800" aria-describedby="hint-desafio"></textarea>
+          </div>
+
+          <div class="av-field">
+            <label class="av-consent" for="f-consentimento">
+              <input type="checkbox" id="f-consentimento" name="consentimento" required aria-describedby="err-consentimento"
+                     value="Concordo com o uso dos meus dados para a organização do evento e estou ciente de que o encontro poderá ser fotografado e gravado."
+                     data-msg-required="Para concluir a inscrição, é preciso concordar com o uso dos dados.">
+              <span>Concordo com o uso dos meus dados para a organização do evento e estou ciente de que o encontro poderá ser fotografado e gravado.<span class="av-req" aria-hidden="true">*</span></span>
+            </label>
+            <p class="av-error" id="err-consentimento"></p>
+          </div>
+
+          <div class="av-form-status" id="av-form-status" role="alert" hidden></div>
+
+          <button class="button button-primary av-submit" type="submit">Enviar inscrição</button>
+
+          <div class="av-duvidas">
+            <p>Dúvidas? Fale com o Suporte</p>
+            <a class="button button-ghost button-whats" href="https://wa.me/5521966474253?text=Ol%C3%A1%2C%20Gabriela!%20Tenho%20d%C3%BAvidas%20sobre%20como%20participar%20da%20Academia%20de%20Virtudes." target="_blank" rel="noopener" data-config="whatsapp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Falar no WhatsApp
+            </a>
+          </div>
+        </form>
+
+        <div class="av-confirmacao" id="av-confirmacao" tabindex="-1" hidden>
+          <picture class="av-simbolo">
+            <source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp">
+            <img class="av-confirmacao-simbolo" src="../assets/academia-de-virtudes-simbolo.png" alt="" width="72" height="72" loading="lazy" decoding="async">
+          </picture>
+          <h3 class="av-confirmacao-titulo">Inscrição recebida.</h3>
+          <p>Obrigado, <span id="av-primeiro-nome"></span>. Sua vaga está pré-confirmada e a equipe vai falar com você pelo WhatsApp nos próximos dias.</p>
+          <p class="av-confirmacao-meta"><span data-config="aula">Aula inaugural</span> · Sexta-feira, 23 de outubro · 9h às 14h</p>
+          <p class="av-confirmacao-local">
+            <strong data-config="local-nome">Barra Space Center · Auditório</strong>
+            <span data-config="local-endereco">Av. das Américas, 1155 · Barra da Tijuca, Rio de Janeiro</span><br>
+            <a class="av-link" href="https://www.google.com/maps/search/?api=1&amp;query=Barra+Space+Center+Av.+das+Am%C3%A9ricas+1155+Rio+de+Janeiro" target="_blank" rel="noopener" data-config="mapa">Ver no mapa</a>
+          </p>
+          <p>Não esqueça a sua doação.</p>
+          <button class="button button-ghost" type="button" id="av-agenda-btn">Adicionar à agenda</button>
+
+          <div class="av-duvidas">
+            <p>Dúvidas? Fale com o Suporte</p>
+            <a class="button button-ghost button-whats" href="https://wa.me/5521966474253?text=Ol%C3%A1%2C%20Gabriela!%20Tenho%20d%C3%BAvidas%20sobre%20como%20participar%20da%20Academia%20de%20Virtudes." target="_blank" rel="noopener" data-config="whatsapp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Falar no WhatsApp
+            </a>
+          </div>
+        </div>
+        </template>
+      </div>
+    </section>
+
+  </main>
+
+  <a class="av-wa-float" id="av-wa-float" href="https://wa.me/5521966474253?text=Ol%C3%A1%2C%20Gabriela!%20Tenho%20d%C3%BAvidas%20sobre%20como%20participar%20da%20Academia%20de%20Virtudes." target="_blank" rel="noopener" aria-label="Falar com o Suporte no WhatsApp" data-config="whatsapp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <footer>
+    <div class="site-container footer-inner">
+      <div class="footer-logo">
+        <div class="brand" style="gap:0.7rem;">
+          <img src="../assets/logo-gpm.png" alt="Logo Grupo GPM" width="36" height="36" loading="lazy" style="width:36px; height:auto;">
+          <span style="font-size:0.95rem;">GRUPO GPM</span>
+        </div>
+        <span>Essência humana, potencial artificial.</span>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#unidades">Unidades</a>
+        <a href="../index.html#metodologia">Metodologia</a>
+      </div>
+      <div class="footer-links">
+        <a href="../mentoria.html">Mentoria Nexialista</a>
+        <a href="../index.html#contato">Contato</a>
+        <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="site-container footer-bottom">
+      <span>© 2026 Grupo GPM</span>
+      <span>Negócios reais. Gestão com método. Resultado medido no dia a dia.</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ── Menu mobile (mesmo comportamento das páginas de unidade) ── */
+      const menuToggle = document.getElementById('menuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      menuToggle.addEventListener('click', () => {
+        const open = mobileMenu.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(open));
+        menuToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+      });
+      mobileMenu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
+      }));
+
+      /* ── Aplica a configuração do topo do arquivo ── */
+      const setText = (key, value) => document.querySelectorAll(`[data-config="${key}"]`).forEach((el) => { el.textContent = value; });
+      const setHref = (key, value) => document.querySelectorAll(`[data-config="${key}"]`).forEach((el) => { el.href = value; });
+
+      setText('aula', AULA_NOME);
+      const assunto = document.querySelector('[data-config="subject"]');
+      if (assunto) assunto.value = 'Inscrição · Academia de Virtudes · ' + AULA_NOME;
+      setText('prazo', PRAZO_INSCRICAO);
+
+      /* ── Faixa do topo: contagem regressiva até o início da aula ── */
+      const ticker = document.getElementById('av-ticker');
+      const tickerLeitor = document.getElementById('av-ticker-leitor');
+      const inicio = new Date(EVENTO_INICIO).getTime();
+      const header = document.querySelector('header');
+      const medirHeader = () => document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+      const dois = (n) => String(n).padStart(2, '0');
+      let tickerTimer;
+      function atualizarContagem() {
+        if (!ticker) return;            // faixa retirada da página
+        const resta = inicio - Date.now();
+        if (resta <= 0) {
+          clearInterval(tickerTimer);
+          ticker.remove();
+          medirHeader();
+          return;
+        }
+        const s = Math.floor(resta / 1000);
+        const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+        const texto = (d > 0 ? d + (d === 1 ? ' dia ' : ' dias ') : '') + dois(h) + 'h ' + dois(m) + 'min ' + dois(s % 60) + 's';
+        ticker.querySelectorAll('[data-cd]').forEach((el) => { el.textContent = texto; });
+        // leitor de tela: texto estável (sem segundos), atualizado a cada minuto
+        const leitor = 'Faltam ' + (d > 0 ? d + (d === 1 ? ' dia' : ' dias') + ' e ' : '') + h + (h === 1 ? ' hora' : ' horas')
+          + ' para a aula inaugural, sexta, 23 de outubro, às 9h. Inscrições até ' + PRAZO_INSCRICAO + '. Quero participar.';
+        if (tickerLeitor.textContent !== leitor) tickerLeitor.textContent = leitor;
+      }
+      atualizarContagem();
+      if (ticker && document.body.contains(ticker)) tickerTimer = setInterval(atualizarContagem, 1000);
+      medirHeader();
+      // remede quando o header muda de altura (fontes carregando, rotação da tela etc.)
+      if ('ResizeObserver' in window) new ResizeObserver(medirHeader).observe(header);
+      else window.addEventListener('resize', medirHeader);
+      setText('local-nome', LOCAL_NOME);
+      setText('local-endereco', LOCAL_ENDERECO);
+      setHref('mapa', LOCAL_MAPA_URL);
+      setText('provida-nome', PROVIDA_NOME);
+      setHref('provida-url', PROVIDA_URL);
+      setHref('whatsapp', WHATSAPP_URL);
+
+      document.querySelector('[data-config="encontro2-data"]').textContent = ENCONTRO_2_DATA.trim() || 'Novembro';
+      document.querySelector('[data-config="encontro3-data"]').textContent = ENCONTRO_3_DATA.trim() || 'Dezembro';
+
+      const itens = ITENS_DOACAO.map((i) => String(i).trim()).filter(Boolean);
+      const listaItens = document.querySelector('[data-config="itens-doacao"]');
+      listaItens.replaceChildren(...itens.map((item) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        return li;
+      }));
+      const selectDoacao = document.querySelector('[data-config="select-doacao"]');
+      if (selectDoacao) {
+        const optVazia = selectDoacao.options[0];
+        selectDoacao.replaceChildren(optVazia, ...[...itens, 'Outro'].map((item) => {
+          const opt = document.createElement('option');
+          opt.textContent = item;
+          return opt;
+        }));
+      }
+
+      /* ── Botão flutuante do WhatsApp: no celular, some enquanto o formulário está na tela ── */
+      const waFloat = document.getElementById('av-wa-float');
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          entries.forEach((entry) => waFloat.classList.toggle('is-hidden', entry.isIntersecting));
+        }).observe(document.getElementById('inscricao'));
+      }
+
+      /* ── Entrada suave das seções ──
+         O conteúdo só é escondido (classe av-motion) quando este script chega
+         até aqui; se o JavaScript falhar antes, tudo aparece normalmente. */
+      if (!reduceMotion && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('av-motion');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.av-reveal').forEach((el) => observer.observe(el));
+      }
+
+      /* ── Botões "Quero participar" → seção de inscrição ── */
+      const form = document.getElementById('av-form');
+      // Inscrições encerradas: o formulário está guardado num <template> e não existe na página.
+      if (!form) return;
+      form.action = FORMSPREE_ENDPOINT;
+      const formSection = document.getElementById('inscricao');
+      const formIntro = document.getElementById('av-form-intro');
+      const confirmacao = document.getElementById('av-confirmacao');
+      const primeiroCampo = document.getElementById('f-nome');
+      let inscricaoEnviada = false;
+
+      document.querySelectorAll('[data-go-form]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          formSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+          (inscricaoEnviada ? confirmacao : primeiroCampo).focus({ preventScroll: true });
+        });
+      });
+
+      /* ── "Copiar link" (convite para outra pessoa se inscrever) ── */
+      const copiarBtn = document.getElementById('av-copiar-link');
+      const copiarLabel = copiarBtn.querySelector('span');
+      const copiarStatus = document.getElementById('av-copiar-status');
+      let copiarTimer;
+      async function copiarTexto(texto) {
+        try {
+          await navigator.clipboard.writeText(texto);
+          return true;
+        } catch (err) {
+          // navegadores sem a API de área de transferência (ou fora de https)
+          const area = document.createElement('textarea');
+          area.value = texto;
+          area.setAttribute('readonly', '');
+          area.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+          document.body.appendChild(area);
+          area.select();
+          let ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          area.remove();
+          return ok;
+        }
+      }
+      copiarBtn.addEventListener('click', async () => {
+        const ok = await copiarTexto(copiarBtn.dataset.link);
+        const msg = ok ? 'Link copiado' : 'Não foi possível copiar';
+        copiarLabel.textContent = msg;
+        copiarStatus.textContent = msg;
+        copiarBtn.classList.toggle('is-copiado', ok);
+        clearTimeout(copiarTimer);
+        copiarTimer = setTimeout(() => {
+          copiarLabel.textContent = 'Copiar link';
+          copiarStatus.textContent = '';
+          copiarBtn.classList.remove('is-copiado');
+        }, 2000);
+      });
+
+      /* ── Máscara de telefone: (21) 99999-9999 ── */
+      function formatPhone(value) {
+        const d = value.replace(/\D/g, '').slice(0, 11);
+        if (d.length === 0) return '';
+        if (d.length < 3) return '(' + d;
+        if (d.length < 7) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+        if (d.length < 11) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+        return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+      }
+      form.querySelectorAll('[data-mask="phone"]').forEach((input) => {
+        input.addEventListener('input', () => { input.value = formatPhone(input.value); });
+      });
+
+      /* ── Campos condicionais ── */
+      function toggleGroup(wrapper, show) {
+        wrapper.hidden = !show;
+        wrapper.querySelectorAll('input').forEach((input) => {
+          input.disabled = !show;      // campo desabilitado não bloqueia o envio nem é enviado
+          input.required = show;
+          if (!show) clearError(input);
+        });
+      }
+      const campoConvidado = document.getElementById('campo-convidado');
+      form.querySelectorAll('input[name="equipe_gpm"]').forEach((radio) => radio.addEventListener('change', () => {
+        toggleGroup(campoConvidado, form.equipe_gpm.value === 'Não');
+      }));
+
+      /* ── Validação (mensagens em português) ── */
+      const RADIO_GROUPS = {
+        equipe_gpm: { fieldset: document.getElementById('grupo-equipe'), error: document.getElementById('err-equipe_gpm') },
+      };
+
+      function errorElFor(input) {
+        const id = (input.getAttribute('aria-describedby') || '').split(' ').find((x) => x.startsWith('err-'));
+        return id ? document.getElementById(id) : null;
+      }
+      function setError(input, message) {
+        input.setAttribute('aria-invalid', 'true');
+        const el = errorElFor(input);
+        if (el) el.textContent = message;
+      }
+      function clearError(input) {
+        input.removeAttribute('aria-invalid');
+        const el = errorElFor(input);
+        if (el) el.textContent = '';
+      }
+
+      function validateInput(input) {
+        if (input.disabled) { clearError(input); return true; }
+        const value = input.type === 'checkbox' ? input.checked : input.value.trim();
+        if (input.required && !value) {
+          setError(input, input.dataset.msgRequired || 'Preencha este campo.');
+          return false;
+        }
+        if (value && input.dataset.mask === 'phone') {
+          const digits = input.value.replace(/\D/g, '');
+          if (digits.length < 10 || digits.length > 11) { setError(input, input.dataset.msgInvalid); return false; }
+        }
+        if (value && input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.value.trim())) {
+          setError(input, input.dataset.msgInvalid);
+          return false;
+        }
+        clearError(input);
+        return true;
+      }
+
+      function validateRadioGroup(name) {
+        const group = RADIO_GROUPS[name];
+        const ok = Boolean(form[name].value);
+        group.fieldset.classList.toggle('is-invalid', !ok);
+        form.querySelectorAll(`input[name="${name}"]`).forEach((radio) => {
+          if (ok) radio.removeAttribute('aria-invalid'); else radio.setAttribute('aria-invalid', 'true');
+        });
+        group.error.textContent = ok ? '' : 'Selecione uma opção.';
+        return ok;
+      }
+
+      const validatedInputs = [...form.querySelectorAll('input.av-input, select.av-select, input[type="checkbox"]')];
+
+      validatedInputs.forEach((input) => {
+        input.addEventListener('blur', () => { if (input.value || input.checked) validateInput(input); });
+        input.addEventListener('input', () => { if (input.getAttribute('aria-invalid') === 'true') validateInput(input); });
+        input.addEventListener('change', () => { if (input.getAttribute('aria-invalid') === 'true') validateInput(input); });
+      });
+      Object.keys(RADIO_GROUPS).forEach((name) => {
+        form.querySelectorAll(`input[name="${name}"]`).forEach((radio) => radio.addEventListener('change', () => {
+          if (RADIO_GROUPS[name].fieldset.classList.contains('is-invalid')) validateRadioGroup(name);
+        }));
+      });
+
+      function validateForm() {
+        let firstInvalid = null;
+        const order = [
+          document.getElementById('f-nome'),
+          document.getElementById('f-whatsapp'),
+          document.getElementById('f-email'),
+          'equipe_gpm',
+          document.getElementById('f-convidado'),
+          document.getElementById('f-item'),
+          document.getElementById('f-consentimento'),
+        ];
+        order.forEach((item) => {
+          const ok = typeof item === 'string' ? validateRadioGroup(item) : validateInput(item);
+          if (!ok && !firstInvalid) {
+            firstInvalid = typeof item === 'string' ? form.querySelector(`input[name="${item}"]`) : item;
+          }
+        });
+        return firstInvalid;
+      }
+
+      /* ── Envio via Formspree (mesmo padrão do formulário do playbook) ── */
+      const status = document.getElementById('av-form-status');
+      const submitBtn = form.querySelector('.av-submit');
+      const submitLabel = submitBtn.textContent;
+      let enviando = false;
+
+      function showStatus(message) {
+        status.textContent = message;
+        status.hidden = false;
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (enviando) return;
+        status.hidden = true;
+
+        const firstInvalid = validateForm();
+        if (firstInvalid) {
+          showStatus('Revise os campos destacados para concluir a inscrição.');
+          firstInvalid.focus();
+          return;
+        }
+
+        enviando = true;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando…';
+
+        try {
+          const response = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json' },
+          });
+
+          if (response.ok) {
+            mostrarConfirmacao();
+            return;
+          }
+
+          const data = await response.json().catch(() => null);
+          const emailError = data && Array.isArray(data.errors) && data.errors.some((e) => e.field === 'email');
+          if (emailError) {
+            const email = document.getElementById('f-email');
+            setError(email, email.dataset.msgInvalid);
+            email.focus();
+          }
+          showStatus('Não foi possível enviar sua inscrição agora. Confira os dados e tente novamente em instantes.');
+        } catch (err) {
+          showStatus('Não foi possível enviar sua inscrição. Verifique sua conexão e tente novamente.');
+        }
+
+        enviando = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = submitLabel;
+      });
+
+      function mostrarConfirmacao() {
+        const primeiroNome = form.nome.value.trim().split(/\s+/)[0] || '';
+        document.getElementById('av-primeiro-nome').textContent = primeiroNome;
+        inscricaoEnviada = true;
+        form.hidden = true;
+        formIntro.hidden = true;
+        confirmacao.hidden = false;
+        confirmacao.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        confirmacao.focus({ preventScroll: true });
+      }
+
+      /* ── "Adicionar à agenda": arquivo .ics gerado no navegador ── */
+      function icsEscape(text) {
+        return String(text).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+      }
+      function icsFold(line) {
+        const encoder = new TextEncoder();
+        let out = '';
+        let current = '';
+        let bytes = 0;
+        for (const ch of line) {
+          const size = encoder.encode(ch).length;
+          if (bytes + size > 73) {
+            out += current + '\r\n ';
+            current = '';
+            bytes = 1;
+          }
+          current += ch;
+          bytes += size;
+        }
+        return out + current;
+      }
+      function buildIcs() {
+        const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+        const descricao = 'Os 4 perfis diante da inteligência artificial. Com Eduardo Pitombo Mesquita. '
+          + 'Não esqueça a sua doação: ' + itens.join(', ').toLowerCase() + '.';
+        const lines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Grupo GPM//Academia de Virtudes//PT-BR',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VTIMEZONE',
+          'TZID:America/Sao_Paulo',
+          'BEGIN:STANDARD',
+          'DTSTART:19700101T000000',
+          'TZOFFSETFROM:-0300',
+          'TZOFFSETTO:-0300',
+          'TZNAME:-03',
+          'END:STANDARD',
+          'END:VTIMEZONE',
+          'BEGIN:VEVENT',
+          'UID:academia-de-virtudes-encontro-1-20261024@gpmintegracao.com.br',
+          'DTSTAMP:' + stamp,
+          'DTSTART;TZID=America/Sao_Paulo:20261023T090000',
+          'DTEND;TZID=America/Sao_Paulo:20261023T140000',
+          'SUMMARY:' + icsEscape('Academia de Virtudes · ' + AULA_NOME),
+          'DESCRIPTION:' + icsEscape(descricao),
+          'LOCATION:' + icsEscape(LOCAL_NOME + ' – ' + LOCAL_ENDERECO.replace(/ · /g, ', ')),
+          'URL:https://gpmintegracao.com.br/academiadevirtudes/',
+          'END:VEVENT',
+          'END:VCALENDAR',
+        ];
+        return lines.map(icsFold).join('\r\n') + '\r\n';
+      }
+      document.getElementById('av-agenda-btn').addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(buildIcs());
+        link.download = 'academia-de-virtudes-aula-inaugural.ics';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      });
+    })();
+  </script>
+
+</body>
+</html>

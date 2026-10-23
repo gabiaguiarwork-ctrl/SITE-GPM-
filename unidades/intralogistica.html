@@ -97,6 +97,20 @@
     .footer-bottom { margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; color: var(--branco-40); font-size: 0.92rem; }
     @media (max-width: 980px) { .menu, .topbar-actions { display: none; } .hamburger { display: inline-flex; } .footer-inner { grid-template-columns: 1fr; } }
     @media (max-width: 680px) { .unit-hero { padding: 4rem 1.5rem 3.5rem; } .section { padding: 3.5rem 0; } .diferenciais-grid { grid-template-columns: 1fr; } .diferencial-item { flex-direction: column; } }
+    /* ── Menu: submenu "Sobre" e item da Academia de Virtudes ── */
+    .menu { align-items: center; gap: 1.35rem; }
+    .menu-item { position: relative; }
+    .menu-item > a { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .menu-arrow { font-size: 0.7em; }
+    .dropdown { position: absolute; top: calc(100% + 0.9rem); left: -1rem; z-index: 40; display: grid; min-width: 220px; padding: 0.6rem 0; background: rgba(10,22,40,0.98); border: 1px solid rgba(201,168,76,0.25); border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; }
+    .dropdown::before { content: ''; position: absolute; left: 0; right: 0; top: -1rem; height: 1rem; }
+    .menu-item:hover .dropdown, .menu-item:focus-within .dropdown { opacity: 1; visibility: visible; transform: none; }
+    .dropdown a { padding: 0.5rem 1.1rem; white-space: nowrap; color: var(--branco-70); }
+    .menu-academia { display: inline-flex; align-items: center; gap: 0.45rem; color: #c9a45c; white-space: nowrap; }
+    .menu-academia img { width: 20px; height: 20px; }
+    .mobile-menu .menu-academia { display: flex; }
+    .menu-academia:hover { color: #e2c88e; }
+    @media (max-width: 1200px) { .menu, .topbar-actions { display: none; } .hamburger { display: inline-flex; } }
   </style>
 </head>
 <body>
@@ -110,10 +124,16 @@
       <button class="hamburger" id="menuToggle" aria-label="Abrir menu"><span></span></button>
       <nav class="menu" aria-label="Menu principal">
         <a href="../index.html#inicio">Início</a>
-        <a href="../index.html#sobre">Sobre</a>
+        <div class="menu-item">
+          <a href="../index.html#sobre">Sobre <span class="menu-arrow" aria-hidden="true">▾</span></a>
+          <div class="dropdown">
+            <a href="../index.html#sobre">Nossa Tese</a>
+            <a href="../mentoria.html">Mentoria Nexialista</a>
+          </div>
+        </div>
         <a href="../index.html#unidades">Unidades</a>
         <a href="../index.html#metodologia">Metodologia</a>
-        <a href="../mentoria.html">Mentoria</a>
+        <a class="menu-academia" href="../academiadevirtudes/"><picture><source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="../assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="../index.html#contato">Contato</a>
       </nav>
       <div class="topbar-actions">
@@ -125,6 +145,7 @@
         <a href="../index.html#unidades">Unidades</a>
         <a href="../index.html#metodologia">Metodologia</a>
         <a href="../mentoria.html">Mentoria</a>
+        <a class="menu-academia" href="../academiadevirtudes/"><picture><source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="../assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="../index.html#contato">Contato</a>
       </div>
     </div>
