@@ -1071,7 +1071,14 @@
     .units-carousel-track {
       display: flex;
       gap: 0;
-      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    /* Transição (fade + leve deslocamento) só roda para quem não pediu
+       menos movimento no sistema — respeita prefers-reduced-motion. */
+    @media (prefers-reduced-motion: no-preference) {
+      .units-carousel-track {
+        transition: opacity 0.28s ease, transform 0.28s ease;
+      }
     }
 
     .units-slide {
@@ -1104,6 +1111,13 @@
 
     .units-intro-heading {
       font-size: clamp(42px, 6vw, 64px);
+    }
+
+    /* No desktop, o convite pra explorar é só a dica "deslize para conhecer"
+       (o carrossel já é arrastável ali). O botão "Explorar frentes" só
+       existe como affordance no mobile/tablet — ver @media (max-width:980px). */
+    .units-explore-btn {
+      display: none;
     }
 
     .units-slide-intro .section-title::after {
@@ -2797,28 +2811,6 @@
         gap: 16px;
       }
 
-      .units-slide {
-        min-width: 85vw;
-        height: 420px;
-        margin: 0 8px;
-      }
-
-      .units-slide-intro {
-        width: auto;
-        min-width: 85vw;
-        max-width: 85vw;
-        padding: 32px 28px;
-        margin: 0 0 0 4%;
-      }
-
-      .units-slide-panel h3 {
-        font-size: 26px;
-      }
-
-      .units-carousel-nav {
-        margin-top: 24px;
-      }
-
       .presence-layout {
         grid-template-columns: 1fr;
         text-align: center;
@@ -2914,30 +2906,26 @@
       }
     }
 
-    @media (max-width: 640px) {
-      /* No mobile, o carrossel horizontal (arrastar/espiar a próxima aba)
-         não é uma boa experiência de leitura — vira uma lista vertical
-         simples: cada unidade inteira, uma abaixo da outra, rolando a
-         página normalmente, sem cards cortados na borda nem texto minúsculo. */
-      .units-carousel-container {
-        overflow: visible;
-        scroll-snap-type: none;
-      }
-
-      .units-carousel-track {
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .units-slide {
+    @media (max-width: 980px) {
+      /* Em telas ≤980px (celular, celular deitado e tablets), continua sendo
+         um CARROSSEL — arrastar, setas e bolinhas continuam funcionando,
+         reaproveitando a mesma lógica do desktop (só o JS já desliga o
+         autoplay nessa faixa, ver script). O que muda é só o dimensionamento
+         do card: 100% da viewport (sem o min-width:85vw "espiando" a próxima
+         aba, que era a causa do corte lateral) e o layout interno, que
+         empilha foto em cima e texto embaixo em vez de lado a lado. Acima de
+         980px (desktop) nada disso se aplica — carrossel original intacto. */
+      .units-slide,
+      .units-slide-intro {
         width: 100%;
         min-width: 100%;
         max-width: 100%;
-        height: auto;
         margin: 0;
+        box-sizing: border-box;
       }
 
       .units-slide-intro {
+        height: auto;
         padding: 28px 24px;
       }
 
@@ -2945,18 +2933,27 @@
         font-size: 28px;
       }
 
-      /* "Deslize para conhecer" não faz sentido sem swipe — a lista já entrega isso. */
-      .units-slide-intro > div:last-child {
+      /* No mobile, quem convida a explorar é o botão "Explorar frentes"
+         (leva direto pra primeira unidade) — a dica de arrastar sai de cena. */
+      .units-intro-hint {
         display: none;
+      }
+
+      .units-explore-btn {
+        display: inline-flex;
+        margin-top: 20px;
       }
 
       .units-slide:not(.units-slide-intro) {
         flex-direction: column;
+        height: auto;
       }
 
-      /* Sem foto no mobile: card direto ao texto. */
+      /* Foto volta a aparecer — em cima do card, com altura própria, em vez
+         de dividir a largura com o texto como no desktop. */
       .units-slide-photo {
-        display: none;
+        flex: 0 0 auto;
+        height: 200px;
       }
 
       .units-slide-panel {
@@ -2964,9 +2961,11 @@
         gap: 14px;
       }
 
+      /* Trava uma altura de texto consistente entre os cards (com rolagem
+         interna se o texto for mais longo) — sem isso, o card mais longo do
+         grupo dita a altura de todos os outros na mesma linha do carrossel. */
       .units-slide-text-scroll {
-        max-height: none;
-        overflow: visible;
+        max-height: 170px;
       }
 
       .units-slide-num {
@@ -2975,18 +2974,28 @@
       }
 
       .units-slide-panel h3 {
-        font-size: 22px;
+        font-size: 20px;
         margin: 0 0 10px;
       }
 
       .units-slide-panel p {
-        font-size: 15px;
-        line-height: 1.7;
+        font-size: 14px;
+        line-height: 1.6;
       }
 
-      /* Sem swipe, as setas/bolinhas de navegação não fazem mais sentido. */
       .units-carousel-nav {
-        display: none;
+        margin-top: 20px;
+      }
+
+      /* Área de toque maior nas bolinhas (8px visíveis, ~44px de alvo real). */
+      .units-carousel-dot {
+        position: relative;
+      }
+
+      .units-carousel-dot::before {
+        content: '';
+        position: absolute;
+        inset: -18px;
       }
     }
 
@@ -3289,9 +3298,10 @@
             <p style="font-size:16px; color:rgba(255,255,255,0.6); max-width:380px; line-height:1.7;">
               Cada unidade opera de forma autônoma, mas todas compartilham a mesma estrutura, método e visão de longo prazo.
             </p>
-            <div style="margin-top:28px; font-size:13px; color: var(--dourado); letter-spacing:0.1em;">
+            <div class="units-intro-hint" style="margin-top:28px; font-size:13px; color: var(--dourado); letter-spacing:0.1em;">
               DESLIZE PARA CONHECER →
             </div>
+            <button type="button" class="button button-primary units-explore-btn">Explorar frentes →</button>
           </div>
 
           <!-- SLIDE 1 -->
@@ -3658,6 +3668,7 @@
       const unitsDotsContainer = document.querySelector('.units-carousel-dots');
       const unitsPrevBtn = document.querySelector('.units-carousel-prev');
       const unitsNextBtn = document.querySelector('.units-carousel-next');
+      const unitsExploreBtn = document.querySelector('.units-explore-btn');
       if (!unitsContainer || !unitsSlides.length || !unitsDotsContainer) return;
 
       unitsSlides.forEach((_, i) => {
@@ -3733,12 +3744,17 @@
       // Em telas de toque, o autoplay fica desligado — no celular o usuário
       // navega arrastando o card, e um timer disparando sozinho no meio do
       // gesto puxava o carrossel para outro lugar, dando sensação de travado.
-      const unitsIsTouch = window.matchMedia('(pointer: coarse)').matches;
+      // Em telas ≤980px a seção virou lista vertical (ver CSS), então o
+      // autoplay também fica desligado ali — sem isso, o JS ainda tentaria
+      // aplicar translateX/scrollLeft de carrossel numa lista que não rola
+      // mais horizontalmente.
+      const unitsIsCarousel = !window.matchMedia('(pointer: coarse)').matches
+        && !window.matchMedia('(max-width: 980px)').matches;
       let unitsTimer = null;
       const UNITS_AUTOPLAY_DELAY = 7000;
 
       function scheduleUnits() {
-        if (unitsIsTouch) return;
+        if (!unitsIsCarousel) return;
         clearTimeout(unitsTimer);
         unitsTimer = setTimeout(() => {
           goToUnitsSlide((getUnitsCurrentIndex() + 1) % unitsSlides.length, 1);
@@ -3765,6 +3781,9 @@
 
       unitsPrevBtn?.addEventListener('click', () => interactUnits((getUnitsCurrentIndex() - 1 + unitsSlides.length) % unitsSlides.length, -1));
       unitsNextBtn?.addEventListener('click', () => interactUnits((getUnitsCurrentIndex() + 1) % unitsSlides.length, 1));
+
+      // "Explorar frentes" (abertura do mobile) — leva direto para a primeira unidade.
+      unitsExploreBtn?.addEventListener('click', () => interactUnits(1, 1));
 
       scheduleUnits();
     })();
