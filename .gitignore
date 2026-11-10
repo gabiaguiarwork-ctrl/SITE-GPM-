@@ -5,7 +5,20 @@ node_modules/
 *.log
 .env
 .env.local
+.env.*
+*.pem
+*.key
 dist/
 build/
 ._tmp_*
 *.html.html
+
+# Notas e prompts internos (nunca publicar)
+_notas/
+
+# Supabase CLI: arquivos locais temporários
+supabase/.temp/
+supabase/.branches/
+
+# Fotos originais (o site usa as versões otimizadas em assets/)
+academiadevirtudes/fotos/

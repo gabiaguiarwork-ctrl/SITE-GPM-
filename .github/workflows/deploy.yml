@@ -12,16 +12,28 @@ jobs:
       - name: Baixar código do repositório
         uses: actions/checkout@v4
 
-      - name: Enviar arquivos via FTP para a Hostinger
+      - name: Enviar arquivos via FTPS para a Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          # FTPS: a senha e os arquivos trafegam criptografados (FTP comum envia tudo aberto)
+          protocol: ftps
+          # "/" se a conta FTP já abre dentro do public_html; "public_html/" se abre na raiz da conta
           server-dir: /
+          # Nada disso vai para o site. Não remova itens desta lista sem revisar a segurança.
           exclude: |
             **/.git*
             **/.git*/**
             **/.github/**
-            **/GPM_CRM/**
             **/node_modules/**
+            **/GPM_CRM/**
+            **/CRM/**
+            **/supabase/**
+            **/_notas/**
+            **/academiadevirtudes/fotos/**
+            **/*.md
+            **/*.ps1
+            **/*.sql
+            **/.env*
