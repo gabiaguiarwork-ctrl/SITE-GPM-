@@ -28,12 +28,12 @@ update public.profiles set role  = 'admin' where id = '00000000-0000-4000-8000-0
 update public.profiles set aceite_privacidade_em = now(), aceite_privacidade_versao = '2026-11',
        whatsapp = '21999990000', empresa = 'Empresa Teste', cargo = 'Cargo Teste'
  where id in ('00000000-0000-4000-8000-0000000000b1','00000000-0000-4000-8000-0000000000b2','00000000-0000-4000-8000-0000000000b3');
-do $ begin
+do $$ begin
   if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'cpf') then
     execute $q$update public.profiles set sobrenome = 'Teste', cpf = '52998224725'
                 where id in ('00000000-0000-4000-8000-0000000000b1','00000000-0000-4000-8000-0000000000b2','00000000-0000-4000-8000-0000000000b3')$q$;
   end if;
-end $;
+end $$;
 
 -- Encontros: f1 publicado e liberado, f2 publicado mas só no futuro, f3 rascunho
 insert into public.modulos (id, titulo, ordem, publicado, liberado_em) values
