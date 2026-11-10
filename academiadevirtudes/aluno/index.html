@@ -8,13 +8,14 @@
 <meta name="theme-color" content="#08142E">
 <title>Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=1">
-<script src="/academiadevirtudes/_app/config.js?v=1" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=2">
+<script src="/academiadevirtudes/_app/config.js?v=2" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=2" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/aluno/aluno.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/conteudo.js?v=1" defer></script>
+<script src="/academiadevirtudes/aluno/aluno.js?v=2" defer></script>
 </head>
 <body>
 <div class="ac-loader" role="status">Carregando…</div>
@@ -35,12 +36,18 @@
 <main class="ac-conteudo" id="conteudo">
   <h1>Olá, <span data-nome>aluno</span></h1>
   <p class="ac-sub">Bem-vindo à Área do Aluno da Academia de Virtudes.</p>
-  <div id="vitrine">
-    <section class="ac-secao ac-bloco" aria-labelledby="t-breve">
-      <h2 id="t-breve">Em breve</h2>
-      <p>Os encontros, as aulas gravadas e os materiais vão aparecer aqui.</p>
-    </section>
-  </div>
+
+  <section id="avisos" class="ac-avisos" aria-label="Avisos" hidden></section>
+
+  <section id="bloco-continuar" aria-labelledby="t-continuar" hidden>
+    <h2 class="ac-rotulo-secao" id="t-continuar">Continuar de onde parou</h2>
+    <div id="continuar"></div>
+  </section>
+
+  <section aria-labelledby="t-encontros">
+    <h2 class="ac-rotulo-secao" id="t-encontros">Encontros</h2>
+    <div id="encontros" aria-live="polite"><p class="ac-vazio">Carregando os encontros…</p></div>
+  </section>
 </main>
 
 <footer class="ac-pe">

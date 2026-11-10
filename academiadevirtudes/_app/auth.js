@@ -13,6 +13,14 @@
   var A = {};
   var cliente = null;
 
+  function fetchComKeepalive(url, opcoes) {
+    var o = opcoes || {};
+    if (typeof o.body === 'string' && o.body.length < 4096 && /\/rest\/v1\/progresso(\?|$)/.test(String(url))) {
+      o = Object.assign({}, o, { keepalive: true });
+    }
+    return window.fetch(url, o);
+  }
+
   /* ---------- Cliente Supabase (único por página) ---------- */
   A.cliente = function () {
     if (cliente) return cliente;
@@ -20,7 +28,9 @@
       throw new Error('config: biblioteca do Supabase não carregou');
     }
     cliente = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey, {
-      auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+      // Gravações pequenas de progresso usam keepalive: terminam mesmo se a pessoa fechar a aba.
+      global: { fetch: fetchComKeepalive }
     });
     return cliente;
   };

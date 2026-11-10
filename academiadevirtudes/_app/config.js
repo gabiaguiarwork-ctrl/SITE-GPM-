@@ -26,8 +26,16 @@
       aluno: BASE + '/aluno/',
       perfil: BASE + '/aluno/perfil/',
       admin: BASE + '/admin/',
-      adminMfa: BASE + '/admin/mfa/'
+      adminMfa: BASE + '/admin/mfa/',
+      encontro: BASE + '/aluno/encontro/',
+      aula: BASE + '/aluno/aula/',
+      materiais: BASE + '/aluno/materiais/'
     }),
+
+    // Panda Video: endereço do player da biblioteca (Panda → Configurações → Embed),
+    // no formato player-vz-xxxxxxxx-xxx.tv.pandavideo.com.br. Vazio = Panda ainda não configurado.
+    // O Vimeo não precisa de configuração aqui.
+    pandaHost: '',
 
     // Endereço que o Supabase usa nos e-mails de recuperação e convite.
     // Em localhost o auth.js troca pelo endereço local automaticamente.
