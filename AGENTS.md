@@ -62,6 +62,9 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - Páginas da Área do Aluno **não usam `<style>` nem `<script>` inline nem atributos `style=`/`onclick=`**: todo CSS e JS fica em arquivos em `academiadevirtudes/_app/`, para a Content-Security-Policy funcionar sem `unsafe-inline`.
 - Nunca usar `innerHTML`, `outerHTML`, `insertAdjacentHTML` ou `document.write` com dado do banco ou do usuário: usar `textContent` ou criação de elementos.
 - Bibliotecas e fontes servidas do próprio site (`_app/vendor/`, `_app/fonts/`). Única exceção: o script do Cloudflare Turnstile (`https://challenges.cloudflare.com`), que entra explicitamente na CSP.
+- `_app/vendor/supabase-2.119.0.js`: `@supabase/supabase-js` 2.119.0 (build UMD oficial do npm, licença MIT), `sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O`. Para atualizar: baixar a nova versão com o número no nome do arquivo, conferir o hash com o pacote do npm e trocar a referência nas páginas.
+- `_app/fonts/`: Cormorant Garamond (normal 500–600 e itálico 500) e Inter (400–600), só o subconjunto latino, em woff2 variável; licença SIL OFL 1.1 nos arquivos `OFL-*.txt`.
+- Ao alterar um arquivo de `_app/`, aumente o `?v=` nas páginas que o carregam, para o navegador não usar a cópia antiga.
 - Links externos com `rel="noopener noreferrer"`. Nada de dados pessoais em `localStorage` além da sessão do supabase-js.
 
 ## Supabase

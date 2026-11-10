@@ -1,0 +1,227 @@
+/*
+  Área do Aluno · Academia de Virtudes
+  Estilos compartilhados. As páginas da Área do Aluno NÃO usam <style> nem style= (CSP sem unsafe-inline).
+  Fontes servidas do próprio site (sem Google): Cormorant Garamond e Inter, licença SIL OFL 1.1.
+*/
+
+/* ---------- Fontes (arquivos variáveis: um arquivo cobre vários pesos) ---------- */
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500 600;
+  font-display: swap;
+  src: url("fonts/cormorant-garamond-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/cormorant-garamond-italic-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("fonts/inter-latin.woff2") format("woff2");
+}
+
+/* ---------- Paleta e medidas (mesma da página /academiadevirtudes/) ---------- */
+:root {
+  color-scheme: dark;
+  --bg: #08142E;
+  --bg-2: #0E1F45;
+  --bg-3: #13285A;
+  --gold: #C9A45C;
+  --gold-2: #E2C88E;
+  --ivory: #F4EEE2;
+  --mist: #B9C0CF;
+  --dim: #8791A6;
+  --line: rgba(201, 164, 92, .22);
+  --line-2: rgba(244, 238, 226, .12);
+  --erro: #F0A595;      /* erro sobre fundo escuro (contraste AA) */
+  --ok: #8FD3A8;
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --raio: 14px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(201, 164, 92, .12), transparent 60%),
+    var(--bg);
+  color: var(--ivory);
+  font: 400 16px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: var(--gold-2); text-underline-offset: 3px; }
+a:hover { color: #fff; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.15; margin: 0; font-variant-numeric: lining-nums; }
+h1 em, h2 em, h3 em { font-style: italic; color: var(--gold-2); }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
+.ac-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* ---------- "Carregando": nada da página aparece até o guard liberar ---------- */
+.ac-loader { display: none; }
+.ac-carregando body > :not(.ac-loader) { display: none !important; }
+.ac-carregando .ac-loader {
+  display: grid; place-items: center; gap: 14px;
+  min-height: 100vh; min-height: 100dvh; color: var(--mist); font-size: 14px;
+}
+.ac-loader::before {
+  content: ""; width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid var(--line); border-top-color: var(--gold);
+  animation: ac-gira .9s linear infinite;
+}
+@keyframes ac-gira { to { transform: rotate(360deg); } }
+
+/* ---------- Telas de acesso (entrar, redefinir senha, MFA) ---------- */
+.ac-acesso {
+  min-height: 100vh; min-height: 100dvh;
+  display: grid; place-items: center;
+  padding: 32px 20px 40px;
+}
+.ac-acesso__caixa { width: 100%; max-width: 420px; }
+.ac-acesso__marca { text-align: center; margin-bottom: 28px; }
+.ac-acesso__simbolo { width: 64px; height: 64px; margin: 0 auto 14px; }
+.ac-acesso__nome {
+  font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold);
+}
+.ac-acesso__frase { margin-top: 10px; font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--gold-2); }
+.ac-cartao {
+  background: rgba(14, 31, 69, .72);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 22px;
+  box-shadow: 0 30px 60px -40px rgba(0, 0, 0, .8);
+}
+@media (min-width: 480px) { .ac-cartao { padding: 34px 32px; } }
+.ac-cartao h1 { font-size: 30px; margin-bottom: 8px; }
+.ac-cartao .ac-sub { color: var(--mist); font-size: 15px; margin-bottom: 22px; }
+.ac-rodape-acesso { margin-top: 22px; text-align: center; font-size: 13px; color: var(--dim); }
+.ac-rodape-acesso a { color: var(--mist); }
+
+/* ---------- Campos ---------- */
+.ac-campo { margin-bottom: 18px; }
+.ac-campo label, .ac-rotulo {
+  display: block; margin-bottom: 7px;
+  font-size: 13px; font-weight: 500; letter-spacing: .04em; color: var(--mist);
+}
+.ac-input {
+  width: 100%; min-height: 50px; padding: 13px 15px;
+  font: 400 16px var(--sans); /* 16px evita zoom automático no iPhone */
+  color: var(--ivory); background: rgba(8, 20, 46, .7);
+  border: 1px solid rgba(201, 164, 92, .3); border-radius: 12px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.ac-input::placeholder { color: #7A849A; }
+.ac-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 164, 92, .25); }
+.ac-input[aria-invalid="true"] { border-color: var(--erro); }
+.ac-input[readonly] { opacity: .75; }
+.ac-senha { position: relative; }
+.ac-senha .ac-input { padding-right: 92px; }
+.ac-senha__botao {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  min-height: 40px; padding: 0 12px; border: 0; border-radius: 8px;
+  background: transparent; color: var(--gold-2); font: 500 13px var(--sans); cursor: pointer;
+}
+.ac-senha__botao:hover { background: rgba(201, 164, 92, .12); }
+.ac-erro-campo { margin-top: 6px; font-size: 13.5px; color: var(--erro); }
+
+/* Código de 6 dígitos (MFA) */
+.ac-codigo {
+  letter-spacing: .5em; text-align: center; font-size: 22px; font-variant-numeric: tabular-nums;
+}
+
+/* Regras da senha (lista que acende conforme a pessoa digita) */
+.ac-regras { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; font-size: 13.5px; color: var(--dim); }
+.ac-regras li { display: flex; align-items: center; gap: 8px; }
+.ac-regras li::before { content: "○"; color: var(--dim); width: 14px; }
+.ac-regras li.ok { color: var(--ok); }
+.ac-regras li.ok::before { content: "✓"; color: var(--ok); }
+
+/* Caixa de seleção (aceite) */
+.ac-check { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--mist); cursor: pointer; }
+.ac-check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--gold); flex-shrink: 0; }
+
+/* ---------- Botões ---------- */
+.ac-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 50px; padding: 0 26px; border-radius: 999px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(180deg, #D7B673, #B88F45); color: #0B1733;
+  font: 600 15px var(--sans); letter-spacing: .02em; text-decoration: none; cursor: pointer;
+  transition: transform .15s var(--ease), opacity .2s;
+}
+.ac-btn:hover { transform: translateY(-1px); color: #0B1733; }
+.ac-btn[disabled] { opacity: .6; cursor: default; transform: none; }
+.ac-btn--bloco { width: 100%; }
+.ac-btn--contorno { background: transparent; color: var(--gold-2); }
+.ac-btn--contorno:hover { background: rgba(201, 164, 92, .1); color: var(--gold-2); }
+.ac-btn--perigo { background: transparent; border-color: rgba(240, 165, 149, .6); color: var(--erro); }
+.ac-link {
+  background: none; border: 0; padding: 10px 4px; cursor: pointer;
+  font: 500 14px var(--sans); color: var(--gold-2); text-decoration: underline; text-underline-offset: 3px;
+}
+.ac-acoes { display: grid; gap: 10px; margin-top: 22px; }
+.ac-centro { text-align: center; }
+
+/* ---------- Mensagens ---------- */
+.ac-msg { margin: 0 0 18px; padding: 12px 14px; border-radius: 12px; font-size: 14.5px; line-height: 1.5; border: 1px solid; }
+.ac-msg--erro { color: var(--erro); border-color: rgba(240, 165, 149, .45); background: rgba(240, 165, 149, .07); }
+.ac-msg--ok { color: var(--ok); border-color: rgba(143, 211, 168, .4); background: rgba(143, 211, 168, .07); }
+.ac-msg--info { color: var(--mist); border-color: var(--line); background: rgba(201, 164, 92, .06); }
+
+/* ---------- MFA: QR code fornecido pelo Supabase ---------- */
+.ac-qr { width: 200px; height: 200px; margin: 6px auto 14px; padding: 10px; background: #fff; border-radius: 12px; }
+.ac-segredo { font: 500 14px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; word-break: break-all; color: var(--gold-2); text-align: center; }
+
+/* ---------- Área logada: header e footer ---------- */
+.ac-topo {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(8, 20, 46, .92); border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.ac-topo__barra {
+  max-width: 1120px; margin: 0 auto; padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.ac-topo__marca { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ivory); }
+.ac-topo__marca img { width: 34px; height: 34px; }
+.ac-topo__marca span { font-family: var(--serif); font-size: 19px; line-height: 1.1; }
+.ac-topo__nav { display: flex; align-items: center; gap: 4px; }
+.ac-topo__nav a, .ac-topo__nav button {
+  min-height: 44px; padding: 0 12px; display: inline-flex; align-items: center;
+  border: 0; background: none; border-radius: 10px; cursor: pointer;
+  font: 500 14px var(--sans); color: var(--mist); text-decoration: none;
+}
+.ac-topo__nav a:hover, .ac-topo__nav button:hover, .ac-topo__nav a[aria-current="page"] { color: var(--gold-2); background: rgba(201, 164, 92, .08); }
+@media (max-width: 480px) { .ac-topo__marca span { display: none; } }
+
+.ac-conteudo { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
+.ac-conteudo h1 { font-size: clamp(30px, 7vw, 44px); margin-bottom: 10px; }
+.ac-conteudo .ac-sub { color: var(--mist); margin-bottom: 26px; }
+.ac-bloco { max-width: 640px; margin-bottom: 28px; }
+
+.ac-pe {
+  border-top: 1px solid var(--line-2); padding: 26px 20px 34px;
+  text-align: center; font-size: 13px; color: var(--dim);
+}
+.ac-pe a { color: var(--mist); }
+.ac-pe__frase { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--gold-2); margin-bottom: 6px; }
+
+/* ---------- Movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

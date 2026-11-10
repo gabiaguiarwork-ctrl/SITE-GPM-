@@ -1,0 +1,40 @@
+/*
+  Área do Aluno · Academia de Virtudes
+  Configuração PÚBLICA. Tudo aqui é visível no navegador de qualquer pessoa.
+  NUNCA coloque aqui a chave secreta (sb_secret_… / service_role).
+  A segurança dos dados é a RLS do banco, não este arquivo.
+*/
+(function () {
+  'use strict';
+
+  var BASE = '/academiadevirtudes';
+
+  window.ACADEMIA_CONFIG = Object.freeze({
+    supabaseUrl: 'https://qfghgtrvwklzlsuawndm.supabase.co',
+    // Chave pública (publishable). Pode ficar no site.
+    supabaseKey: 'sb_publishable_DXzzbhId9PFYpWi24gA_Jg_sFLtXjqJ',
+
+    // Site key PÚBLICA do Cloudflare Turnstile (hostnames: gpmintegracao.com.br, www e localhost).
+    // A secret key fica SÓ no painel do Supabase. O CAPTCHA é obrigatório em todo lugar, inclusive localhost:
+    // sem token, nenhuma chamada de login ou recuperação é feita.
+    turnstileSiteKey: '0x4AAAAAAF7uZlVNU6NHdDHd',
+
+    base: BASE,
+    rotas: Object.freeze({
+      entrar: BASE + '/entrar/',
+      redefinirSenha: BASE + '/redefinir-senha/',
+      aluno: BASE + '/aluno/',
+      perfil: BASE + '/aluno/perfil/',
+      admin: BASE + '/admin/',
+      adminMfa: BASE + '/admin/mfa/'
+    }),
+
+    // Endereço que o Supabase usa nos e-mails de recuperação e convite.
+    // Em localhost o auth.js troca pelo endereço local automaticamente.
+    redirectRedefinirSenha: 'https://gpmintegracao.com.br' + BASE + '/redefinir-senha/',
+
+    privacidade: Object.freeze({ versao: '2026-11', url: '/politica-privacidade.html' }),
+
+    senha: Object.freeze({ minimo: 10 })
+  });
+})();
