@@ -23,6 +23,17 @@ insert into auth.users (instance_id, id, aud, role, email, raw_user_meta_data) v
   ('00000000-0000-0000-0000-000000000000','00000000-0000-4000-8000-0000000000b4','authenticated','authenticated','teste-rls2-admin@exemplo.invalid',   '{"nome":"Admin"}');
 update public.profiles set ativo = false   where id = '00000000-0000-4000-8000-0000000000b3';
 update public.profiles set role  = 'admin' where id = '00000000-0000-4000-8000-0000000000b4';
+-- Depois da 0006, conteúdo só aparece com o cadastro completo: completa os perfis b1, b2 e b3.
+-- (Antes da 0006 as colunas sobrenome/cpf não existem e só o aceite é gravado.)
+update public.profiles set aceite_privacidade_em = now(), aceite_privacidade_versao = '2026-11',
+       whatsapp = '21999990000', empresa = 'Empresa Teste', cargo = 'Cargo Teste'
+ where id in ('00000000-0000-4000-8000-0000000000b1','00000000-0000-4000-8000-0000000000b2','00000000-0000-4000-8000-0000000000b3');
+do $ begin
+  if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'cpf') then
+    execute $q$update public.profiles set sobrenome = 'Teste', cpf = '52998224725'
+                where id in ('00000000-0000-4000-8000-0000000000b1','00000000-0000-4000-8000-0000000000b2','00000000-0000-4000-8000-0000000000b3')$q$;
+  end if;
+end $;
 
 -- Encontros: f1 publicado e liberado, f2 publicado mas só no futuro, f3 rascunho
 insert into public.modulos (id, titulo, ordem, publicado, liberado_em) values
