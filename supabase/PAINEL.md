@@ -3,6 +3,9 @@
 Projeto: `https://qfghgtrvwklzlsuawndm.supabase.co`. Quem altera o painel e roda SQL é a equipe GPM.
 Os nomes dos menus podem mudar um pouco entre versões do painel; procure pelo nome da opção.
 
+**Importante:** a 0006 substitui funções e privilégios das migrations anteriores. Se alguma migration anterior for rodada de novo, rode a 0006 logo depois. Os testes 0001 e 0002 continuam valendo depois da 0006.
+**Ordem de publicação:** rode a 0006 no Supabase **antes** de publicar o site com o cadastro aberto (as páginas novas leem as colunas novas).
+
 ## 1. SQL (nesta ordem)
 
 No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Run**.
@@ -14,8 +17,10 @@ No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Ru
 5. `supabase/tests/0002_conteudo_test.sql` (todas as linhas `ok = true`)
 6. `supabase/migrations/0004_admin.sql`
 7. `supabase/migrations/0005_hardening.sql` (tira de anon/authenticated o acesso à função `rls_auto_enable()` do "RLS automático"; se a função não existir, não faz nada)
-8. Opcional, só para ver as telas com conteúdo: `supabase/seed/exemplo.sql` (o fim do arquivo explica como apagar).
-9. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
+8. `supabase/migrations/0006_cadastro_aberto.sql` (cadastro aberto, CPF, cadastro completo, consentimento de comunicações)
+9. `supabase/tests/0003_cadastro_test.sql` (todas as linhas `ok = true`)
+10. Opcional, só para ver as telas com conteúdo: `supabase/seed/exemplo.sql` (o fim do arquivo explica como apagar).
+11. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
 
 ## 2. Senha
 
@@ -27,6 +32,15 @@ No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Ru
 - Secure email change: **ligado**
 - Email OTP expiration: **3600** segundos (1 hora; vale para convite e recuperação)
 - Prevent use of leaked passwords (Attack Protection): ligar, se o plano permitir
+
+## 2b. Cadastro aberto
+
+**Authentication → Sign In / Providers** (ou **Providers → Email**):
+
+- **Confirm email**: **ligado** (sempre). Sem ele, a pessoa entraria sem provar que o e-mail é dela.
+- **Allow new users to sign up**: ligar **só no dia do lançamento**, depois que o SMTP próprio (item 9) estiver funcionando e testado. Sem SMTP, o e-mail de confirmação só chega para quem é da equipe do Supabase. Enquanto estiver desligado, a tela de cadastro mostra "Os cadastros ainda não estão abertos".
+- **Allow anonymous sign-ins**: desligado.
+- Intervalo mínimo entre e-mails para o mesmo usuário (se aparecer a opção): **60 segundos**.
 
 ## 3. MFA
 
@@ -42,12 +56,16 @@ Site key no site: `0x4AAAAAAF7uZlVNU6NHdDHd` (em `academiadevirtudes/_app/config
 
 **Authentication → Rate Limits** (valores sugeridos):
 
+Valores revistos para o cadastro aberto (o CAPTCHA já barra robôs; estes limites seguram abuso de uma mesma rede):
+
 | Item | Valor |
 |---|---|
-| Sign-ups and sign-ins (por 5 min, por IP) | 30 |
+| Sign-ups and sign-ins (por 5 min, por IP) | **50** (num encontro presencial, muita gente se cadastra pelo mesmo Wi-Fi; fora de evento, 30 basta) |
 | Token refreshes (por 5 min, por IP) | 150 |
 | Token verifications (por 5 min, por IP) | 30 |
-| Emails sent (por hora) | o máximo que o SMTP permitir (o envio padrão do Supabase fica preso em poucos por hora) |
+| Emails sent (por hora) | começar com **100** e ajustar ao limite do SMTP contratado (cada cadastro, reenvio, convite e recuperação gasta 1 e-mail) |
+
+Se o SMTP for a caixa da Hostinger, confira o limite diário dela: num lançamento com muitos cadastros ao mesmo tempo, um serviço como Resend, Brevo ou Amazon SES aguenta melhor.
 
 ## 6. Sessão
 
@@ -58,7 +76,7 @@ Site key no site: `0x4AAAAAAF7uZlVNU6NHdDHd` (em `academiadevirtudes/_app/config
 
 **Authentication → URL Configuration**:
 - Site URL: `https://gpmintegracao.com.br`
-- Redirect URLs: `https://gpmintegracao.com.br/academiadevirtudes/**` e `http://localhost:5500/**`
+- Redirect URLs: `https://gpmintegracao.com.br/academiadevirtudes/**` e `http://localhost:5500/**` (já cobrem a página nova de confirmação, `/academiadevirtudes/confirmar/`; não é preciso acrescentar nada)
 
 ## 8. Modelos de e-mail (português)
 
@@ -68,7 +86,7 @@ Site key no site: `0x4AAAAAAF7uZlVNU6NHdDHd` (em `academiadevirtudes/_app/config
 |---|---|---|
 | Invite user | Seu acesso à Área do Aluno · Academia de Virtudes | `supabase/templates/convite.html` |
 | Reset password | Criar nova senha · Academia de Virtudes | `supabase/templates/recuperacao.html` |
-| Confirm signup | Confirme seu e-mail · Academia de Virtudes | `supabase/templates/confirmacao.html` |
+| Confirm signup | Confirme seu e-mail · Academia de Virtudes | `supabase/templates/confirmacao.html` (**novo**: o link agora abre `/academiadevirtudes/confirmar/`; cole de novo) |
 | Change email address | Confirme o novo e-mail · Academia de Virtudes | `supabase/templates/troca-de-email.html` |
 
 Os links usam `{{ .SiteURL }}/academiadevirtudes/redefinir-senha/?token_hash=…&type=…`. Por isso o link do e-mail sempre abre o site publicado (não o localhost). Para testar no computador, troque `https://gpmintegracao.com.br` por `http://localhost:5500` no endereço do link antes de abrir.

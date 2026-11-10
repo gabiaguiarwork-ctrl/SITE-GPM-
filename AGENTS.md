@@ -42,7 +42,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 - `/academiadevirtudes/`: página pública da Academia (Encontro 2 com inscrições abertas).
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
 - `/academiadevirtudes/_inscricao-encontro-1.html`: página antiga guardada, sem link (noindex).
-- Área do Aluno: `/academiadevirtudes/{entrar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `encontro/?id=`, `aula/?id=`, `materiais/`, `perfil/`; dentro de `admin/`: `mfa/` e as abas `#alunos`, `#encontros`, `#conteudos`, `#avisos`, `#relatorios`.
+- Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `encontro/?id=`, `aula/?id=`, `materiais/`, `perfil/`, `completar/`; dentro de `admin/`: `mfa/` e as abas `#alunos`, `#encontros`, `#conteudos`, `#avisos`, `#relatorios`.
 
 ## Formulários
 
@@ -67,9 +67,18 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - `_app/fonts/`: Cormorant Garamond (normal 500–600 e itálico 500) e Inter (400–600), só o subconjunto latino, em woff2 variável; licença SIL OFL 1.1 nos arquivos `OFL-*.txt`.
 - Ao alterar um arquivo de `_app/`, aumente o `?v=` nas páginas que o carregam, para o navegador não usar a cópia antiga.
 - Links externos com `rel="noopener noreferrer"`. Nada de dados pessoais em `localStorage` além da sessão do supabase-js.
-- Cabeçalhos de segurança (CSP, noindex, no-store, no-referrer, COOP) ficam no `.htaccess` de cada pasta: `entrar/`, `redefinir-senha/`, `aluno/`, `admin/`. Não em `academiadevirtudes/`, para não afetar a página pública. Pasta nova da Área do Aluno precisa estar dentro de uma delas ou ter o próprio `.htaccess`.
+- Cabeçalhos de segurança (CSP, noindex, no-store, no-referrer, COOP) ficam no `.htaccess` de cada pasta: `entrar/`, `cadastro/`, `confirmar/`, `redefinir-senha/`, `aluno/`, `admin/`. Não em `academiadevirtudes/`, para não afetar a página pública. Pasta nova da Área do Aluno precisa estar dentro de uma delas ou ter o próprio `.htaccess`.
 - Para testar a CSP no computador: `node _notas/ferramentas/servidor-teste.cjs . 8080` na raiz do repositório e abrir `http://localhost:8080/academiadevirtudes/entrar/` (o Live Server da porta 5500 não lê `.htaccess`).
 - Configuração do painel, modelos de e-mail e primeiro admin: `supabase/PAINEL.md`.
+
+### Cadastro aberto (decisão da GPM, 11/2026)
+
+- Plataforma gratuita, com cadastro aberto em `/academiadevirtudes/cadastro/`. O convite pelo painel continua existindo, e o admin pode desativar qualquer pessoa.
+- Acesso só depois de: cadastro completo (nome, sobrenome, e-mail, WhatsApp, CPF, empresa, cargo, senha), CAPTCHA, aceite da privacidade e confirmação do e-mail (`/academiadevirtudes/confirmar/`, que grava o aceite com `aceitar_privacidade()`).
+- No banco, conteúdo só aparece com `is_active() and cadastro_completo()` (admin com MFA vê tudo). No site, quem está com o cadastro incompleto vai para `/aluno/completar/` antes de qualquer página.
+- Regras dos campos: `_app/campos.js` no navegador e a migration 0006 no banco (as duas precisam bater). WhatsApp e CPF ficam só com dígitos; o CPF é validado, só é preenchido pelo aluno se estiver vazio e sai dos metadados da conta (não vai no token de sessão).
+- Consentimento de comunicações é separado e opcional: só muda pela função `definir_comunicacoes()`, que grava a data e registra na auditoria.
+- Nenhuma tela pode revelar se um e-mail já tem conta (cadastro, reenvio, login e "esqueci minha senha" respondem igual).
 
 ## Supabase
 
