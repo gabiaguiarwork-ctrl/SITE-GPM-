@@ -34,6 +34,7 @@ Leia antes de alterar qualquer arquivo deste repositório.
 ## Menu
 
 Início · Sobre ▾ (Nossa Tese, Mentoria Nexialista) · Unidades · Metodologia · Academia de Virtudes (com o símbolo dourado) · Contato.
+Só em `academiadevirtudes/index.html`, "Academia de Virtudes ▾" abre "A Academia" e "Área do Aluno" (o menu do celular e o hero também têm o link). As outras páginas continuam com o link simples.
 O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo de 1200 px e o botão "Como se tornar um Nexialista" continua até 768 px).
 
 ## Endereços
@@ -41,7 +42,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 - `/academiadevirtudes/`: página pública da Academia (Encontro 2 com inscrições abertas).
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
 - `/academiadevirtudes/_inscricao-encontro-1.html`: página antiga guardada, sem link (noindex).
-- Área do Aluno: `/academiadevirtudes/{entrar,redefinir-senha,aluno,admin}/`.
+- Área do Aluno: `/academiadevirtudes/{entrar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `encontro/?id=`, `aula/?id=`, `materiais/`, `perfil/`; dentro de `admin/`: `mfa/` e as abas `#alunos`, `#encontros`, `#conteudos`, `#avisos`, `#relatorios`.
 
 ## Formulários
 

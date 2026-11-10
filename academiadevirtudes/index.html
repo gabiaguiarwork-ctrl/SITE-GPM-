@@ -308,6 +308,11 @@
   .fx .fade{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
   .fx .fade.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.fx .fade{opacity:1;transform:none;transition:none}}
+  /* Área do Aluno: link discreto no header e no hero */
+  .mobile-menu a.area-aluno-mobile{color:var(--dourado)}
+  .hero-aluno{margin:14px 0 0;font-size:14px}
+  .hero-aluno a{color:rgba(244,238,226,.78);text-decoration:underline;text-decoration-color:rgba(201,164,92,.5);text-underline-offset:4px;display:inline-block;padding:10px 0}
+  .hero-aluno a:hover,.hero-aluno a:focus-visible{color:var(--gold-2)}
 </style>
 </head>
 <body>
@@ -330,7 +335,13 @@
       </div>
       <a href="../index.html#unidades">Unidades</a>
       <a href="../index.html#metodologia">Metodologia</a>
-      <a class="menu-academia" href="./" aria-current="page"><picture><source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="../assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
+      <div class="menu-item">
+        <a class="menu-academia" href="./" aria-current="page"><picture><source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="../assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes <span class="menu-arrow" aria-hidden="true">▾</span></a>
+        <div class="dropdown">
+          <a href="./">A Academia</a>
+          <a href="/academiadevirtudes/aluno/">Área do Aluno</a>
+        </div>
+      </div>
       <a href="../index.html#contato">Contato</a>
     </nav>
     <div class="topbar-actions">
@@ -343,6 +354,7 @@
       <a href="../index.html#metodologia">Metodologia</a>
       <a href="../mentoria.html">Mentoria</a>
       <a class="menu-academia" href="./" aria-current="page"><picture><source srcset="../assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="../assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
+      <a class="area-aluno-mobile" href="/academiadevirtudes/aluno/">Área do Aluno</a>
       <a href="../index.html#contato">Contato</a>
     </nav>
   </div>
@@ -363,6 +375,7 @@
         <a class="btn ghost" href="#encontro-1">Ver como foi o Encontro 1</a>
       </div>
       <p class="hero-vagas">Vagas limitadas</p>
+      <p class="hero-aluno"><a href="/academiadevirtudes/aluno/">Já participa? Entre na Área do Aluno →</a></p>
     </div>
   </section>
 
