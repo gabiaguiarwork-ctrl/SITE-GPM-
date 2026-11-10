@@ -13,8 +13,9 @@ No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Ru
 4. `supabase/migrations/0003_storage.sql`
 5. `supabase/tests/0002_conteudo_test.sql` (todas as linhas `ok = true`)
 6. `supabase/migrations/0004_admin.sql`
-7. Opcional, só para ver as telas com conteúdo: `supabase/seed/exemplo.sql` (o fim do arquivo explica como apagar).
-8. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
+7. `supabase/migrations/0005_hardening.sql` (tira de anon/authenticated o acesso à função `rls_auto_enable()` do "RLS automático"; se a função não existir, não faz nada)
+8. Opcional, só para ver as telas com conteúdo: `supabase/seed/exemplo.sql` (o fim do arquivo explica como apagar).
+9. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
 
 ## 2. Senha
 
