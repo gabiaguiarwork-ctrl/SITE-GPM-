@@ -8,13 +8,19 @@
 <meta name="theme-color" content="#08142E">
 <title>Painel · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=2">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=4">
 <script src="/academiadevirtudes/_app/config.js?v=2" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
 <script src="/academiadevirtudes/_app/auth.js?v=2" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/admin/admin.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/conteudo.js?v=2" defer></script>
+<script src="/academiadevirtudes/admin/admin.js?v=2" defer></script>
+<script src="/academiadevirtudes/admin/alunos.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/encontros.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/avisos.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/relatorios.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/iniciar.js?v=1" defer></script>
 </head>
 <body>
 <div class="ac-loader" role="status">Carregando…</div>
@@ -31,15 +37,174 @@
   </div>
 </header>
 
-<main class="ac-conteudo" id="conteudo">
+<main class="ac-conteudo ac-admin" id="conteudo">
   <h1>Painel da Academia</h1>
-  <p class="ac-sub">Olá, <span data-nome>admin</span>. Acesso confirmado com verificação em duas etapas.</p>
-  <div id="painel">
-    <section class="ac-secao ac-bloco" aria-labelledby="t-breve">
-      <h2 id="t-breve">Em construção</h2>
-      <p>As abas de Alunos, Encontros, Conteúdos, Avisos e Relatórios entram nas próximas fases.</p>
-    </section>
+  <p class="ac-sub">Olá, <span data-nome>admin</span>. Rascunhos nunca aparecem para os alunos.</p>
+
+  <div class="ac-abas" role="tablist" aria-label="Seções do painel">
+    <button class="ac-aba" role="tab" type="button" id="aba-alunos" aria-controls="painel-alunos" aria-selected="true">Alunos</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-encontros" aria-controls="painel-encontros" aria-selected="false" tabindex="-1">Encontros</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-conteudos" aria-controls="painel-conteudos" aria-selected="false" tabindex="-1">Conteúdos</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-avisos" aria-controls="painel-avisos" aria-selected="false" tabindex="-1">Avisos</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-relatorios" aria-controls="painel-relatorios" aria-selected="false" tabindex="-1">Relatórios</button>
   </div>
+  <p class="ac-msg" id="msg-admin" role="status" aria-live="polite" hidden></p>
+
+  <!-- ===================== Alunos ===================== -->
+  <section class="ac-painel" id="painel-alunos" role="tabpanel" aria-labelledby="aba-alunos">
+    <div class="ac-barra-ferramentas">
+      <div class="ac-campo ac-campo--busca">
+        <label for="busca-alunos">Buscar</label>
+        <input class="ac-input" id="busca-alunos" type="search" placeholder="Nome, e-mail ou empresa" autocomplete="off">
+      </div>
+      <div class="ac-campo">
+        <label for="filtro-status">Status</label>
+        <select class="ac-select" id="filtro-status">
+          <option value="">Todos</option>
+          <option value="ativo">Ativos</option>
+          <option value="pendente">Convite pendente</option>
+          <option value="inativo">Inativos</option>
+          <option value="admin">Admins</option>
+        </select>
+      </div>
+      <div class="ac-linha-acoes ac-linha-acoes--compacta">
+        <button class="ac-btn" type="button" id="abrir-convite">Convidar aluno</button>
+        <button class="ac-btn ac-btn--contorno" type="button" id="abrir-importar">Importar CSV</button>
+      </div>
+    </div>
+
+    <form class="ac-secao ac-formulario" id="form-convite" novalidate hidden>
+      <h2>Convidar aluno</h2>
+      <p class="ac-sub">A pessoa recebe um e-mail para criar a senha.</p>
+      <div class="ac-grade-2">
+        <div class="ac-campo"><label for="cv-nome">Nome completo</label><input class="ac-input" id="cv-nome" maxlength="120" required aria-describedby="erro-cv-nome"><p class="ac-erro-campo" id="erro-cv-nome" hidden></p></div>
+        <div class="ac-campo"><label for="cv-email">E-mail</label><input class="ac-input" id="cv-email" type="email" maxlength="254" required aria-describedby="erro-cv-email"><p class="ac-erro-campo" id="erro-cv-email" hidden></p></div>
+        <div class="ac-campo"><label for="cv-whatsapp">WhatsApp</label><input class="ac-input" id="cv-whatsapp" type="tel" maxlength="16" placeholder="(21) 99999-9999"></div>
+        <div class="ac-campo"><label for="cv-empresa">Empresa (opcional)</label><input class="ac-input" id="cv-empresa" maxlength="120"></div>
+        <div class="ac-campo"><label for="cv-cargo">Cargo (opcional)</label><input class="ac-input" id="cv-cargo" maxlength="120"></div>
+        <div class="ac-campo"><label for="cv-papel">Papel</label><select class="ac-select" id="cv-papel"><option value="aluno">Aluno</option><option value="admin">Admin (equipe GPM)</option></select></div>
+      </div>
+      <div class="ac-linha-acoes">
+        <button class="ac-btn" type="submit" id="btn-convite">Enviar convite</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-convite">Cancelar</button>
+      </div>
+    </form>
+
+    <form class="ac-secao ac-formulario" id="form-importar" novalidate hidden>
+      <h2>Importar alunos (CSV)</h2>
+      <p class="ac-sub">Arquivo .csv com as colunas <strong>nome</strong>, <strong>email</strong> e, se quiser, <strong>whatsapp</strong>, <strong>empresa</strong> e <strong>cargo</strong> (separadas por vírgula ou ponto e vírgula). Até 100 pessoas por vez.</p>
+      <div class="ac-campo"><label for="im-arquivo">Arquivo CSV</label><input class="ac-input" id="im-arquivo" type="file" accept=".csv,text/csv"></div>
+      <div id="im-previa" aria-live="polite"></div>
+      <div class="ac-linha-acoes">
+        <button class="ac-btn" type="submit" id="btn-importar" disabled>Enviar convites</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-importar">Cancelar</button>
+      </div>
+    </form>
+
+    <p class="ac-contagem" id="contagem-alunos" aria-live="polite"></p>
+    <div class="ac-tabela-caixa"><table class="ac-tabela" id="tabela-alunos">
+      <caption class="ac-sr-only">Alunos</caption>
+      <thead><tr><th scope="col">Aluno</th><th scope="col">Status</th><th scope="col">Último acesso</th><th scope="col">Progresso</th><th scope="col">Ações</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <!-- ===================== Encontros ===================== -->
+  <section class="ac-painel" id="painel-encontros" role="tabpanel" aria-labelledby="aba-encontros" hidden>
+    <div class="ac-linha-acoes ac-linha-acoes--compacta"><button class="ac-btn" type="button" id="novo-encontro">Novo encontro</button></div>
+    <form class="ac-secao ac-formulario" id="form-encontro" novalidate hidden>
+      <h2 id="t-form-encontro">Novo encontro</h2>
+      <input type="hidden" id="en-id">
+      <div class="ac-campo"><label for="en-titulo">Título</label><input class="ac-input" id="en-titulo" maxlength="160" required aria-describedby="erro-en-titulo"><p class="ac-erro-campo" id="erro-en-titulo" hidden></p></div>
+      <div class="ac-campo"><label for="en-subtitulo">Subtítulo (opcional)</label><input class="ac-input" id="en-subtitulo" maxlength="240"></div>
+      <div class="ac-campo"><label for="en-descricao">Descrição (opcional, aceita **negrito**, *itálico* e listas)</label><textarea class="ac-input ac-textarea" id="en-descricao" maxlength="4000" rows="4"></textarea></div>
+      <div class="ac-grade-2">
+        <div class="ac-campo"><label for="en-liberado">Liberar em (opcional, horário de Brasília)</label><input class="ac-input" id="en-liberado" type="datetime-local" aria-describedby="ajuda-en-liberado"><p class="ac-ajuda" id="ajuda-en-liberado">Antes dessa data o aluno vê o card com "Em breve", sem os conteúdos.</p></div>
+        <div class="ac-campo"><label for="en-capa">Capa (JPG, PNG ou WebP até 2 MB, 16:9)</label><input class="ac-input" id="en-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-en-capa"><p class="ac-ajuda" id="ajuda-en-capa">Deixe em branco para manter a capa atual.</p></div>
+      </div>
+      <label class="ac-check" for="en-publicado"><input type="checkbox" id="en-publicado"><span>Publicado (visível para os alunos)</span></label>
+      <div class="ac-linha-acoes">
+        <button class="ac-btn" type="submit" id="btn-encontro">Salvar encontro</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-encontro">Cancelar</button>
+      </div>
+    </form>
+    <ul class="ac-lista ac-lista--admin" id="lista-encontros" aria-live="polite"></ul>
+  </section>
+
+  <!-- ===================== Conteúdos ===================== -->
+  <section class="ac-painel" id="painel-conteudos" role="tabpanel" aria-labelledby="aba-conteudos" hidden>
+    <div class="ac-barra-ferramentas">
+      <div class="ac-campo"><label for="co-filtro">Encontro</label><select class="ac-select" id="co-filtro"></select></div>
+      <div class="ac-linha-acoes ac-linha-acoes--compacta"><button class="ac-btn" type="button" id="novo-conteudo">Novo conteúdo</button></div>
+    </div>
+    <form class="ac-secao ac-formulario" id="form-conteudo" novalidate hidden>
+      <h2 id="t-form-conteudo">Novo conteúdo</h2>
+      <input type="hidden" id="co-id">
+      <div class="ac-grade-2">
+        <div class="ac-campo"><label for="co-titulo">Título</label><input class="ac-input" id="co-titulo" maxlength="160" required aria-describedby="erro-co-titulo"><p class="ac-erro-campo" id="erro-co-titulo" hidden></p></div>
+        <div class="ac-campo"><label for="co-tipo">Tipo</label><select class="ac-select" id="co-tipo"><option value="video">Vídeo</option><option value="pdf">PDF</option><option value="texto">Texto</option><option value="link">Link</option></select></div>
+      </div>
+      <div class="ac-campo"><label for="co-descricao">Descrição curta (opcional)</label><input class="ac-input" id="co-descricao" maxlength="4000"></div>
+      <div class="ac-grade-2" data-so-tipo="video">
+        <div class="ac-campo"><label for="co-provedor">Player</label><select class="ac-select" id="co-provedor"><option value="vimeo">Vimeo</option><option value="panda">Panda Video</option></select></div>
+        <div class="ac-campo"><label for="co-video">ID do vídeo</label><input class="ac-input" id="co-video" maxlength="100" aria-describedby="ajuda-co-video erro-co-video" autocomplete="off"><p class="ac-ajuda" id="ajuda-co-video">Vimeo: o número do vídeo (não listado: número:hash). Panda: o ID do vídeo.</p><p class="ac-erro-campo" id="erro-co-video" hidden></p></div>
+      </div>
+      <div class="ac-grade-2">
+        <div class="ac-campo"><label for="co-duracao">Duração em minutos (opcional)</label><input class="ac-input" id="co-duracao" type="number" min="0" max="1440" inputmode="numeric"></div>
+        <div class="ac-campo" data-so-tipo="link"><label for="co-url">Endereço (https://)</label><input class="ac-input" id="co-url" type="url" maxlength="600" aria-describedby="erro-co-url"><p class="ac-erro-campo" id="erro-co-url" hidden></p></div>
+      </div>
+      <div class="ac-grade-2">
+        <div class="ac-campo"><label for="co-arquivo">Material em PDF (até 20 MB)</label><input class="ac-input" id="co-arquivo" type="file" accept="application/pdf" aria-describedby="ajuda-co-arquivo erro-co-arquivo"><p class="ac-ajuda" id="ajuda-co-arquivo">Opcional em vídeo e texto; obrigatório em PDF. Deixe em branco para manter o atual.</p><p class="ac-erro-campo" id="erro-co-arquivo" hidden></p></div>
+        <div class="ac-campo"><label for="co-arquivo-nome">Nome do material (opcional)</label><input class="ac-input" id="co-arquivo-nome" maxlength="160" placeholder="Ex.: Roteiro do Encontro 1"></div>
+      </div>
+      <div class="ac-campo"><label for="co-texto">Texto de apoio (opcional; ## título, **negrito**, *itálico*, - lista, &gt; citação, [link](https://…))</label><textarea class="ac-input ac-textarea" id="co-texto" maxlength="20000" rows="8"></textarea></div>
+      <label class="ac-check" for="co-publicado"><input type="checkbox" id="co-publicado"><span>Publicado (visível para os alunos quando o encontro estiver liberado)</span></label>
+      <div class="ac-linha-acoes">
+        <button class="ac-btn" type="submit" id="btn-conteudo">Salvar conteúdo</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-conteudo">Cancelar</button>
+      </div>
+    </form>
+    <ul class="ac-lista ac-lista--admin" id="lista-conteudos" aria-live="polite"></ul>
+  </section>
+
+  <!-- ===================== Avisos ===================== -->
+  <section class="ac-painel" id="painel-avisos" role="tabpanel" aria-labelledby="aba-avisos" hidden>
+    <form class="ac-secao ac-formulario" id="form-aviso" novalidate>
+      <h2 id="t-form-aviso">Novo aviso</h2>
+      <input type="hidden" id="av-id">
+      <div class="ac-campo"><label for="av-titulo">Título</label><input class="ac-input" id="av-titulo" maxlength="160" required aria-describedby="erro-av-titulo"><p class="ac-erro-campo" id="erro-av-titulo" hidden></p></div>
+      <div class="ac-campo"><label for="av-texto">Texto (opcional)</label><textarea class="ac-input ac-textarea" id="av-texto" maxlength="2000" rows="3"></textarea></div>
+      <label class="ac-check" for="av-publicado"><input type="checkbox" id="av-publicado" checked><span>Publicado (aparece no topo da vitrine)</span></label>
+      <div class="ac-linha-acoes">
+        <button class="ac-btn" type="submit" id="btn-aviso">Salvar aviso</button>
+        <button class="ac-btn ac-btn--contorno" type="button" id="limpar-aviso">Limpar</button>
+      </div>
+    </form>
+    <ul class="ac-lista ac-lista--admin" id="lista-avisos" aria-live="polite"></ul>
+  </section>
+
+  <!-- ===================== Relatórios ===================== -->
+  <section class="ac-painel" id="painel-relatorios" role="tabpanel" aria-labelledby="aba-relatorios" hidden>
+    <div class="ac-numeros" id="numeros"></div>
+    <div class="ac-linha-acoes ac-linha-acoes--compacta">
+      <button class="ac-btn ac-btn--contorno" type="button" id="csv-alunos">Exportar alunos (CSV)</button>
+      <button class="ac-btn ac-btn--contorno" type="button" id="csv-conteudos">Exportar conclusão por conteúdo (CSV)</button>
+    </div>
+    <h2 class="ac-rotulo-secao">Nunca acessaram</h2>
+    <div id="nunca-acessaram"></div>
+    <h2 class="ac-rotulo-secao">Conclusão por conteúdo</h2>
+    <div class="ac-tabela-caixa"><table class="ac-tabela" id="tabela-conclusao">
+      <caption class="ac-sr-only">Conclusão por conteúdo</caption>
+      <thead><tr><th scope="col">Conteúdo</th><th scope="col">Encontro</th><th scope="col">Concluíram</th><th scope="col">Começaram</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <h2 class="ac-rotulo-secao">Últimas ações (auditoria)</h2>
+    <div class="ac-tabela-caixa"><table class="ac-tabela" id="tabela-auditoria">
+      <caption class="ac-sr-only">Auditoria</caption>
+      <thead><tr><th scope="col">Quando</th><th scope="col">Quem</th><th scope="col">Ação</th><th scope="col">Alvo</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
 </main>
 
 <footer class="ac-pe">

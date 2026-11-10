@@ -39,11 +39,17 @@
     if (!caminho || !/^[a-z0-9][a-z0-9/_.-]*\.(jpg|jpeg|png|webp)$/.test(caminho) || caminho.indexOf('..') >= 0) return '';
     return CFG.supabaseUrl + '/storage/v1/object/public/capas/' + caminho.split('/').map(encodeURIComponent).join('/');
   };
-  C.capa = function (m, classe) {
-    var url = C.capaUrl(m.capa_path);
-    if (url) return h('img', { class: classe, src: url, alt: '', loading: 'lazy', decoding: 'async' });
+  function capaVazia(classe) {
     return h('div', { class: classe + ' ' + classe + '--vazia', 'aria-hidden': 'true' },
       h('img', { src: '/assets/academia-de-virtudes-simbolo.webp', alt: '', width: '56', height: '56' }));
+  }
+  C.capa = function (m, classe) {
+    var url = C.capaUrl(m.capa_path);
+    if (!url) return capaVazia(classe);
+    var img = h('img', { class: classe, src: url, alt: '', loading: 'lazy', decoding: 'async' });
+    // Capa apagada ou fora do ar: mostra o símbolo da Academia no lugar do ícone de imagem quebrada.
+    img.addEventListener('error', function () { if (img.parentNode) img.parentNode.replaceChild(capaVazia(classe), img); });
+    return img;
   };
 
   /* ---------- Consultas ---------- */

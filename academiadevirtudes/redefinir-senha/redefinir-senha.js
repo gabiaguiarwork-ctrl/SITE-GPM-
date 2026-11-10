@@ -89,7 +89,7 @@
   /* ---------- Início: validar o link ---------- */
   function abrirFormulario(tipo) {
     if (tipo === 'invite') {
-      $('#t-senha').textContent = 'Bem-vindo à Área do Aluno';
+      $('#t-senha').textContent = 'Boas-vindas à Área do Aluno';
       $('#sub-senha').textContent = 'Para concluir seu primeiro acesso, crie uma senha.';
       document.title = 'Primeiro acesso · Área do Aluno · Academia de Virtudes';
     }

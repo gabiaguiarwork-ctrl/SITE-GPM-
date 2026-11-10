@@ -9,7 +9,12 @@ No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Ru
 
 1. `supabase/migrations/0001_auth_base.sql`
 2. `supabase/tests/0001_auth_base_test.sql`: o resultado é uma tabela com a coluna `ok`. Todas as linhas precisam estar `true`. O teste apaga os usuários de teste que cria.
-3. **Advisors → Security Advisor**: precisa ficar sem alertas.
+3. `supabase/migrations/0002_conteudo.sql`
+4. `supabase/migrations/0003_storage.sql`
+5. `supabase/tests/0002_conteudo_test.sql` (todas as linhas `ok = true`)
+6. `supabase/migrations/0004_admin.sql`
+7. Opcional, só para ver as telas com conteúdo: `supabase/seed/exemplo.sql` (o fim do arquivo explica como apagar).
+8. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
 
 ## 2. Senha
 
@@ -77,7 +82,31 @@ O que é preciso:
 3. Registros de DNS do domínio: SPF, DKIM e DMARC do serviço escolhido (sem eles, os e-mails caem no spam).
 4. No painel: **Authentication → Emails → SMTP Settings**: host, porta, usuário, senha, remetente. A senha do SMTP fica só no painel, nunca no repositório.
 
-## 10. Primeiro admin e aluno de teste
+## 10. Edge Functions (convites, status, papel, importação, LGPD)
+
+Precisa da Supabase CLI no computador (https://supabase.com/docs/guides/cli). Na raiz do repositório:
+
+```bash
+supabase login
+supabase link --project-ref qfghgtrvwklzlsuawndm
+supabase functions deploy convidar-aluno       --no-verify-jwt
+supabase functions deploy alterar-status-aluno --no-verify-jwt
+supabase functions deploy alterar-papel-aluno  --no-verify-jwt
+supabase functions deploy importar-alunos      --no-verify-jwt
+supabase functions deploy dados-aluno          --no-verify-jwt
+```
+
+- `--no-verify-jwt`: a verificação é feita dentro de cada função (sessão válida + `is_admin()` com MFA). Isso é necessário porque o projeto usa as chaves novas (`sb_publishable_…`) e porque o navegador faz uma checagem de CORS sem token antes de cada chamada.
+- Nenhum segredo precisa ser configurado: `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY` já existem no ambiente das Edge Functions. **Nunca** coloque a chave do servidor no site ou no repositório.
+- As funções aceitam chamadas só de `https://gpmintegracao.com.br`, `https://www.gpmintegracao.com.br` e `http://localhost:5500`.
+- Para conferir: **Edge Functions** no painel → cada função → **Logs**.
+
+## 11. Player de vídeo
+
+- **Vimeo**: em cada vídeo, **Privacidade → Onde o vídeo pode ser incorporado → Somente domínios especificados**: `gpmintegracao.com.br` (e `localhost` só durante os testes). "Quem pode assistir": **Ocultar do Vimeo**. No painel da Academia, use o número do vídeo; se o link do vídeo tiver um código depois do número (vídeo não listado, ex.: `vimeo.com/123456789/abc123def4`), use `123456789:abc123def4`.
+- **Panda Video**: em **Configurações → Segurança**, ligar a restrição de domínio para `gpmintegracao.com.br`; se quiser, ligar a marca d'água. Depois copie o endereço do player (formato `player-vz-xxxxxxxx-xxx.tv.pandavideo.com.br`) para `pandaHost` em `academiadevirtudes/_app/config.js` (e aumente o `?v=` de config.js nas páginas).
+
+## 12. Primeiro admin e aluno de teste
 
 1. **Authentication → Users → Add user → Send invitation**: convide o seu e-mail.
    (Enquanto não houver SMTP próprio, use um e-mail de quem é membro da organização no Supabase.)
