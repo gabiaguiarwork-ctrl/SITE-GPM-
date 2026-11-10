@@ -3042,6 +3042,9 @@
     .faixa-academia__texto span { font-size: 14px; color: #B9C0CF; font-variant-numeric: lining-nums; }
     .faixa-academia a { color: #C9A45C; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; padding: 10px 0; }
     .faixa-academia a:hover { color: #E2C88E; }
+    /* link do local (mapa) dentro do texto da faixa */
+    .faixa-academia__texto a.mapa { color: inherit; font-weight: 500; font-size: inherit; white-space: normal; padding: 0; text-decoration: underline; text-decoration-color: rgba(201,164,92,.7); text-underline-offset: 3px; }
+    .faixa-academia__texto a.mapa:hover { color: #E2C88E; }
     .faixa-academia a:focus-visible { outline: 2px solid #E2C88E; outline-offset: 4px; border-radius: 4px; }
     @media (max-width: 640px) {
       .faixa-academia__inner { flex-direction: column; text-align: center; gap: 10px; padding: 22px 20px; }
@@ -3176,9 +3179,9 @@
         </picture>
         <div class="faixa-academia__texto">
           <strong>Academia de Virtudes</strong>
-          <span>O Encontro 1 aconteceu em 23 de outubro. Conheça o ciclo e entre na lista do Encontro 2.</span>
+          <span>Inscrições abertas para o Encontro 2: sexta-feira, 20 de novembro, às 9h, no <a class="mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Centro+Empresarial+Office+Tower%2C+Av.+Evandro+Lins+e+Silva%2C+840+-+Barra+da+Tijuca%2C+Rio+de+Janeiro+-+RJ%2C+22631-470" target="_blank" rel="noopener">Centro Empresarial Office Tower</a>. Vagas limitadas.</span>
         </div>
-        <a href="academiadevirtudes/">Conhecer a Academia →</a>
+        <a href="academiadevirtudes/#encontro-2">Garantir minha vaga →</a>
       </div>
     </section>
     <section id="sobre" class="section section-about">

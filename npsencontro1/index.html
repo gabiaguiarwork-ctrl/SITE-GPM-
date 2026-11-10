@@ -1,13 +1,11 @@
 <!doctype html>
 <!--
-  ACADEMIA DE VIRTUDES · ENCONTRO 1 · AVALIAÇÃO (NPS) + LISTA PRIORITÁRIA DO ENCONTRO 2
+  ACADEMIA DE VIRTUDES · ENCONTRO 1 · AVALIAÇÃO (NPS)
   Grupo GPM · arquivo único (logo embutida, sem dependências além do Google Fonts)
 
-  Onde colocar: pasta /academiadevirtudes/avaliacao/  →  gpmintegracao.com.br/academiadevirtudes/avaliacao
-  Formspree:
-    NPS (anônimo) ............ https://formspree.io/f/mljjeqwp
-    Lista prioritária ........ https://formspree.io/f/xaeeyrdb
-  Se os IDs estiverem trocados, inverta as duas constantes no <script> (bloco CONFIGURAÇÃO).
+  Onde colocar: pasta /npsencontro1/ na raiz do site  →  gpmintegracao.com.br/npsencontro1/
+  Formspree: NPS anônimo → https://formspree.io/f/mljjeqwp
+  Depois de avaliar, a pessoa é levada à inscrição do Encontro 2 (/academiadevirtudes/#encontro-2).
 -->
 <html lang="pt-BR">
 <head>
@@ -19,12 +17,12 @@
 <meta property="og:title" content="Como foi o seu encontro? · Academia de Virtudes">
 <meta property="og:description" content="Três perguntas, anônimas, em menos de um minuto.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://gpmintegracao.com.br/academiadevirtudes/avaliacao/">
+<meta property="og:url" content="https://gpmintegracao.com.br/npsencontro1/">
 <meta property="og:image" content="https://gpmintegracao.com.br/assets/academia-de-virtudes-og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="../../assets/logo-alfa.png">
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -141,9 +139,12 @@
   .err{color:var(--error);font-size:13.5px;margin:8px 0 0}
   .form-error{color:var(--error);font-size:14.5px;margin:14px 0 0;text-align:center}
   .hidden{display:none !important}
+  /* local do Encontro 2: clicável, abre o mapa */
+  a.mapa{color:inherit;text-decoration:underline;text-decoration-color:rgba(201,164,92,.7);text-underline-offset:3px}
+  a.mapa:hover{color:var(--gold-2)}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 
-  /* Cartão da lista prioritária */
+  /* Cartão de inscrição do Encontro 2 (tela de obrigado) */
   .vip{margin-top:34px;padding:26px 22px;border-radius:18px;border:1px solid var(--card-line);
     background:linear-gradient(180deg,rgba(201,164,92,.10),rgba(201,164,92,.02));text-align:center}
   .vip .eyebrow{margin-bottom:10px}
@@ -205,17 +206,17 @@
 
     <!-- 3 · Próximo encontro -->
     <section class="screen" data-screen="next" aria-labelledby="t-next">
-      <h2 id="t-next">Você gostaria de participar do <em>Encontro 2</em>, em novembro?</h2>
-      <p class="help">A data ainda será definida.</p>
+      <h2 id="t-next">Você gostaria de participar do <em>Encontro 2</em>, no dia 20 de novembro?</h2>
+      <p class="help">Sexta-feira, às 9h, no <a class="mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Centro+Empresarial+Office+Tower%2C+Av.+Evandro+Lins+e+Silva%2C+840+-+Barra+da+Tijuca%2C+Rio+de+Janeiro+-+RJ%2C+22631-470" target="_blank" rel="noopener">Centro Empresarial Office Tower</a>.</p>
       <div class="options" role="radiogroup" aria-labelledby="t-next" id="next-options">
         <button type="button" class="option" role="radio" aria-checked="false" data-value="Sim">Sim, quero participar</button>
-        <button type="button" class="option" role="radio" aria-checked="false" data-value="Talvez">Talvez<small>Depende da data</small></button>
+        <button type="button" class="option" role="radio" aria-checked="false" data-value="Talvez">Talvez<small>Ainda não sei se consigo</small></button>
         <button type="button" class="option" role="radio" aria-checked="false" data-value="Não">Não por enquanto</button>
       </div>
       <p class="form-error hidden" id="nps-error" role="alert"></p>
     </section>
 
-    <!-- 4 · Obrigado + convite para a lista -->
+    <!-- 4 · Obrigado + inscrição do Encontro 2 (na página principal da Academia) -->
     <section class="screen center" data-screen="thanks" aria-labelledby="t-thanks" tabindex="-1">
       <p class="eyebrow">Avaliação recebida</p>
       <h1 id="t-thanks">Obrigado.</h1>
@@ -223,64 +224,13 @@
       <p class="quote">Saber não é virtude. Virtude é hábito.</p>
 
       <div class="vip" id="vip-card">
-        <p class="eyebrow">Lista prioritária · Encontro&nbsp;2</p>
-        <h3>Seja avisado primeiro.</h3>
-        <p>A data de novembro ainda não foi definida. Quem está na lista recebe o aviso em primeira mão e tem prioridade na inscrição.</p>
-        <button type="button" class="btn block" data-go="list">Entrar na lista prioritária</button>
-        <p class="note">Sua avaliação continua anônima. A lista é um cadastro separado.</p>
+        <p class="eyebrow">Inscrições abertas · Encontro&nbsp;2</p>
+        <h3>Essência Humana</h3>
+        <p>Sexta-feira, 20 de novembro, às 9h, no <a class="mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Centro+Empresarial+Office+Tower%2C+Av.+Evandro+Lins+e+Silva%2C+840+-+Barra+da+Tijuca%2C+Rio+de+Janeiro+-+RJ%2C+22631-470" target="_blank" rel="noopener">Centro Empresarial Office Tower</a>. Vagas limitadas.</p>
+        <a class="btn block" href="/academiadevirtudes/#encontro-2">Fazer minha inscrição</a>
+        <p class="note">Sua avaliação continua anônima. A inscrição é um cadastro separado.</p>
       </div>
-      <button type="button" class="link hidden" id="vip-link" data-go="list">Mudou de ideia? Entrar na lista do Encontro 2</button>
-    </section>
-
-    <!-- 5 · Formulário da lista prioritária -->
-    <section class="screen" data-screen="list" aria-labelledby="t-list">
-      <p class="eyebrow">Lista prioritária · Encontro&nbsp;2</p>
-      <h2 id="t-list">Avisamos você <em>primeiro.</em></h2>
-      <p class="help">Assim que a data de novembro for definida, você recebe o convite antes de todo mundo.</p>
-      <form id="list-form" novalidate>
-        <input type="hidden" name="_subject" value="Lista prioritária · Academia de Virtudes · Encontro 2">
-        <input type="hidden" name="lista" value="Encontro 2 · novembro de 2026">
-        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-        <div class="field">
-          <label for="nome">Nome completo</label>
-          <input type="text" id="nome" name="nome" autocomplete="name" required>
-          <p class="err hidden" data-err="nome">Informe seu nome.</p>
-        </div>
-        <div class="field">
-          <label for="telefone">WhatsApp</label>
-          <input type="tel" id="telefone" name="telefone" autocomplete="tel" inputmode="tel" placeholder="(21) 99999-9999" required>
-          <p class="err hidden" data-err="telefone">Informe um número com DDD.</p>
-        </div>
-        <div class="field">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" placeholder="voce@empresa.com.br" required>
-          <p class="err hidden" data-err="email">Informe um e-mail válido.</p>
-        </div>
-        <div class="field">
-          <span class="label" id="t-esteve">Você esteve no Encontro 1?</span>
-          <div class="seg" role="radiogroup" aria-labelledby="t-esteve" id="esteve">
-            <button type="button" class="option" role="radio" aria-checked="false" data-value="Sim">Sim</button>
-            <button type="button" class="option" role="radio" aria-checked="false" data-value="Não">Não</button>
-          </div>
-          <input type="hidden" name="esteve_no_encontro_1" id="esteve_val">
-          <p class="err hidden" data-err="esteve">Escolha uma opção.</p>
-        </div>
-
-        <div class="actions">
-          <button type="submit" class="btn block" id="list-btn">Confirmar meu lugar na lista</button>
-        </div>
-        <p class="form-error hidden" id="list-error" role="alert"></p>
-      </form>
-    </section>
-
-    <!-- 6 · Confirmação da lista -->
-    <section class="screen center" data-screen="done" aria-labelledby="t-done" tabindex="-1">
-      <p class="eyebrow">Lista prioritária · Encontro&nbsp;2</p>
-      <h1 id="t-done">Você está <em>na lista.</em></h1>
-      <div class="rule"></div>
-      <p class="lead">Assim que a data de novembro for definida, você recebe o convite em primeira mão.</p>
-      <p class="lead" style="margin-top:22px;color:var(--dim)">Até o próximo encontro.</p>
+      <a class="link hidden" id="vip-link" href="/academiadevirtudes/#encontro-2">Mudou de ideia? Inscrições abertas para o Encontro 2</a>
     </section>
 
   </main>
@@ -294,7 +244,6 @@
 (function(){
   /* ============================ CONFIGURAÇÃO ============================ */
   var FORM_NPS   = "https://formspree.io/f/mljjeqwp";   // avaliação anônima
-  var FORM_LISTA = "https://formspree.io/f/xaeeyrdb";   // lista prioritária do Encontro 2
   var EVENTO     = "Academia de Virtudes · Encontro 1 · 23/10/2026";
   /* ===================================================================== */
 
@@ -314,16 +263,14 @@
     if (push !== false && history[history.length-1] !== name) history.push(name);
     var idx = order.indexOf(name);
     var chrome = $("#chrome");
-    chrome.classList.toggle("hide", idx === -1 && name !== "list");
-    $("#back").classList.toggle("show", (idx > 0) || name === "list");
+    chrome.classList.toggle("hide", idx === -1);
+    $("#back").classList.toggle("show", idx > 0);
     $("#step-count").textContent = idx >= 0 ? ("0" + (idx+1) + " / 03") : "";
-    $("#bar").style.width = idx >= 0 ? ((idx+1)/3*100) + "%" : (name === "list" ? "100%" : "0");
+    $("#bar").style.width = idx >= 0 ? ((idx+1)/3*100) + "%" : "0";
     window.scrollTo({top:0, behavior:"smooth"});
     var screen = $('.screen[data-screen="'+name+'"]');
-    var focusable = screen.querySelector("textarea, input:not([type=hidden]):not(.hp)");
     if (name === "why") setTimeout(function(){ $("#motivo").focus({preventScroll:true}); }, 350);
-    else if (name === "list") setTimeout(function(){ $("#nome").focus({preventScroll:true}); }, 350);
-    else if (name === "thanks" || name === "done") screen.focus({preventScroll:true});
+    else if (name === "thanks") screen.focus({preventScroll:true});
   }
 
   $("#back").addEventListener("click", function(){
@@ -400,62 +347,6 @@
       });
   });
 
-  // Lista prioritária
-  var esteve = $("#esteve");
-  esteve.addEventListener("click", function(e){
-    var b = e.target.closest(".option"); if (!b) return;
-    $$(".option", esteve).forEach(function(x){ x.setAttribute("aria-checked", x === b ? "true" : "false"); });
-    $("#esteve_val").value = b.dataset.value;
-    $('[data-err="esteve"]').classList.add("hidden");
-  });
-
-  var tel = $("#telefone");
-  tel.addEventListener("input", function(){
-    var d = this.value.replace(/\D/g,"").slice(0,11), o = d;
-    if (d.length > 2) o = "(" + d.slice(0,2) + ") " + d.slice(2);
-    if (d.length > 6) o = "(" + d.slice(0,2) + ") " + d.slice(2, d.length-4) + "-" + d.slice(-4);
-    this.value = o;
-  });
-
-  $("#list-form").addEventListener("submit", function(e){
-    e.preventDefault();
-    var f = this, ok = true, first = null;
-    function check(name, valid, input){
-      $('[data-err="'+name+'"]').classList.toggle("hidden", valid);
-      if (!valid){ ok = false; if (!first) first = input; }
-    }
-    var nome = $("#nome"), email = $("#email");
-    check("nome", nome.value.trim().length >= 3, nome);
-    check("telefone", tel.value.replace(/\D/g,"").length >= 10, tel);
-    check("email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()), email);
-    check("esteve", !!$("#esteve_val").value, $(".option", esteve));
-    if (!ok){ first.focus(); return; }
-    if (f._gotcha.value) return;
-
-    var btn = $("#list-btn"), err = $("#list-error");
-    btn.disabled = true; btn.textContent = "Enviando…"; err.classList.add("hidden");
-    post(FORM_LISTA, {
-      _subject: f._subject.value,
-      lista: f.lista.value,
-      nome: nome.value.trim(),
-      telefone: tel.value,
-      email: email.value.trim(),
-      _replyto: email.value.trim(),
-      esteve_no_encontro_1: $("#esteve_val").value
-    }).then(function(){
-      var fn = nome.value.trim().split(/\s+/)[0];
-      // nome digitado entra como texto (não como HTML)
-      var tDone = $("#t-done"), em = document.createElement("em");
-      em.textContent = "na lista.";
-      tDone.textContent = fn ? (fn + ", você está ") : "Você está ";
-      tDone.appendChild(em);
-      history = ["done"]; show("done", false);
-    }).catch(function(){
-      btn.disabled = false; btn.textContent = "Confirmar meu lugar na lista";
-      err.textContent = "Não conseguimos enviar agora. Verifique sua conexão e tente de novo.";
-      err.classList.remove("hidden");
-    });
-  });
 })();
 </script>
 </body>
