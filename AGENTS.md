@@ -66,6 +66,9 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - `_app/fonts/`: Cormorant Garamond (normal 500–600 e itálico 500) e Inter (400–600), só o subconjunto latino, em woff2 variável; licença SIL OFL 1.1 nos arquivos `OFL-*.txt`.
 - Ao alterar um arquivo de `_app/`, aumente o `?v=` nas páginas que o carregam, para o navegador não usar a cópia antiga.
 - Links externos com `rel="noopener noreferrer"`. Nada de dados pessoais em `localStorage` além da sessão do supabase-js.
+- Cabeçalhos de segurança (CSP, noindex, no-store, no-referrer, COOP) ficam no `.htaccess` de cada pasta: `entrar/`, `redefinir-senha/`, `aluno/`, `admin/`. Não em `academiadevirtudes/`, para não afetar a página pública. Pasta nova da Área do Aluno precisa estar dentro de uma delas ou ter o próprio `.htaccess`.
+- Para testar a CSP no computador: `node _notas/ferramentas/servidor-teste.cjs . 8080` na raiz do repositório e abrir `http://localhost:8080/academiadevirtudes/entrar/` (o Live Server da porta 5500 não lê `.htaccess`).
+- Configuração do painel, modelos de e-mail e primeiro admin: `supabase/PAINEL.md`.
 
 ## Supabase
 

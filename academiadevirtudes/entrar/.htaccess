@@ -1,0 +1,12 @@
+# Área do Aluno · cabeçalhos de segurança de /academiadevirtudes/entrar/
+# (vale também para as subpastas; uma subpasta pode ter o próprio .htaccess, que substitui estes valores)
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://qfghgtrvwklzlsuawndm.supabase.co wss://qfghgtrvwklzlsuawndm.supabase.co; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Cache-Control "no-store"
+  Header always set Referrer-Policy "no-referrer"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+</IfModule>
