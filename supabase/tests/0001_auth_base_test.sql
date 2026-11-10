@@ -131,6 +131,38 @@ select 'aceite e último acesso gravados pelas funções', '2026-11 / sim',
   from public.profiles where id = '00000000-0000-4000-8000-0000000000a1';
 
 -- ---------------------------------------------------------------------
+-- 2b) O trigger protege sozinho, mesmo se alguém der GRANT UPDATE (role) por engano.
+--     O GRANT é feito numa subtransação desfeita no fim (nada fica gravado).
+-- ---------------------------------------------------------------------
+do $$
+declare
+  resultado text;
+begin
+  begin
+    grant update (role) on public.profiles to authenticated;
+    perform set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000a1","role":"authenticated","aal":"aal1"}', true);
+    perform set_config('role', 'authenticated', true);
+    begin
+      update public.profiles set role = 'admin' where id = '00000000-0000-4000-8000-0000000000a1';
+      resultado := 'alterou';
+    exception when others then
+      resultado := sqlerrm;
+    end;
+    raise exception 'desfazer_teste';
+  exception when others then
+    if sqlerrm <> 'desfazer_teste' then
+      resultado := coalesce(resultado, '') || ' / falha na preparação: ' || sqlerrm;
+    end if;
+  end;
+  insert into _r (teste, esperado, obtido)
+  values ('trigger bloqueia aluno se promover mesmo com GRANT UPDATE (role)', 'alteração não permitida', resultado);
+end $$;
+insert into _r (teste, esperado, obtido)
+select 'GRANT temporário foi desfeito', 'false', has_column_privilege('authenticated', 'public.profiles', 'role', 'UPDATE')::text;
+insert into _r (teste, esperado, obtido)
+select 'aluno continua aluno depois do teste', 'aluno', role from public.profiles where id = '00000000-0000-4000-8000-0000000000a1';
+
+-- ---------------------------------------------------------------------
 -- 3) Aluno INATIVO (sessão ainda aberta)
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000a3","role":"authenticated","aal":"aal1"}', false);

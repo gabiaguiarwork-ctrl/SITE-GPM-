@@ -159,9 +159,11 @@ $$;
 -- Proteção de colunas: pelo front (papéis anon/authenticated) ninguém altera
 -- id, e-mail, papel, status, aceite, datas. Só funções do servidor
 -- (SECURITY DEFINER, que rodam como o dono) e a service_role conseguem.
+-- Precisa ser SECURITY INVOKER: numa função definer, current_user seria o dono
+-- (postgres) e a checagem abaixo nunca bloquearia nada.
 create or replace function privado.proteger_profiles()
 returns trigger
-language plpgsql security definer set search_path = ''
+language plpgsql security invoker set search_path = ''
 as $$
 begin
   if current_user in ('authenticated', 'anon') then
