@@ -8,12 +8,12 @@
 <meta name="theme-color" content="#08142E">
 <title>Entrar · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=4">
-<script src="/academiadevirtudes/_app/config.js?v=2" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
+<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=2" defer></script>
-<script src="/academiadevirtudes/entrar/entrar.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
+<script src="/academiadevirtudes/entrar/entrar.js?v=2" defer></script>
 </head>
 <body>
 <div class="ac-loader" role="status">Carregando…</div>
@@ -32,7 +32,7 @@
       <!-- Entrar -->
       <section id="painel-entrar" aria-labelledby="t-entrar" hidden>
         <h1 id="t-entrar">Área do Aluno</h1>
-        <p class="ac-sub">Entre com o e-mail e a senha do seu convite.</p>
+        <p class="ac-sub">Entre com seu e-mail e senha.</p>
         <form id="form-entrar" novalidate>
           <div class="ac-campo">
             <label for="email">E-mail</label>
@@ -50,7 +50,9 @@
           <div class="ac-captcha" id="captcha-entrar"></div>
           <button class="ac-btn ac-btn--bloco" id="btn-entrar" type="submit">Entrar</button>
         </form>
+        <p class="ac-ajuda ac-centro" id="nao-confirmado" hidden>Acabou de se cadastrar? Confirme o e-mail antes de entrar. <a class="ac-link" href="/academiadevirtudes/confirmar/">Pedir novo link de confirmação</a></p>
         <p class="ac-centro"><button class="ac-link" id="ir-esqueci" type="button">Esqueci minha senha</button></p>
+        <p class="ac-centro ac-troca">Ainda não tem acesso? <a class="ac-link" href="/academiadevirtudes/cadastro/">Faça seu cadastro</a></p>
       </section>
 
       <!-- Esqueci minha senha -->
@@ -87,7 +89,7 @@
       <!-- Aceite da política de privacidade -->
       <section id="painel-aceite" aria-labelledby="t-aceite" hidden>
         <h1 id="t-aceite">Antes de continuar</h1>
-        <p class="ac-sub">A Área do Aluno guarda seu nome, e-mail, WhatsApp e o seu progresso nos encontros, só para a organização da Academia de Virtudes.</p>
+        <p class="ac-sub">A Área do Aluno guarda seu nome, e-mail, WhatsApp, CPF, empresa, cargo e o seu progresso nos encontros, só para a organização da Academia de Virtudes.</p>
         <label class="ac-check" for="aceite">
           <input type="checkbox" id="aceite">
           <span>Li e aceito a <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> do Grupo GPM.</span>

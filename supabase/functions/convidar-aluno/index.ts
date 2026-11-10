@@ -1,5 +1,5 @@
 // convidar-aluno · convida uma pessoa para a Área do Aluno (ou reenvia o convite pendente).
-// Corpo: { nome, email, whatsapp?, empresa?, cargo?, papel?: 'aluno' | 'admin' }
+// Corpo: { nome, sobrenome?, email, whatsapp?, empresa?, cargo?, papel?: 'aluno' | 'admin' }
 import { convidar, email, erro, iniciar, resposta, servidor, texto } from '../_shared/comum.ts';
 
 Deno.serve(async (req) => {
@@ -9,14 +9,15 @@ Deno.serve(async (req) => {
     const { admin, corpo } = ini;
 
     const dados = {
-      nome: texto(corpo.nome, 120),
+      nome: texto(corpo.nome, 60),
+      sobrenome: texto(corpo.sobrenome, 80),
       email: email(corpo.email),
       whatsapp: texto(corpo.whatsapp, 30),
       empresa: texto(corpo.empresa, 120),
       cargo: texto(corpo.cargo, 120),
     };
     const papel = corpo.papel === 'admin' ? 'admin' : 'aluno';
-    if (dados.nome.length < 3) return erro(req, 400, 'Informe o nome completo.');
+    if (dados.nome.length < 2) return erro(req, 400, 'Informe o nome.');
     if (!dados.email) return erro(req, 400, 'Informe um e-mail válido.');
 
     const sb = servidor();

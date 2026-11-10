@@ -22,6 +22,9 @@
     base: BASE,
     rotas: Object.freeze({
       entrar: BASE + '/entrar/',
+      cadastro: BASE + '/cadastro/',
+      confirmar: BASE + '/confirmar/',
+      completar: BASE + '/aluno/completar/',
       redefinirSenha: BASE + '/redefinir-senha/',
       aluno: BASE + '/aluno/',
       perfil: BASE + '/aluno/perfil/',
@@ -37,9 +40,14 @@
     // O Vimeo não precisa de configuração aqui.
     pandaHost: '',
 
-    // Endereço que o Supabase usa nos e-mails de recuperação e convite.
+    // Endereços que o Supabase usa nos e-mails de recuperação, convite e confirmação.
     // Em localhost o auth.js troca pelo endereço local automaticamente.
     redirectRedefinirSenha: 'https://gpmintegracao.com.br' + BASE + '/redefinir-senha/',
+    // Endereço da confirmação do e-mail do cadastro (precisa estar nas Redirect URLs do painel).
+    redirectConfirmar: 'https://gpmintegracao.com.br' + BASE + '/confirmar/',
+
+    // Espera mínima entre reenvios do e-mail de confirmação, na tela (o Supabase também limita).
+    reenvioSegundos: 60,
 
     privacidade: Object.freeze({ versao: '2026-11', url: '/politica-privacidade.html' }),
 

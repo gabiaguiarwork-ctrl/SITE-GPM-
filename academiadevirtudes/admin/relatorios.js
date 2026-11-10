@@ -9,6 +9,7 @@
   var AC = window.AC;
   var ADM = window.AcademiaAdmin;
   var C = window.AcademiaConteudo;
+  var CP = window.AcademiaCampos;
   var h = AC.h;
   var $ = AC.$;
 
@@ -17,19 +18,21 @@
     criar_encontro: 'Criou encontro', publicar_encontro: 'Publicou encontro', despublicar_encontro: 'Despublicou encontro', excluir_encontro: 'Excluiu encontro',
     criar_conteudo: 'Criou conteúdo', publicar_conteudo: 'Publicou conteúdo', despublicar_conteudo: 'Despublicou conteúdo', excluir_conteudo: 'Excluiu conteúdo',
     criar_aviso: 'Criou aviso', publicar_aviso: 'Publicou aviso', despublicar_aviso: 'Despublicou aviso', excluir_aviso: 'Excluiu aviso',
-    exportar_dados_aluno: 'Exportou dados (LGPD)', excluir_dados_aluno: 'Excluiu dados (LGPD)'
+    exportar_dados_aluno: 'Exportou dados (LGPD)', excluir_dados_aluno: 'Excluiu dados (LGPD)',
+    aceitar_comunicacoes: 'Aceitou comunicações', retirar_comunicacoes: 'Retirou comunicações'
   };
 
   function nomePor(id) {
     var a = ADM.estado.alunos.filter(function (x) { return x.id === id; })[0];
-    return a ? (a.nome || a.email) : '';
+    return a ? (ADM.nomeCompleto(a) || a.email) : '';
   }
   function alunosSemAdmin() { return ADM.estado.alunos.filter(function (a) { return a.role !== 'admin'; }); }
 
   function montar() {
     var alunos = alunosSemAdmin();
     var validos = ADM.conteudosValidos();
-    var ativos = alunos.filter(function (a) { return a.ativo; });
+    // Cadastro ainda sem e-mail confirmado não conta como aluno ativo.
+    var ativos = alunos.filter(function (a) { return a.ativo && ADM.statusAluno(a).id !== 'confirmacao'; });
     var nunca = ativos.filter(function (a) { return !a.ultimo_acesso; });
     var semana = Date.now() - 7 * 864e5;
     var recentes = ativos.filter(function (a) { return a.ultimo_acesso && new Date(a.ultimo_acesso).getTime() >= semana; });
@@ -42,7 +45,7 @@
     if (!nunca.length) caixa.appendChild(C.vazio('Todos os alunos ativos já acessaram.'));
     else {
       var ul = h('ul', { class: 'ac-previa' });
-      nunca.forEach(function (a) { ul.appendChild(h('li', null, (a.nome || '(sem nome)') + ' · ' + a.email + (a.whatsapp ? ' · ' + a.whatsapp : ''))); });
+      nunca.forEach(function (a) { ul.appendChild(h('li', null, (ADM.nomeCompleto(a) || '(sem nome)') + ' · ' + a.email + (a.whatsapp ? ' · ' + CP.formatarWhatsapp(a.whatsapp) : ''))); });
       caixa.appendChild(ul);
     }
 
@@ -87,10 +90,15 @@
     var validos = ADM.conteudosValidos();
     var ids = {};
     validos.forEach(function (c) { ids[c.id] = true; });
-    var linhas = [['Nome', 'E-mail', 'WhatsApp', 'Empresa', 'Cargo', 'Papel', 'Status', 'Último acesso', 'Concluídos', 'Total', '% concluído', 'Aceite da privacidade']];
+    // Sem CPF de propósito (minimização): o CPF de cada pessoa sai no "Exportar dados (LGPD)".
+    var linhas = [['Nome', 'Sobrenome', 'E-mail', 'WhatsApp', 'Empresa', 'Cargo', 'Papel', 'Status', 'Origem', 'Cadastro em', 'E-mail confirmado',
+      'Cadastro completo', 'Aceita comunicações', 'Comunicações: data da escolha', 'Último acesso', 'Concluídos', 'Total', '% concluído', 'Aceite da privacidade']];
     ADM.estado.alunos.forEach(function (a) {
       var feitos = ADM.estado.progresso.filter(function (p) { return p.aluno_id === a.id && p.concluido && ids[p.conteudo_id]; }).length;
-      linhas.push([a.nome, a.email, a.whatsapp, a.empresa, a.cargo, a.role, ADM.statusAluno(a).texto, a.ultimo_acesso ? C.data(a.ultimo_acesso, true) : 'Nunca',
+      linhas.push([a.nome, a.sobrenome, a.email, a.whatsapp ? CP.formatarWhatsapp(a.whatsapp) : '', a.empresa, a.cargo, a.role, ADM.statusAluno(a).texto,
+        a.origem === 'convite' ? 'Convite' : 'Cadastro próprio', C.data(a.criado_em, true), a.email_confirmado_em ? 'Sim' : 'Não',
+        a.cadastro_completo ? 'Sim' : 'Não', a.aceite_comunicacoes ? 'Sim' : 'Não', a.aceite_comunicacoes_em ? C.data(a.aceite_comunicacoes_em, true) : '',
+        a.ultimo_acesso ? C.data(a.ultimo_acesso, true) : 'Nunca',
         feitos, validos.length, validos.length ? Math.round(feitos / validos.length * 100) : 0,
         a.aceite_privacidade_em ? C.data(a.aceite_privacidade_em, true) + ' (v' + a.aceite_privacidade_versao + ')' : '']);
     });

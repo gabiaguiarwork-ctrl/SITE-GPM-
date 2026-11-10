@@ -1,5 +1,5 @@
 // importar-alunos · convida várias pessoas de uma vez (lista vinda de um CSV lido no navegador).
-// Corpo: { alunos: [{ nome, email, whatsapp?, empresa?, cargo? }] }  (até 100 por vez)
+// Corpo: { alunos: [{ nome, sobrenome?, email, whatsapp?, empresa?, cargo? }] }  (até 100 por vez)
 // Devolve o resultado de cada linha. O limite de e-mails por hora do SMTP vale aqui também.
 import { convidar, email, erro, iniciar, resposta, servidor, texto } from '../_shared/comum.ts';
 
@@ -21,12 +21,12 @@ Deno.serve(async (req) => {
     for (let i = 0; i < corpo.alunos.length; i++) {
       const a = (corpo.alunos[i] ?? {}) as Record<string, unknown>;
       const dados = {
-        nome: texto(a.nome, 120), email: email(a.email), whatsapp: texto(a.whatsapp, 30),
+        nome: texto(a.nome, 60), sobrenome: texto(a.sobrenome, 80), email: email(a.email), whatsapp: texto(a.whatsapp, 30),
         empresa: texto(a.empresa, 120), cargo: texto(a.cargo, 120),
       };
       const linha = i + 1;
       if (!dados.email) { resultados.push({ linha, email: texto(a.email, 254), ok: false, mensagem: 'E-mail inválido.' }); continue; }
-      if (dados.nome.length < 3) { resultados.push({ linha, email: dados.email, ok: false, mensagem: 'Nome ausente.' }); continue; }
+      if (dados.nome.length < 2) { resultados.push({ linha, email: dados.email, ok: false, mensagem: 'Nome ausente.' }); continue; }
       if (vistos.has(dados.email)) { resultados.push({ linha, email: dados.email, ok: false, mensagem: 'Repetido na lista.' }); continue; }
       vistos.add(dados.email);
 

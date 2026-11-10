@@ -21,17 +21,17 @@
             <td style="background:#0E1F45;border:1px solid #3A4A6E;border-radius:16px;padding:32px 28px;">
               <h1 style="margin:0 0 18px;font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:28px;line-height:1.25;color:#F4EEE2;">Confirme seu e-mail</h1>
               <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#F4EEE2;">{{ if .Data.nome }}Olá, {{ .Data.nome }}.{{ else }}Olá.{{ end }}</p>
-              <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#F4EEE2;">Confirme este endereço de e-mail para usar a Área do Aluno da Academia de Virtudes.</p>
+              <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#F4EEE2;">Falta só um passo: confirme este endereço de e-mail para ativar seu acesso gratuito à Área do Aluno da Academia de Virtudes.</p>
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;">
                 <tr>
                   <td style="border-radius:999px;background:#C9A45C;">
-                    <a href="{{ .SiteURL }}/academiadevirtudes/redefinir-senha/?token_hash={{ .TokenHash }}&type=email" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#0B1733;text-decoration:none;border-radius:999px;">Confirmar e-mail</a>
+                    <a href="{{ .SiteURL }}/academiadevirtudes/confirmar/?token_hash={{ .TokenHash }}&type=email" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#0B1733;text-decoration:none;border-radius:999px;">Confirmar e ativar meu acesso</a>
                   </td>
                 </tr>
               </table>
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B9C0CF;">Se o botão não funcionar, copie e cole este endereço no navegador:</p>
-              <p style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#E2C88E;word-break:break-all;">{{ .SiteURL }}/academiadevirtudes/redefinir-senha/?token_hash={{ .TokenHash }}&type=email</p>
-              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B9C0CF;">Não reconhece este pedido? Ignore este e-mail.</p>
+              <p style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#E2C88E;word-break:break-all;">{{ .SiteURL }}/academiadevirtudes/confirmar/?token_hash={{ .TokenHash }}&type=email</p>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#B9C0CF;">O link vale por 1 hora. Não fez este cadastro? Ignore este e-mail: sem a confirmação, o acesso não é ativado.</p>
             </td>
           </tr>
           <tr>

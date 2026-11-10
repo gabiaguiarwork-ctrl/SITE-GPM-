@@ -471,3 +471,15 @@ td .ac-selo--mini { margin-left: 0; }
 .ac-select { min-height: 50px; }
 .ac-formulario .ac-select { width: 100%; }
 .ac-selo--mini { white-space: nowrap; }
+
+/* Cadastro aberto: caixa mais larga, textos auxiliares e novos status */
+.ac-acesso__caixa--largo { max-width: 600px; }
+.ac-opcional { display: block; margin-top: 2px; font-size: 13px; color: var(--dim); }
+.ac-troca { margin-top: 18px; font-size: 14.5px; color: var(--mist); }
+.ac-cartao .ac-check { margin-bottom: 4px; }
+.ac-meta--fraca { color: var(--dim); }
+.ac-status--confirmacao { color: var(--mist); }
+.ac-status--incompleto { color: var(--gold-2); border-style: dashed; }
+.ac-selo--alerta { color: var(--erro); border-color: rgba(240, 165, 149, .45); }
+/* Títulos que recebem o foco por script (anúncio para leitor de tela), sem contorno visual */
+h1[tabindex="-1"]:focus { outline: none; }

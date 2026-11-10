@@ -125,11 +125,12 @@
       var cab = partir(linhas[0]).map(function (c) { return ADM.slug(c).replace(/-/g, ''); });
       var col = function (nomes) { for (var i = 0; i < nomes.length; i++) { var k = cab.indexOf(nomes[i]); if (k >= 0) return k; } return -1; };
       var iNome = col(['nome', 'nomecompleto', 'name']), iEmail = col(['email', 'e-mail', 'mail']), iWpp = col(['whatsapp', 'telefone', 'celular', 'fone']);
+      var iSobrenome = col(['sobrenome', 'ultimonome', 'lastname']);
       var iEmp = col(['empresa', 'company']), iCargo = col(['cargo', 'funcao']);
       if (iNome < 0 || iEmail < 0) return null;
       return linhas.slice(1).map(function (l) {
         var c = partir(l);
-        return { nome: c[iNome] || '', email: (c[iEmail] || '').toLowerCase(), whatsapp: iWpp >= 0 ? c[iWpp] || '' : '', empresa: iEmp >= 0 ? c[iEmp] || '' : '', cargo: iCargo >= 0 ? c[iCargo] || '' : '' };
+        return { nome: c[iNome] || '', sobrenome: iSobrenome >= 0 ? c[iSobrenome] || '' : '', email: (c[iEmail] || '').toLowerCase(), whatsapp: iWpp >= 0 ? c[iWpp] || '' : '', empresa: iEmp >= 0 ? c[iEmp] || '' : '', cargo: iCargo >= 0 ? c[iCargo] || '' : '' };
       });
     },
 
@@ -147,15 +148,27 @@
     },
     carregarAlunos: function () {
       return Promise.all([
-        ADM.sb().from('profiles').select('id, nome, email, whatsapp, empresa, cargo, role, ativo, criado_em, ultimo_acesso, aceite_privacidade_em, aceite_privacidade_versao').order('nome'),
-        ADM.sb().from('progresso').select('aluno_id, conteudo_id, concluido, posicao_seg, atualizado_em')
+        ADM.sb().from('profiles').select('id, nome, sobrenome, email, whatsapp, cpf, empresa, cargo, role, ativo, criado_em, ultimo_acesso, aceite_privacidade_em, aceite_privacidade_versao, aceite_comunicacoes, aceite_comunicacoes_em').order('nome'),
+        ADM.sb().from('progresso').select('aluno_id, conteudo_id, concluido, posicao_seg, atualizado_em'),
+        // Dados que ficam na conta (auth.users): e-mail confirmado, convite e cadastro completo.
+        ADM.sb().rpc('admin_contas')
       ]).then(function (r) {
         if (r[0].error) throw r[0].error;
         if (r[1].error) throw r[1].error;
-        ADM.estado.alunos = r[0].data;
+        if (r[2].error) throw r[2].error;
+        var contas = {};
+        (r[2].data || []).forEach(function (c) { contas[c.id] = c; });
+        ADM.estado.alunos = r[0].data.map(function (a) {
+          var c = contas[a.id] || {};
+          a.email_confirmado_em = c.email_confirmado_em || null;
+          a.origem = c.convidado_em ? 'convite' : 'cadastro';
+          a.cadastro_completo = c.cadastro_completo === true;
+          return a;
+        });
         ADM.estado.progresso = r[1].data;
       });
     },
+    nomeCompleto: function (a) { return [a.nome, a.sobrenome].filter(Boolean).join(' '); },
     // Conteúdos que contam para o progresso: publicados, em encontro publicado e liberado.
     conteudosValidos: function () {
       var mods = {};
@@ -167,7 +180,9 @@
     },
     statusAluno: function (a) {
       if (!a.ativo) return { id: 'inativo', texto: 'Inativo' };
-      if (!a.ultimo_acesso && !a.aceite_privacidade_em) return { id: 'pendente', texto: 'Convite pendente' };
+      if (a.origem === 'convite' && !a.ultimo_acesso && !a.aceite_privacidade_em) return { id: 'pendente', texto: 'Convite pendente' };
+      if (a.origem === 'cadastro' && !a.email_confirmado_em) return { id: 'confirmacao', texto: 'Aguardando confirmação' };
+      if (a.role !== 'admin' && !a.cadastro_completo) return { id: 'incompleto', texto: 'Cadastro incompleto' };
       return { id: 'ativo', texto: 'Ativo' };
     },
 

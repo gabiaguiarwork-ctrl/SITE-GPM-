@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR" class="ac-carregando">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Complete seu cadastro · Área do Aluno · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
+<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
+<script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/campos.js?v=1" defer></script>
+<script src="/academiadevirtudes/aluno/completar/completar.js?v=1" defer></script>
+</head>
+<body>
+<div class="ac-loader" role="status">Carregando…</div>
+
+<main class="ac-acesso">
+  <div class="ac-acesso__caixa ac-acesso__caixa--largo">
+    <div class="ac-acesso__marca">
+      <img class="ac-acesso__simbolo" src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="64" height="64">
+      <p class="ac-acesso__nome">Academia de Virtudes</p>
+    </div>
+
+    <div class="ac-cartao">
+      <h1 id="t-completar">Complete seu cadastro</h1>
+      <p class="ac-sub">Para liberar os encontros e materiais, faltam alguns dados. Todos os campos são obrigatórios.</p>
+      <p class="ac-msg" id="msg" role="alert" hidden></p>
+      <form id="form-completar" novalidate>
+        <div class="ac-grade-2">
+          <div class="ac-campo">
+            <label for="nome">Nome</label>
+            <input class="ac-input" id="nome" type="text" autocomplete="given-name" maxlength="60" required aria-describedby="erro-nome">
+            <p class="ac-erro-campo" id="erro-nome" hidden></p>
+          </div>
+          <div class="ac-campo">
+            <label for="sobrenome">Sobrenome</label>
+            <input class="ac-input" id="sobrenome" type="text" autocomplete="family-name" maxlength="80" required aria-describedby="erro-sobrenome">
+            <p class="ac-erro-campo" id="erro-sobrenome" hidden></p>
+          </div>
+        </div>
+        <div class="ac-grade-2">
+          <div class="ac-campo">
+            <label for="whatsapp">WhatsApp</label>
+            <input class="ac-input" id="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(21) 99999-9999" maxlength="16" required aria-describedby="erro-whatsapp">
+            <p class="ac-erro-campo" id="erro-whatsapp" hidden></p>
+          </div>
+          <div class="ac-campo" id="campo-cpf">
+            <label for="cpf">CPF</label>
+            <input class="ac-input" id="cpf" type="text" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14" required aria-describedby="ajuda-cpf erro-cpf">
+            <p class="ac-ajuda" id="ajuda-cpf">Depois de salvo, só a equipe GPM consegue corrigir.</p>
+            <p class="ac-erro-campo" id="erro-cpf" hidden></p>
+          </div>
+        </div>
+        <div class="ac-grade-2">
+          <div class="ac-campo">
+            <label for="empresa">Empresa</label>
+            <input class="ac-input" id="empresa" type="text" autocomplete="organization" maxlength="120" required aria-describedby="ajuda-empresa erro-empresa">
+            <p class="ac-ajuda" id="ajuda-empresa">Se não trabalha em empresa, escreva "Autônomo".</p>
+            <p class="ac-erro-campo" id="erro-empresa" hidden></p>
+          </div>
+          <div class="ac-campo">
+            <label for="cargo">Cargo / função</label>
+            <input class="ac-input" id="cargo" type="text" autocomplete="organization-title" maxlength="120" required aria-describedby="erro-cargo">
+            <p class="ac-erro-campo" id="erro-cargo" hidden></p>
+          </div>
+        </div>
+        <button class="ac-btn ac-btn--bloco" id="btn-completar" type="submit">Salvar e continuar</button>
+      </form>
+      <p class="ac-centro ac-troca"><button class="ac-link" type="button" data-sair>Sair</button></p>
+    </div>
+
+    <p class="ac-rodape-acesso">
+      <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> ·
+      <a href="/academiadevirtudes/">Academia de Virtudes</a>
+    </p>
+  </div>
+</main>
+</body>
+</html>

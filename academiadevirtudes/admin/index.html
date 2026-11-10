@@ -8,18 +8,19 @@
 <meta name="theme-color" content="#08142E">
 <title>Painel · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=4">
-<script src="/academiadevirtudes/_app/config.js?v=2" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
+<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=2" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
 <script src="/academiadevirtudes/_app/conteudo.js?v=2" defer></script>
-<script src="/academiadevirtudes/admin/admin.js?v=2" defer></script>
-<script src="/academiadevirtudes/admin/alunos.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/campos.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/admin.js?v=3" defer></script>
+<script src="/academiadevirtudes/admin/alunos.js?v=2" defer></script>
 <script src="/academiadevirtudes/admin/encontros.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/avisos.js?v=1" defer></script>
-<script src="/academiadevirtudes/admin/relatorios.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/relatorios.js?v=2" defer></script>
 <script src="/academiadevirtudes/admin/iniciar.js?v=1" defer></script>
 </head>
 <body>
@@ -55,16 +56,26 @@
     <div class="ac-barra-ferramentas">
       <div class="ac-campo ac-campo--busca">
         <label for="busca-alunos">Buscar</label>
-        <input class="ac-input" id="busca-alunos" type="search" placeholder="Nome, e-mail ou empresa" autocomplete="off">
+        <input class="ac-input" id="busca-alunos" type="search" placeholder="Nome, e-mail, empresa ou cargo" autocomplete="off">
       </div>
       <div class="ac-campo">
         <label for="filtro-status">Status</label>
         <select class="ac-select" id="filtro-status">
           <option value="">Todos</option>
           <option value="ativo">Ativos</option>
+          <option value="confirmacao">Aguardando confirmação</option>
+          <option value="incompleto">Cadastro incompleto</option>
           <option value="pendente">Convite pendente</option>
           <option value="inativo">Inativos</option>
           <option value="admin">Admins</option>
+        </select>
+      </div>
+      <div class="ac-campo">
+        <label for="filtro-comunicacoes">Comunicações</label>
+        <select class="ac-select" id="filtro-comunicacoes">
+          <option value="">Todos</option>
+          <option value="sim">Aceitaram</option>
+          <option value="nao">Não aceitaram</option>
         </select>
       </div>
       <div class="ac-linha-acoes ac-linha-acoes--compacta">
@@ -75,9 +86,10 @@
 
     <form class="ac-secao ac-formulario" id="form-convite" novalidate hidden>
       <h2>Convidar aluno</h2>
-      <p class="ac-sub">A pessoa recebe um e-mail para criar a senha.</p>
+      <p class="ac-sub">A pessoa recebe um e-mail para criar a senha. No primeiro acesso, ela completa o que faltar (inclusive o CPF).</p>
       <div class="ac-grade-2">
-        <div class="ac-campo"><label for="cv-nome">Nome completo</label><input class="ac-input" id="cv-nome" maxlength="120" required aria-describedby="erro-cv-nome"><p class="ac-erro-campo" id="erro-cv-nome" hidden></p></div>
+        <div class="ac-campo"><label for="cv-nome">Nome</label><input class="ac-input" id="cv-nome" maxlength="60" required aria-describedby="erro-cv-nome"><p class="ac-erro-campo" id="erro-cv-nome" hidden></p></div>
+        <div class="ac-campo"><label for="cv-sobrenome">Sobrenome (opcional)</label><input class="ac-input" id="cv-sobrenome" maxlength="80"></div>
         <div class="ac-campo"><label for="cv-email">E-mail</label><input class="ac-input" id="cv-email" type="email" maxlength="254" required aria-describedby="erro-cv-email"><p class="ac-erro-campo" id="erro-cv-email" hidden></p></div>
         <div class="ac-campo"><label for="cv-whatsapp">WhatsApp</label><input class="ac-input" id="cv-whatsapp" type="tel" maxlength="16" placeholder="(21) 99999-9999"></div>
         <div class="ac-campo"><label for="cv-empresa">Empresa (opcional)</label><input class="ac-input" id="cv-empresa" maxlength="120"></div>
@@ -92,7 +104,7 @@
 
     <form class="ac-secao ac-formulario" id="form-importar" novalidate hidden>
       <h2>Importar alunos (CSV)</h2>
-      <p class="ac-sub">Arquivo .csv com as colunas <strong>nome</strong>, <strong>email</strong> e, se quiser, <strong>whatsapp</strong>, <strong>empresa</strong> e <strong>cargo</strong> (separadas por vírgula ou ponto e vírgula). Até 100 pessoas por vez.</p>
+      <p class="ac-sub">Arquivo .csv com as colunas <strong>nome</strong>, <strong>email</strong> e, se quiser, <strong>sobrenome</strong>, <strong>whatsapp</strong>, <strong>empresa</strong> e <strong>cargo</strong> (separadas por vírgula ou ponto e vírgula). Até 100 pessoas por vez.</p>
       <div class="ac-campo"><label for="im-arquivo">Arquivo CSV</label><input class="ac-input" id="im-arquivo" type="file" accept=".csv,text/csv"></div>
       <div id="im-previa" aria-live="polite"></div>
       <div class="ac-linha-acoes">

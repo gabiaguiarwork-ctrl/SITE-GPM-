@@ -1,7 +1,7 @@
 /*
   Área do Aluno · Academia de Virtudes
-  Acesso: cliente Supabase, CAPTCHA (Turnstile), login, recuperação de senha, MFA,
-  aceite da política de privacidade e guard de rota.
+  Acesso: cliente Supabase, CAPTCHA (Turnstile), cadastro, confirmação do e-mail, login,
+  recuperação de senha, MFA, aceite da política de privacidade, cadastro completo e guard de rota.
 
   Importante: o guard é só navegação. A proteção real dos dados é a RLS do banco.
 */
@@ -44,6 +44,11 @@
 
     if (/^config:/.test(e.message || '')) return 'A página não carregou por completo. Recarregue e tente de novo.';
     if (codigo === 'captcha_failed' || msg.indexOf('captcha') >= 0) return 'A verificação de segurança falhou. Faça a verificação de novo e tente outra vez.';
+    if (codigo === 'signup_disabled') return 'Os cadastros ainda não estão abertos. Se você recebeu um convite, use o link do e-mail.';
+    // No login, e-mail não confirmado tem a mesma mensagem de senha errada (não revela que a conta existe).
+    if (codigo === 'email_not_confirmed') return contexto === 'login' ? 'E-mail ou senha incorretos.' : 'Seu e-mail ainda não foi confirmado. Abra o link que enviamos ou peça um novo.';
+    if (codigo === 'email_address_invalid' || codigo === 'email_address_not_authorized') return 'Informe um e-mail válido.';
+    if (codigo === '23514') return 'Algum dado está fora do formato aceito. Confira os campos e tente de novo.';
     if (codigo === 'over_request_rate_limit' || codigo === 'over_email_send_rate_limit' || status === 429) return 'Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente de novo.';
     if (codigo === 'weak_password' || e.name === 'AuthWeakPasswordError') {
       var razoes = e.reasons || [];
@@ -137,7 +142,7 @@
     return A.sessao().then(function (s) {
       if (!s) return null;
       return sb.from('profiles')
-        .select('id, nome, email, whatsapp, empresa, cargo, role, ativo, aceite_privacidade_versao, ultimo_acesso')
+        .select('id, nome, sobrenome, email, whatsapp, cpf, empresa, cargo, role, ativo, aceite_privacidade_versao, aceite_comunicacoes, aceite_comunicacoes_em, ultimo_acesso')
         .eq('id', s.user.id)
         .maybeSingle()
         .then(function (r) { if (r.error) throw r.error; return r.data; });
@@ -149,6 +154,17 @@
   };
   A.temPapelAdmin = function () {
     return A.cliente().rpc('tem_papel_admin').then(function (r) { if (r.error) throw r.error; return r.data === true; });
+  };
+
+  // Cadastro completo (nome, sobrenome, WhatsApp, CPF, empresa, cargo e aceite). Quem decide é o banco.
+  A.cadastroCompleto = function () {
+    return A.cliente().rpc('cadastro_completo').then(function (r) { if (r.error) throw r.error; return r.data === true; });
+  };
+
+  // Consentimento de comunicações (marcar/desmarcar). Devolve a data gravada.
+  A.definirComunicacoes = function (aceito) {
+    return A.cliente().rpc('definir_comunicacoes', { aceito: aceito === true })
+      .then(function (r) { if (r.error) throw r.error; return r.data; });
   };
 
   A.aceitarPrivacidade = function () {
@@ -178,6 +194,22 @@
     return AC.ehLocalhost() ? location.origin + CFG.rotas.redefinirSenha : CFG.redirectRedefinirSenha;
   };
 
+  A.enderecoConfirmar = function () {
+    return AC.ehLocalhost() ? location.origin + CFG.rotas.confirmar : CFG.redirectConfirmar;
+  };
+
+  // Só erros que não dizem nada sobre o e-mail voltam para a tela: CAPTCHA, limite por IP e rede.
+  // O limite de envio de e-mail (over_email_send_rate_limit) é silenciado: ele aparece quando
+  // o e-mail já existe e pediu outro envio há pouco, e revelaria a conta.
+  function erroQuePodeAparecer(e) {
+    if (!e) return false;
+    var codigo = e.code || '';
+    if (codigo === 'captcha_failed' || /captcha/i.test(e.message || '')) return true;
+    if (codigo === 'over_request_rate_limit') return true;
+    if (e.name === 'AuthRetryableFetchError' || /failed to fetch|network/i.test(e.message || '')) return true;
+    return false;
+  }
+
   // Sempre "sucesso" para a tela: não revela se o e-mail existe.
   A.pedirNovaSenha = function (email, captchaToken) {
     if (!captchaToken) return Promise.reject({ code: 'captcha_failed' });
@@ -185,8 +217,52 @@
       redirectTo: A.enderecoRedefinir(),
       captchaToken: captchaToken
     }).then(function (r) {
-      // Erros que não revelam nada (captcha, limite, rede) voltam para a tela; o resto é silenciado.
-      if (r.error && (r.error.status === 429 || /captcha/i.test(r.error.message || '') || r.error.name === 'AuthRetryableFetchError')) throw r.error;
+      if (erroQuePodeAparecer(r.error)) throw r.error;
+    });
+  };
+
+  /*
+    Cadastro aberto. dados = { email, nome, sobrenome, whatsapp, cpf, empresa, cargo, aceite_comunicacoes }.
+    O papel e o aceite da privacidade NÃO vão nos metadados (o banco ignora o papel e grava o aceite
+    depois da confirmação do e-mail). Resultado para a tela, igual exista ou não o e-mail:
+      { etapa: 'confirmar' } → "Quase lá": e-mail de confirmação enviado
+      { etapa: 'logado' }    → só se o painel estiver sem confirmação de e-mail
+  */
+  A.cadastrar = function (dados, senha, captchaToken) {
+    if (!captchaToken) return Promise.reject({ code: 'captcha_failed' });
+    return A.cliente().auth.signUp({
+      email: String(dados.email).trim().toLowerCase(),
+      password: senha,
+      options: {
+        captchaToken: captchaToken,
+        emailRedirectTo: A.enderecoConfirmar(),
+        data: {
+          nome: dados.nome, sobrenome: dados.sobrenome, whatsapp: dados.whatsapp, cpf: dados.cpf,
+          empresa: dados.empresa, cargo: dados.cargo, aceite_comunicacoes: dados.aceite_comunicacoes === true
+        }
+      }
+    }).then(function (r) {
+      if (r.error) {
+        var c = r.error.code || '';
+        // Estes falam só do pedido (senha, CAPTCHA, cadastro fechado, formato), nunca da existência do e-mail.
+        if (erroQuePodeAparecer(r.error) || c === 'weak_password' || r.error.name === 'AuthWeakPasswordError' ||
+            c === 'signup_disabled' || c === 'email_address_invalid' || c === 'validation_failed') throw r.error;
+        // Qualquer outro (ex.: e-mail já cadastrado, limite de e-mail) vira a mesma tela de sucesso.
+        return { etapa: 'confirmar' };
+      }
+      return { etapa: r.data && r.data.session ? 'logado' : 'confirmar' };
+    });
+  };
+
+  // Reenvio do e-mail de confirmação do cadastro. Sempre "sucesso" para a tela.
+  A.reenviarConfirmacao = function (email, captchaToken) {
+    if (!captchaToken) return Promise.reject({ code: 'captcha_failed' });
+    return A.cliente().auth.resend({
+      type: 'signup',
+      email: String(email).trim().toLowerCase(),
+      options: { emailRedirectTo: A.enderecoConfirmar(), captchaToken: captchaToken }
+    }).then(function (r) {
+      if (erroQuePodeAparecer(r.error)) throw r.error;
     });
   };
 
@@ -278,6 +354,7 @@
     - Inativo → sai e vai para /entrar/?motivo=inativo
     - Aceite pendente ou MFA pendente → /entrar/ (que conduz a etapa)
     - Admin: precisa de papel admin; sem aal2 → /admin/mfa/
+    - Aluno com cadastro incompleto → /aluno/completar/?voltar=<rota> (a opção paginaCompletar desliga)
     A página fica só com o "carregando" até o guard terminar.
   */
   A.proteger = function (opcoes) {
@@ -305,11 +382,20 @@
               return pendente();
             }
 
-            sb.auth.onAuthStateChange(function (evento) {
-              if (evento === 'SIGNED_OUT') A.irPara(CFG.rotas.entrar);
-            });
-            return A.registrarAcesso().then(function () {
-              return { sessao: sessao, perfil: perfil, nivel: nivel };
+            // Cadastro incompleto (ex.: entrou por convite) → "Complete seu cadastro" antes de tudo.
+            // Admin não passa por aqui (com MFA ele já vê tudo pelo banco).
+            var conferir = !opcoes.admin && !opcoes.paginaCompletar && perfil.role !== 'admin';
+            return (conferir ? A.cadastroCompleto() : Promise.resolve(true)).then(function (completo) {
+              if (!completo) {
+                A.irPara(CFG.rotas.completar + '?voltar=' + encodeURIComponent(location.pathname + location.search));
+                return pendente();
+              }
+              sb.auth.onAuthStateChange(function (evento) {
+                if (evento === 'SIGNED_OUT') A.irPara(CFG.rotas.entrar);
+              });
+              return A.registrarAcesso().then(function () {
+                return { sessao: sessao, perfil: perfil, nivel: nivel };
+              });
             });
           });
         });

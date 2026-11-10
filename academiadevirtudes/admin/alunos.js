@@ -1,7 +1,8 @@
 /*
   Painel · aba Alunos
-  Lista com busca e status; convidar, importar CSV, reenviar convite, desativar/reativar,
-  tornar admin/aluno, exportar e excluir dados (LGPD). As ações sensíveis passam pelas Edge Functions.
+  Lista com busca, status e filtro de comunicações; convidar, importar CSV, reenviar convite,
+  desativar/reativar, tornar admin/aluno, exportar e excluir dados (LGPD).
+  As ações sensíveis passam pelas Edge Functions.
 */
 (function () {
   'use strict';
@@ -9,6 +10,7 @@
   var AC = window.AC;
   var ADM = window.AcademiaAdmin;
   var C = window.AcademiaConteudo;
+  var CP = window.AcademiaCampos;
   var h = AC.h;
   var $ = AC.$;
   var importacao = [];
@@ -24,14 +26,20 @@
   function listar() {
     var busca = $('#busca-alunos').value.trim().toLowerCase();
     var filtro = $('#filtro-status').value;
+    var comunicacoes = $('#filtro-comunicacoes').value;
     var validos = ADM.conteudosValidos();
     var corpo = AC.limpar($('#tabela-alunos tbody'));
+    // CPF repetido em mais de uma conta (o banco não impede, para o cadastro não revelar quem já tem conta)
+    var cpfs = {};
+    ADM.estado.alunos.forEach(function (a) { if (a.cpf) cpfs[a.cpf] = (cpfs[a.cpf] || 0) + 1; });
     var lista = ADM.estado.alunos.filter(function (a) {
       var st = ADM.statusAluno(a).id;
       if (filtro === 'admin' && a.role !== 'admin') return false;
       if (filtro && filtro !== 'admin' && st !== filtro) return false;
+      if (comunicacoes === 'sim' && !a.aceite_comunicacoes) return false;
+      if (comunicacoes === 'nao' && a.aceite_comunicacoes) return false;
       if (!busca) return true;
-      return [a.nome, a.email, a.empresa].some(function (v) { return v && v.toLowerCase().indexOf(busca) >= 0; });
+      return [ADM.nomeCompleto(a), a.email, a.empresa, a.cargo].some(function (v) { return v && v.toLowerCase().indexOf(busca) >= 0; });
     });
     $('#contagem-alunos').textContent = lista.length + ' de ' + ADM.estado.alunos.length + ' pessoa' + (ADM.estado.alunos.length === 1 ? '' : 's');
     if (!lista.length) {
@@ -50,11 +58,21 @@
       acoes.appendChild(botao('Exportar dados', function (b) { exportar(a, b); }));
       if (!eu && a.role !== 'admin') acoes.appendChild(botao('Excluir dados', function (b) { excluir(a, b); }, 'perigo'));
 
+      var trabalho = [a.empresa, a.cargo].filter(Boolean).join(' · ');
+      var conta = [
+        a.cpf ? 'CPF ' + CP.mascararCpf(a.cpf) : 'Sem CPF',
+        'Cadastro em ' + C.data(a.criado_em),
+        a.origem === 'convite' ? 'Convite' : 'Cadastro próprio',
+        'E-mail confirmado: ' + (a.email_confirmado_em ? 'sim' : 'não'),
+        'Comunicações: ' + (a.aceite_comunicacoes ? 'sim' + (a.aceite_comunicacoes_em ? ' (' + C.data(a.aceite_comunicacoes_em) + ')' : '') : 'não')
+      ].join(' · ');
       corpo.appendChild(h('tr', null,
         h('td', { 'data-rotulo': 'Aluno' },
-          h('strong', null, a.nome || '(sem nome)'), a.role === 'admin' ? h('span', { class: 'ac-selo ac-selo--mini' }, 'Admin') : null, h('br'),
-          h('span', { class: 'ac-meta' }, a.email || ''), a.whatsapp ? h('span', { class: 'ac-meta' }, ' · ' + a.whatsapp) : null,
-          a.empresa ? h('span', { class: 'ac-meta' }, ' · ' + a.empresa) : null),
+          h('strong', null, ADM.nomeCompleto(a) || '(sem nome)'), a.role === 'admin' ? h('span', { class: 'ac-selo ac-selo--mini' }, 'Admin') : null,
+          a.cpf && cpfs[a.cpf] > 1 ? h('span', { class: 'ac-selo ac-selo--mini ac-selo--alerta', title: 'Este CPF aparece em mais de uma conta' }, 'CPF repetido') : null, h('br'),
+          h('span', { class: 'ac-meta' }, a.email || ''), a.whatsapp ? h('span', { class: 'ac-meta' }, ' · ' + CP.formatarWhatsapp(a.whatsapp)) : null,
+          trabalho ? [h('br'), h('span', { class: 'ac-meta' }, trabalho)] : null,
+          h('br'), h('span', { class: 'ac-meta ac-meta--fraca' }, conta)),
         h('td', { 'data-rotulo': 'Status' }, h('span', { class: 'ac-selo ac-selo--mini ac-status--' + st.id }, st.texto)),
         h('td', { 'data-rotulo': 'Último acesso' }, a.ultimo_acesso ? C.data(a.ultimo_acesso, true) : 'Nunca'),
         h('td', { 'data-rotulo': 'Progresso' }, pr.total ? pct + '% (' + pr.feitos + '/' + pr.total + ')' : '—'),
@@ -81,11 +99,11 @@
     }).catch(function (err) { AC.ocupado(b, false); ADM.falha(err); });
   }
   function reenviar(a, b) {
-    executar(b, 'Enviando…', ADM.chamar('convidar-aluno', { nome: a.nome || a.email, email: a.email, whatsapp: a.whatsapp || '', empresa: a.empresa || '', cargo: a.cargo || '' }));
+    executar(b, 'Enviando…', ADM.chamar('convidar-aluno', { nome: a.nome || a.email, sobrenome: a.sobrenome || '', email: a.email, whatsapp: a.whatsapp || '', empresa: a.empresa || '', cargo: a.cargo || '' }));
   }
   function status(a, b) {
     var desativar = a.ativo;
-    if (desativar && !ADM.confirmar('Desativar o acesso de ' + (a.nome || a.email) + '? A pessoa perde o acesso na hora, mesmo se estiver com a página aberta.')) return;
+    if (desativar && !ADM.confirmar('Desativar o acesso de ' + (ADM.nomeCompleto(a) || a.email) + '? A pessoa perde o acesso na hora, mesmo se estiver com a página aberta.')) return;
     executar(b, desativar ? 'Desativando…' : 'Reativando…', ADM.chamar('alterar-status-aluno', { id: a.id, ativo: !desativar }));
   }
   function papel(a, b) {
@@ -126,14 +144,14 @@
   function enviarConvite(e) {
     e.preventDefault();
     var nome = $('#cv-nome'), email = $('#cv-email'), btn = $('#btn-convite');
-    var okNome = nome.value.trim().length >= 3, okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim());
-    AC.erroCampo(nome, okNome ? '' : 'Informe o nome completo.');
+    var okNome = nome.value.trim().length >= 2, okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim());
+    AC.erroCampo(nome, okNome ? '' : 'Informe o nome.');
     AC.erroCampo(email, okEmail ? '' : 'Informe um e-mail válido.');
     if (!okNome) { nome.focus(); return; }
     if (!okEmail) { email.focus(); return; }
     AC.ocupado(btn, true, 'Enviando…');
     ADM.chamar('convidar-aluno', {
-      nome: nome.value.trim(), email: email.value.trim().toLowerCase(), whatsapp: $('#cv-whatsapp').value.trim(),
+      nome: nome.value.trim(), sobrenome: $('#cv-sobrenome').value.trim(), email: email.value.trim().toLowerCase(), whatsapp: $('#cv-whatsapp').value.trim(),
       empresa: $('#cv-empresa').value.trim(), cargo: $('#cv-cargo').value.trim(), papel: $('#cv-papel').value
     }).then(function (r) {
       $('#form-convite').hidden = true;
@@ -171,7 +189,7 @@
       importacao = novos;
       previa.appendChild(h('p', { class: 'ac-msg ac-msg--info' }, novos.length + ' convite(s) para enviar' + (jaTem ? ' · ' + jaTem + ' linha(s) ignorada(s) (já cadastrado ou sem e-mail)' : '') + '.'));
       var ul = h('ul', { class: 'ac-previa' });
-      novos.slice(0, 8).forEach(function (l) { ul.appendChild(h('li', null, (l.nome || '(sem nome)') + ' · ' + l.email)); });
+      novos.slice(0, 8).forEach(function (l) { ul.appendChild(h('li', null, ([l.nome, l.sobrenome].filter(Boolean).join(' ') || '(sem nome)') + ' · ' + l.email)); });
       if (novos.length > 8) ul.appendChild(h('li', null, '… e mais ' + (novos.length - 8)));
       previa.appendChild(ul);
       $('#btn-importar').disabled = !novos.length;
@@ -201,6 +219,7 @@
     iniciar: function () {
       $('#busca-alunos').addEventListener('input', listar);
       $('#filtro-status').addEventListener('change', listar);
+      $('#filtro-comunicacoes').addEventListener('change', listar);
       $('#abrir-convite').addEventListener('click', abrirConvite);
       $('#abrir-importar').addEventListener('click', abrirImportar);
       $('#form-convite').addEventListener('submit', enviarConvite);

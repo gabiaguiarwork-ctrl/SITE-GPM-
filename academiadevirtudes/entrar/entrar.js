@@ -48,6 +48,7 @@
   $('#form-entrar').addEventListener('submit', function (e) {
     e.preventDefault();
     limparMsg();
+    $('#nao-confirmado').hidden = true;
     var email = $('#email'), senha = $('#senha'), btn = $('#btn-entrar');
     var ok = true;
     AC.erroCampo(email, emailValido(email.value) ? '' : 'Informe um e-mail válido.');
@@ -62,6 +63,8 @@
       .then(function () { senha.value = ''; return continuar(); })
       .catch(function (err) {
         erro(A.mensagemErro(err, 'login'));
+        // Para qualquer falha de login (não só e-mail não confirmado), para não revelar nada sobre a conta.
+        if (err && err.status === 400) $('#nao-confirmado').hidden = false;
         if (captchaEntrar) captchaEntrar.reset();
       })
       .then(function () { AC.ocupado(btn, false); });

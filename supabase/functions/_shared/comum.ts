@@ -122,11 +122,12 @@ export async function auditar(sb: SupabaseClient, quem: string, acao: string, al
 export async function convidar(
   sb: SupabaseClient,
   admin: Admin,
-  dados: { nome: string; email: string; whatsapp: string; empresa: string; cargo: string },
+  dados: { nome: string; sobrenome: string; email: string; whatsapp: string; empresa: string; cargo: string },
 ): Promise<{ ok: boolean; id?: string; mensagem: string }> {
   const { data, error } = await sb.auth.admin.inviteUserByEmail(dados.email, {
     redirectTo: REDIRECT_CONVITE,
-    data: { nome: dados.nome, whatsapp: dados.whatsapp, empresa: dados.empresa, cargo: dados.cargo },
+    // O banco limpa e valida estes dados (migration 0006). CPF não vem do painel: a pessoa preenche no primeiro acesso.
+    data: { nome: dados.nome, sobrenome: dados.sobrenome, whatsapp: dados.whatsapp, empresa: dados.empresa, cargo: dados.cargo },
   });
   if (error) {
     const codigo = (error as { code?: string }).code ?? '';

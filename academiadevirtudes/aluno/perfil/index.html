@@ -8,13 +8,14 @@
 <meta name="theme-color" content="#08142E">
 <title>Meu perfil · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=4">
-<script src="/academiadevirtudes/_app/config.js?v=2" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
+<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=2" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/aluno/perfil/perfil.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/campos.js?v=1" defer></script>
+<script src="/academiadevirtudes/aluno/perfil/perfil.js?v=2" defer></script>
 </head>
 <body>
 <div class="ac-loader" role="status">Carregando…</div>
@@ -41,10 +42,17 @@
     <h2 id="t-dados">Seus dados</h2>
     <p class="ac-msg" id="msg-dados" role="status" aria-live="polite" hidden></p>
     <form id="form-dados" novalidate>
-      <div class="ac-campo">
-        <label for="nome">Nome completo</label>
-        <input class="ac-input" id="nome" type="text" autocomplete="name" maxlength="120" required aria-describedby="erro-nome">
-        <p class="ac-erro-campo" id="erro-nome" hidden></p>
+      <div class="ac-grade-2">
+        <div class="ac-campo">
+          <label for="nome">Nome</label>
+          <input class="ac-input" id="nome" type="text" autocomplete="given-name" maxlength="60" required aria-describedby="erro-nome">
+          <p class="ac-erro-campo" id="erro-nome" hidden></p>
+        </div>
+        <div class="ac-campo">
+          <label for="sobrenome">Sobrenome</label>
+          <input class="ac-input" id="sobrenome" type="text" autocomplete="family-name" maxlength="80" required aria-describedby="erro-sobrenome">
+          <p class="ac-erro-campo" id="erro-sobrenome" hidden></p>
+        </div>
       </div>
       <div class="ac-campo">
         <label for="email">E-mail</label>
@@ -54,19 +62,41 @@
       <div class="ac-grade-2">
         <div class="ac-campo">
           <label for="whatsapp">WhatsApp</label>
-          <input class="ac-input" id="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(21) 99999-9999" maxlength="16">
+          <input class="ac-input" id="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(21) 99999-9999" maxlength="16" required aria-describedby="erro-whatsapp">
+          <p class="ac-erro-campo" id="erro-whatsapp" hidden></p>
         </div>
         <div class="ac-campo">
-          <label for="empresa">Empresa (opcional)</label>
-          <input class="ac-input" id="empresa" type="text" autocomplete="organization" maxlength="120">
+          <label for="cpf">CPF</label>
+          <input class="ac-input" id="cpf" type="text" readonly aria-describedby="ajuda-cpf">
+          <p class="ac-ajuda" id="ajuda-cpf">Para corrigir o CPF, fale com a equipe GPM.</p>
         </div>
       </div>
-      <div class="ac-campo">
-        <label for="cargo">Cargo (opcional)</label>
-        <input class="ac-input" id="cargo" type="text" autocomplete="organization-title" maxlength="120">
+      <div class="ac-grade-2">
+        <div class="ac-campo">
+          <label for="empresa">Empresa</label>
+          <input class="ac-input" id="empresa" type="text" autocomplete="organization" maxlength="120" required aria-describedby="erro-empresa">
+          <p class="ac-erro-campo" id="erro-empresa" hidden></p>
+        </div>
+        <div class="ac-campo">
+          <label for="cargo">Cargo / função</label>
+          <input class="ac-input" id="cargo" type="text" autocomplete="organization-title" maxlength="120" required aria-describedby="erro-cargo">
+          <p class="ac-erro-campo" id="erro-cargo" hidden></p>
+        </div>
       </div>
       <button class="ac-btn" id="btn-dados" type="submit">Salvar dados</button>
     </form>
+  </section>
+
+  <!-- Comunicações (consentimento separado, LGPD) -->
+  <section class="ac-secao" aria-labelledby="t-comunicacoes">
+    <h2 id="t-comunicacoes">Comunicações</h2>
+    <p class="ac-sub">Opcional. Você pode marcar ou desmarcar quando quiser.</p>
+    <p class="ac-msg" id="msg-comunicacoes" role="status" aria-live="polite" hidden></p>
+    <label class="ac-check" for="comunicacoes">
+      <input type="checkbox" id="comunicacoes" aria-describedby="comunicacoes-data">
+      <span>Quero receber comunicações do Grupo GPM sobre os próximos encontros.</span>
+    </label>
+    <p class="ac-ajuda" id="comunicacoes-data"></p>
   </section>
 
   <!-- Senha -->

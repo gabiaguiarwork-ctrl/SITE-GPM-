@@ -1,6 +1,7 @@
 /*
   /academiadevirtudes/aluno/perfil/
-  Dados do aluno, troca de senha (confirma a senha atual com CAPTCHA), MFA opcional e saída.
+  Dados do aluno, consentimento de comunicações, troca de senha (confirma a senha atual com CAPTCHA),
+  MFA opcional e saída.
 */
 (function () {
   'use strict';
@@ -8,6 +9,7 @@
   var AC = window.AC;
   var A = window.AcademiaAuth;
   var CFG = window.ACADEMIA_CONFIG;
+  var C = window.AcademiaCampos;
   var $ = AC.$;
   var perfil = null;
   var captchaSenha = null;
@@ -17,6 +19,7 @@
     perfil = ctx.perfil;
     window.AcademiaLayout.montar(ctx);
     preencherDados();
+    mostrarComunicacoes();
     carregarMfa();
     captchaSenha = A.captcha($('#captcha-senha'), null, null, function (t) { AC.mensagem($('#msg-senha'), t, 'erro'); });
     var aceite = perfil.aceite_privacidade_versao;
@@ -27,26 +30,36 @@
   AC.mascaraWhatsapp($('#whatsapp'));
 
   /* ---------- Dados ---------- */
+  var CAMPOS = [
+    [$('#nome'), C.erroTexto('nome')],
+    [$('#sobrenome'), C.erroTexto('sobrenome')],
+    [$('#whatsapp'), C.erroWhatsapp],
+    [$('#empresa'), C.erroTexto('empresa')],
+    [$('#cargo'), C.erroTexto('cargo')]
+  ];
+  C.ligarCorrecao(CAMPOS);
+
   function preencherDados() {
     $('#nome').value = perfil.nome || '';
+    $('#sobrenome').value = perfil.sobrenome || '';
     $('#email').value = perfil.email || '';
-    $('#whatsapp').value = perfil.whatsapp || '';
+    $('#whatsapp').value = perfil.whatsapp ? C.formatarWhatsapp(perfil.whatsapp) : '';
+    $('#cpf').value = C.mascararCpf(perfil.cpf) || 'Não informado';
     $('#empresa').value = perfil.empresa || '';
     $('#cargo').value = perfil.cargo || '';
   }
 
   $('#form-dados').addEventListener('submit', function (e) {
     e.preventDefault();
-    var nome = $('#nome'), btn = $('#btn-dados'), msg = $('#msg-dados');
+    var btn = $('#btn-dados'), msg = $('#msg-dados');
     AC.mensagem(msg, '');
-    var n = nome.value.trim();
-    AC.erroCampo(nome, n.length >= 3 ? '' : 'Informe seu nome completo.');
-    if (n.length < 3) { nome.focus(); return; }
+    if (!C.validar(CAMPOS)) return;
     var dados = {
-      nome: n.slice(0, 120),
-      whatsapp: $('#whatsapp').value.trim().slice(0, 30) || null,
-      empresa: $('#empresa').value.trim().slice(0, 120) || null,
-      cargo: $('#cargo').value.trim().slice(0, 120) || null
+      nome: C.limparTexto($('#nome').value),
+      sobrenome: C.limparTexto($('#sobrenome').value),
+      whatsapp: C.whatsappDigitos($('#whatsapp').value),
+      empresa: C.limparTexto($('#empresa').value),
+      cargo: C.limparTexto($('#cargo').value)
     };
     AC.ocupado(btn, true, 'Salvando…');
     A.cliente().from('profiles').update(dados).eq('id', perfil.id).select('id').then(function (r) {
@@ -56,6 +69,32 @@
       window.AcademiaLayout && AC.$$('[data-nome]').forEach(function (el) { el.textContent = AC.primeiroNome(perfil.nome); });
       AC.mensagem(msg, 'Dados salvos.', 'ok');
     });
+  });
+
+  /* ---------- Comunicações ---------- */
+  function mostrarComunicacoes() {
+    var caixa = $('#comunicacoes');
+    caixa.checked = perfil.aceite_comunicacoes === true;
+    var quando = perfil.aceite_comunicacoes_em ? new Date(perfil.aceite_comunicacoes_em).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) : '';
+    $('#comunicacoes-data').textContent = !quando ? 'Você não pediu para receber comunicações.'
+      : perfil.aceite_comunicacoes ? 'Você aceitou receber comunicações em ' + quando + '.'
+      : 'Você retirou o consentimento em ' + quando + '.';
+  }
+
+  $('#comunicacoes').addEventListener('change', function () {
+    var caixa = this, msg = $('#msg-comunicacoes');
+    var aceito = caixa.checked;
+    AC.mensagem(msg, '');
+    caixa.disabled = true;
+    A.definirComunicacoes(aceito).then(function (quando) {
+      perfil.aceite_comunicacoes = aceito;
+      perfil.aceite_comunicacoes_em = quando || perfil.aceite_comunicacoes_em;
+      mostrarComunicacoes();
+      AC.mensagem(msg, aceito ? 'Pronto. Você vai receber as comunicações dos próximos encontros.' : 'Pronto. Você não vai mais receber essas comunicações.', 'ok');
+    }).catch(function (err) {
+      caixa.checked = !aceito;
+      AC.mensagem(msg, A.mensagemErro(err), 'erro');
+    }).then(function () { caixa.disabled = false; });
   });
 
   /* ---------- Senha ---------- */

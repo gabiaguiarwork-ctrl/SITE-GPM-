@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR" class="ac-carregando">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Confirmar e-mail · Área do Aluno · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
+<script src="/academiadevirtudes/redefinir-senha/link.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
+<script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/campos.js?v=1" defer></script>
+<script src="/academiadevirtudes/confirmar/confirmar.js?v=1" defer></script>
+</head>
+<body>
+<div class="ac-loader" role="status">Confirmando seu e-mail…</div>
+
+<main class="ac-acesso">
+  <div class="ac-acesso__caixa">
+    <div class="ac-acesso__marca">
+      <img class="ac-acesso__simbolo" src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="64" height="64">
+      <p class="ac-acesso__nome">Academia de Virtudes</p>
+      <p class="ac-acesso__frase">Essência humana, potencial artificial.</p>
+    </div>
+
+    <div class="ac-cartao">
+      <p class="ac-msg" id="msg" role="alert" hidden></p>
+
+      <!-- E-mail confirmado -->
+      <section id="painel-ok" aria-labelledby="t-ok" hidden>
+        <h1 id="t-ok" tabindex="-1">E-mail confirmado</h1>
+        <p class="ac-sub">Seu acesso está ativo e o aceite da <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> (versão <span id="versao-privacidade"></span>) foi registrado. Abrindo a Área do Aluno…</p>
+        <div class="ac-acoes"><a class="ac-btn ac-btn--bloco" href="/academiadevirtudes/entrar/">Ir para a Área do Aluno</a></div>
+      </section>
+
+      <!-- Link expirado ou sem link: pedir outro -->
+      <section id="painel-reenviar" aria-labelledby="t-reenviar" hidden>
+        <h1 id="t-reenviar" tabindex="-1">Link expirado</h1>
+        <p class="ac-sub" id="sub-reenviar">Este link expirou ou já foi usado. Informe o e-mail do cadastro para receber um novo link de confirmação.</p>
+        <form id="form-reenviar" novalidate>
+          <div class="ac-campo">
+            <label for="email">E-mail</label>
+            <input class="ac-input" id="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required aria-describedby="erro-email">
+            <p class="ac-erro-campo" id="erro-email" hidden></p>
+          </div>
+          <div class="ac-captcha" id="captcha-reenviar"></div>
+          <button class="ac-btn ac-btn--bloco" id="btn-reenviar" type="submit">Enviar novo link</button>
+          <p class="ac-ajuda ac-centro" id="espera-reenvio"></p>
+        </form>
+        <p class="ac-centro ac-troca">Já confirmou? <a class="ac-link" href="/academiadevirtudes/entrar/">Entrar</a></p>
+      </section>
+    </div>
+
+    <p class="ac-rodape-acesso">
+      <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> ·
+      <a href="/academiadevirtudes/">Academia de Virtudes</a>
+    </p>
+  </div>
+</main>
+</body>
+</html>
