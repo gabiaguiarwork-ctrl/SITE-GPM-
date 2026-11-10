@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR" class="ac-carregando">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Meu perfil · Área do Aluno · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=1">
+<script src="/academiadevirtudes/_app/config.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
+<script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
+<script src="/academiadevirtudes/aluno/perfil/perfil.js?v=1" defer></script>
+</head>
+<body>
+<div class="ac-loader" role="status">Carregando…</div>
+
+<header class="ac-topo">
+  <div class="ac-topo__barra">
+    <a class="ac-topo__marca" href="/academiadevirtudes/aluno/"><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="34" height="34"><span>Academia de Virtudes</span></a>
+    <nav class="ac-topo__nav" aria-label="Área do Aluno">
+      <a href="/academiadevirtudes/aluno/">Início</a>
+      <a href="/academiadevirtudes/aluno/materiais/">Materiais</a>
+      <a href="/academiadevirtudes/aluno/perfil/">Perfil</a>
+      <a href="/academiadevirtudes/admin/" data-so-admin hidden>Admin</a>
+      <button type="button" data-sair>Sair</button>
+    </nav>
+  </div>
+</header>
+
+<main class="ac-conteudo" id="conteudo">
+  <h1>Meu perfil</h1>
+  <p class="ac-sub">Seus dados na Área do Aluno da Academia de Virtudes.</p>
+
+  <!-- Dados -->
+  <section class="ac-secao" aria-labelledby="t-dados">
+    <h2 id="t-dados">Seus dados</h2>
+    <p class="ac-msg" id="msg-dados" role="status" aria-live="polite" hidden></p>
+    <form id="form-dados" novalidate>
+      <div class="ac-campo">
+        <label for="nome">Nome completo</label>
+        <input class="ac-input" id="nome" type="text" autocomplete="name" maxlength="120" required aria-describedby="erro-nome">
+        <p class="ac-erro-campo" id="erro-nome" hidden></p>
+      </div>
+      <div class="ac-campo">
+        <label for="email">E-mail</label>
+        <input class="ac-input" id="email" type="email" readonly aria-describedby="ajuda-email">
+        <p class="ac-ajuda" id="ajuda-email">Para trocar o e-mail, fale com a equipe GPM.</p>
+      </div>
+      <div class="ac-grade-2">
+        <div class="ac-campo">
+          <label for="whatsapp">WhatsApp</label>
+          <input class="ac-input" id="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(21) 99999-9999" maxlength="16">
+        </div>
+        <div class="ac-campo">
+          <label for="empresa">Empresa (opcional)</label>
+          <input class="ac-input" id="empresa" type="text" autocomplete="organization" maxlength="120">
+        </div>
+      </div>
+      <div class="ac-campo">
+        <label for="cargo">Cargo (opcional)</label>
+        <input class="ac-input" id="cargo" type="text" autocomplete="organization-title" maxlength="120">
+      </div>
+      <button class="ac-btn" id="btn-dados" type="submit">Salvar dados</button>
+    </form>
+  </section>
+
+  <!-- Senha -->
+  <section class="ac-secao" aria-labelledby="t-senha">
+    <h2 id="t-senha">Trocar senha</h2>
+    <p class="ac-sub">Por segurança, confirme a senha atual.</p>
+    <p class="ac-msg" id="msg-senha" role="alert" hidden></p>
+    <form id="form-senha" novalidate>
+      <div class="ac-campo">
+        <label for="atual">Senha atual</label>
+        <div class="ac-senha">
+          <input class="ac-input" id="atual" type="password" autocomplete="current-password" required aria-describedby="erro-atual">
+          <button class="ac-senha__botao" type="button" data-mostrar="atual" aria-pressed="false" aria-controls="atual">Mostrar</button>
+        </div>
+        <p class="ac-erro-campo" id="erro-atual" hidden></p>
+      </div>
+      <div class="ac-campo">
+        <label for="nova">Nova senha</label>
+        <div class="ac-senha">
+          <input class="ac-input" id="nova" type="password" autocomplete="new-password" required aria-describedby="regras erro-nova">
+          <button class="ac-senha__botao" type="button" data-mostrar="nova" aria-pressed="false" aria-controls="nova">Mostrar</button>
+        </div>
+        <ul class="ac-regras" id="regras" aria-live="polite">
+          <li data-regra="tamanho">Pelo menos 10 caracteres</li>
+          <li data-regra="maiuscula">Uma letra maiúscula (A–Z)</li>
+          <li data-regra="minuscula">Uma letra minúscula (a–z)</li>
+          <li data-regra="numero">Um número</li>
+        </ul>
+        <p class="ac-erro-campo" id="erro-nova" hidden></p>
+      </div>
+      <div class="ac-campo">
+        <label for="confirma">Confirme a nova senha</label>
+        <input class="ac-input" id="confirma" type="password" autocomplete="new-password" required aria-describedby="erro-confirma">
+        <p class="ac-erro-campo" id="erro-confirma" hidden></p>
+      </div>
+      <div class="ac-campo" id="campo-codigo-senha" hidden>
+        <label for="codigo-senha">Código do aplicativo autenticador</label>
+        <input class="ac-input ac-codigo" id="codigo-senha" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-describedby="erro-codigo-senha">
+        <p class="ac-erro-campo" id="erro-codigo-senha" hidden></p>
+      </div>
+      <div class="ac-captcha" id="captcha-senha"></div>
+      <button class="ac-btn" id="btn-senha" type="submit">Trocar senha</button>
+    </form>
+  </section>
+
+  <!-- MFA -->
+  <section class="ac-secao" aria-labelledby="t-mfa">
+    <h2 id="t-mfa">Verificação em duas etapas</h2>
+    <p class="ac-sub">Opcional para alunos. Além da senha, a entrada pede um código do aplicativo autenticador do celular (Google Authenticator, Microsoft Authenticator ou similar).</p>
+    <p class="ac-msg" id="msg-mfa" role="status" aria-live="polite" hidden></p>
+    <p><span class="ac-selo" id="mfa-status">Verificando…</span></p>
+    <div class="ac-linha-acoes">
+      <button class="ac-btn" id="mfa-ativar" type="button" hidden>Ativar</button>
+      <button class="ac-btn ac-btn--perigo" id="mfa-desativar" type="button" hidden>Desativar</button>
+    </div>
+    <div id="mfa-cadastro" hidden>
+      <p class="ac-sub">1. Abra o aplicativo autenticador e leia o QR code (ou digite a chave).</p>
+      <img class="ac-qr" id="mfa-qr" alt="QR code para cadastrar a Academia de Virtudes no aplicativo autenticador" width="200" height="200">
+      <p class="ac-segredo" id="mfa-segredo"></p>
+      <form id="form-mfa" novalidate>
+        <div class="ac-campo">
+          <label for="mfa-codigo">2. Digite o código de 6 dígitos que apareceu</label>
+          <input class="ac-input ac-codigo" id="mfa-codigo" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-describedby="erro-mfa-codigo">
+          <p class="ac-erro-campo" id="erro-mfa-codigo" hidden></p>
+        </div>
+        <button class="ac-btn" id="btn-mfa" type="submit">Confirmar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Sair -->
+  <section class="ac-secao" aria-labelledby="t-sair">
+    <h2 id="t-sair">Sair</h2>
+    <p class="ac-sub" id="aceite-info"></p>
+    <div class="ac-linha-acoes">
+      <button class="ac-btn ac-btn--contorno" type="button" data-sair>Sair deste aparelho</button>
+      <button class="ac-btn ac-btn--perigo" id="sair-todos" type="button">Sair de todos os dispositivos</button>
+    </div>
+  </section>
+</main>
+
+<footer class="ac-pe">
+  <p class="ac-pe__frase">Essência humana, potencial artificial.</p>
+  <p><a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> · <a href="/">Grupo GPM</a> · © <span data-ano>2026</span></p>
+</footer>
+</body>
+</html>

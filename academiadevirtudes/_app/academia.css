@@ -138,6 +138,7 @@ p { margin: 0; }
 }
 .ac-senha__botao:hover { background: rgba(201, 164, 92, .12); }
 .ac-erro-campo { margin-top: 6px; font-size: 13.5px; color: var(--erro); }
+.ac-ajuda { margin-top: 6px; font-size: 13px; color: var(--dim); }
 
 /* Código de 6 dígitos (MFA) */
 .ac-codigo {
@@ -207,7 +208,36 @@ p { margin: 0; }
   font: 500 14px var(--sans); color: var(--mist); text-decoration: none;
 }
 .ac-topo__nav a:hover, .ac-topo__nav button:hover, .ac-topo__nav a[aria-current="page"] { color: var(--gold-2); background: rgba(201, 164, 92, .08); }
-@media (max-width: 480px) { .ac-topo__marca span { display: none; } }
+.ac-topo__nav [hidden] { display: none !important; }
+/* Celular: marca numa linha, menu rolável na linha de baixo */
+@media (max-width: 640px) {
+  .ac-topo__barra { flex-wrap: wrap; row-gap: 4px; padding: 10px 16px 6px; }
+  .ac-topo__nav { width: 100%; overflow-x: auto; margin: 0 -8px; padding-bottom: 4px; scrollbar-width: none; }
+  .ac-topo__nav::-webkit-scrollbar { display: none; }
+  .ac-topo__nav a, .ac-topo__nav button { flex-shrink: 0; padding: 0 10px; }
+}
+
+/* ---------- CAPTCHA ---------- */
+.ac-captcha { min-height: 65px; margin: 4px 0 18px; }
+.ac-captcha-aviso { margin: -8px 0 16px; font-size: 12.5px; color: var(--dim); }
+
+/* ---------- Seções (perfil, painéis simples) ---------- */
+.ac-secao {
+  background: rgba(14, 31, 69, .55); border: 1px solid var(--line); border-radius: 16px;
+  padding: 24px 20px; margin-bottom: 20px; max-width: 640px;
+}
+@media (min-width: 640px) { .ac-secao { padding: 28px 28px; } }
+.ac-secao h2 { font-size: 26px; margin-bottom: 6px; }
+.ac-secao > .ac-sub { margin-bottom: 18px; }
+.ac-grade-2 { display: grid; gap: 0 16px; }
+@media (min-width: 560px) { .ac-grade-2 { grid-template-columns: 1fr 1fr; } }
+.ac-selo {
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: .06em; border: 1px solid var(--line); color: var(--mist);
+}
+.ac-selo--ok { color: var(--ok); border-color: rgba(143, 211, 168, .45); }
+.ac-linha-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.ac-linha-acoes .ac-btn { flex: 1 1 200px; }
 
 .ac-conteudo { max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; }
 .ac-conteudo h1 { font-size: clamp(30px, 7vw, 44px); margin-bottom: 10px; }

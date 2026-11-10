@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR" class="ac-carregando">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Entrar · Área do Aluno · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=1">
+<script src="/academiadevirtudes/_app/config.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
+<script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=1" defer></script>
+<script src="/academiadevirtudes/entrar/entrar.js?v=1" defer></script>
+</head>
+<body>
+<div class="ac-loader" role="status">Carregando…</div>
+
+<main class="ac-acesso">
+  <div class="ac-acesso__caixa">
+    <div class="ac-acesso__marca">
+      <img class="ac-acesso__simbolo" src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="64" height="64">
+      <p class="ac-acesso__nome">Academia de Virtudes</p>
+      <p class="ac-acesso__frase">Essência humana, potencial artificial.</p>
+    </div>
+
+    <div class="ac-cartao">
+      <p class="ac-msg" id="msg" role="alert" hidden></p>
+
+      <!-- Entrar -->
+      <section id="painel-entrar" aria-labelledby="t-entrar" hidden>
+        <h1 id="t-entrar">Área do Aluno</h1>
+        <p class="ac-sub">Entre com o e-mail e a senha do seu convite.</p>
+        <form id="form-entrar" novalidate>
+          <div class="ac-campo">
+            <label for="email">E-mail</label>
+            <input class="ac-input" id="email" name="email" type="email" autocomplete="username" inputmode="email" required aria-describedby="erro-email">
+            <p class="ac-erro-campo" id="erro-email" hidden></p>
+          </div>
+          <div class="ac-campo">
+            <label for="senha">Senha</label>
+            <div class="ac-senha">
+              <input class="ac-input" id="senha" name="senha" type="password" autocomplete="current-password" required aria-describedby="erro-senha">
+              <button class="ac-senha__botao" type="button" data-mostrar="senha" aria-pressed="false" aria-controls="senha">Mostrar</button>
+            </div>
+            <p class="ac-erro-campo" id="erro-senha" hidden></p>
+          </div>
+          <div class="ac-captcha" id="captcha-entrar"></div>
+          <button class="ac-btn ac-btn--bloco" id="btn-entrar" type="submit">Entrar</button>
+        </form>
+        <p class="ac-centro"><button class="ac-link" id="ir-esqueci" type="button">Esqueci minha senha</button></p>
+      </section>
+
+      <!-- Esqueci minha senha -->
+      <section id="painel-esqueci" aria-labelledby="t-esqueci" hidden>
+        <h1 id="t-esqueci">Esqueci minha senha</h1>
+        <p class="ac-sub">Informe o e-mail do seu acesso. Se ele estiver cadastrado, você recebe um link para criar uma nova senha.</p>
+        <form id="form-esqueci" novalidate>
+          <div class="ac-campo">
+            <label for="email-esqueci">E-mail</label>
+            <input class="ac-input" id="email-esqueci" name="email" type="email" autocomplete="username" inputmode="email" required aria-describedby="erro-email-esqueci">
+            <p class="ac-erro-campo" id="erro-email-esqueci" hidden></p>
+          </div>
+          <div class="ac-captcha" id="captcha-esqueci"></div>
+          <button class="ac-btn ac-btn--bloco" id="btn-esqueci" type="submit">Enviar link</button>
+        </form>
+        <p class="ac-centro"><button class="ac-link" id="voltar-entrar" type="button">Voltar para entrar</button></p>
+      </section>
+
+      <!-- Código do autenticador (MFA) -->
+      <section id="painel-mfa" aria-labelledby="t-mfa" hidden>
+        <h1 id="t-mfa">Verificação em duas etapas</h1>
+        <p class="ac-sub">Digite o código de 6 dígitos que aparece no seu aplicativo autenticador.</p>
+        <form id="form-mfa" novalidate>
+          <div class="ac-campo">
+            <label for="codigo">Código</label>
+            <input class="ac-input ac-codigo" id="codigo" name="codigo" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required aria-describedby="erro-codigo">
+            <p class="ac-erro-campo" id="erro-codigo" hidden></p>
+          </div>
+          <button class="ac-btn ac-btn--bloco" id="btn-mfa" type="submit">Confirmar</button>
+        </form>
+        <p class="ac-centro"><button class="ac-link" type="button" data-acao-sair>Sair</button></p>
+      </section>
+
+      <!-- Aceite da política de privacidade -->
+      <section id="painel-aceite" aria-labelledby="t-aceite" hidden>
+        <h1 id="t-aceite">Antes de continuar</h1>
+        <p class="ac-sub">A Área do Aluno guarda seu nome, e-mail, WhatsApp e o seu progresso nos encontros, só para a organização da Academia de Virtudes.</p>
+        <label class="ac-check" for="aceite">
+          <input type="checkbox" id="aceite">
+          <span>Li e aceito a <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> do Grupo GPM.</span>
+        </label>
+        <div class="ac-acoes">
+          <button class="ac-btn ac-btn--bloco" id="btn-aceite" type="button" disabled>Continuar</button>
+          <button class="ac-link" type="button" data-acao-sair>Sair</button>
+        </div>
+      </section>
+
+      <!-- Acesso inativo -->
+      <section id="painel-inativo" aria-labelledby="t-inativo" hidden>
+        <h1 id="t-inativo">Acesso inativo</h1>
+        <p class="ac-sub">Seu acesso está inativo. Fale com a equipe GPM.</p>
+        <div class="ac-acoes"><button class="ac-btn ac-btn--contorno ac-btn--bloco" id="inativo-voltar" type="button">Voltar para entrar</button></div>
+      </section>
+    </div>
+
+    <p class="ac-rodape-acesso">
+      Ao entrar, você concorda com a <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> do Grupo GPM.<br>
+      <a href="/academiadevirtudes/">Voltar para a Academia de Virtudes</a>
+    </p>
+  </div>
+</main>
+</body>
+</html>

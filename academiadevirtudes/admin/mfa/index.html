@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR" class="ac-carregando">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Verificação em duas etapas · Painel · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=1">
+<script src="/academiadevirtudes/_app/config.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
+<script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/mfa/mfa.js?v=1" defer></script>
+</head>
+<body>
+<div class="ac-loader" role="status">Carregando…</div>
+
+<main class="ac-acesso">
+  <div class="ac-acesso__caixa">
+    <div class="ac-acesso__marca">
+      <img class="ac-acesso__simbolo" src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="64" height="64">
+      <p class="ac-acesso__nome">Academia de Virtudes</p>
+      <p class="ac-acesso__frase">Painel da equipe</p>
+    </div>
+
+    <div class="ac-cartao">
+      <p class="ac-msg" id="msg" role="alert" hidden></p>
+
+      <!-- Primeiro cadastro do autenticador -->
+      <section id="painel-cadastro" aria-labelledby="t-cadastro" hidden>
+        <h1 id="t-cadastro">Ative a verificação em duas etapas</h1>
+        <p class="ac-sub">O painel exige um código do aplicativo autenticador do celular (Google Authenticator, Microsoft Authenticator ou similar). Leia o QR code com o aplicativo, ou digite a chave.</p>
+        <img class="ac-qr" id="qr" alt="QR code para cadastrar a Academia de Virtudes no aplicativo autenticador" width="200" height="200">
+        <p class="ac-segredo" id="segredo"></p>
+        <form id="form-cadastro" novalidate>
+          <div class="ac-campo">
+            <label for="codigo-cadastro">Código de 6 dígitos</label>
+            <input class="ac-input ac-codigo" id="codigo-cadastro" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required aria-describedby="erro-codigo-cadastro">
+            <p class="ac-erro-campo" id="erro-codigo-cadastro" hidden></p>
+          </div>
+          <button class="ac-btn ac-btn--bloco" id="btn-cadastro" type="submit">Ativar e continuar</button>
+        </form>
+      </section>
+
+      <!-- Autenticador já cadastrado -->
+      <section id="painel-codigo" aria-labelledby="t-codigo" hidden>
+        <h1 id="t-codigo">Confirme o código</h1>
+        <p class="ac-sub">Digite o código de 6 dígitos do seu aplicativo autenticador para abrir o painel.</p>
+        <form id="form-codigo" novalidate>
+          <div class="ac-campo">
+            <label for="codigo">Código</label>
+            <input class="ac-input ac-codigo" id="codigo" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required aria-describedby="erro-codigo">
+            <p class="ac-erro-campo" id="erro-codigo" hidden></p>
+          </div>
+          <button class="ac-btn ac-btn--bloco" id="btn-codigo" type="submit">Confirmar</button>
+        </form>
+      </section>
+
+      <p class="ac-centro"><button class="ac-link" type="button" id="sair">Sair</button></p>
+    </div>
+    <p class="ac-rodape-acesso">Perdeu o acesso ao aplicativo? Fale com outro administrador da GPM.</p>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR" class="ac-carregando">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Criar senha · Área do Aluno · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=1">
+<script src="/academiadevirtudes/redefinir-senha/link.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/config.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
+<script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=1" defer></script>
+<script src="/academiadevirtudes/redefinir-senha/redefinir-senha.js?v=1" defer></script>
+</head>
+<body>
+<div class="ac-loader" role="status">Verificando o link…</div>
+
+<main class="ac-acesso">
+  <div class="ac-acesso__caixa">
+    <div class="ac-acesso__marca">
+      <img class="ac-acesso__simbolo" src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="64" height="64">
+      <p class="ac-acesso__nome">Academia de Virtudes</p>
+      <p class="ac-acesso__frase">Essência humana, potencial artificial.</p>
+    </div>
+
+    <div class="ac-cartao">
+      <p class="ac-msg" id="msg" role="alert" hidden></p>
+
+      <!-- Nova senha -->
+      <section id="painel-senha" aria-labelledby="t-senha" hidden>
+        <h1 id="t-senha">Crie uma nova senha</h1>
+        <p class="ac-sub" id="sub-senha">Escolha uma senha só sua para a Área do Aluno.</p>
+        <form id="form-senha" novalidate>
+          <div class="ac-campo">
+            <label for="nova">Nova senha</label>
+            <div class="ac-senha">
+              <input class="ac-input" id="nova" type="password" autocomplete="new-password" required aria-describedby="regras erro-nova">
+              <button class="ac-senha__botao" type="button" data-mostrar="nova" aria-pressed="false" aria-controls="nova">Mostrar</button>
+            </div>
+            <ul class="ac-regras" id="regras" aria-live="polite">
+              <li data-regra="tamanho">Pelo menos 10 caracteres</li>
+              <li data-regra="maiuscula">Uma letra maiúscula (A–Z)</li>
+              <li data-regra="minuscula">Uma letra minúscula (a–z)</li>
+              <li data-regra="numero">Um número</li>
+            </ul>
+            <p class="ac-erro-campo" id="erro-nova" hidden></p>
+          </div>
+          <div class="ac-campo">
+            <label for="confirma">Confirme a nova senha</label>
+            <div class="ac-senha">
+              <input class="ac-input" id="confirma" type="password" autocomplete="new-password" required aria-describedby="erro-confirma">
+              <button class="ac-senha__botao" type="button" data-mostrar="confirma" aria-pressed="false" aria-controls="confirma">Mostrar</button>
+            </div>
+            <p class="ac-erro-campo" id="erro-confirma" hidden></p>
+          </div>
+          <button class="ac-btn ac-btn--bloco" id="btn-senha" type="submit">Salvar senha</button>
+        </form>
+      </section>
+
+      <!-- Código do autenticador (quando a conta tem MFA) -->
+      <section id="painel-mfa" aria-labelledby="t-mfa" hidden>
+        <h1 id="t-mfa">Confirme o código</h1>
+        <p class="ac-sub">Sua conta usa verificação em duas etapas. Digite o código de 6 dígitos do aplicativo autenticador para salvar a nova senha.</p>
+        <form id="form-mfa" novalidate>
+          <div class="ac-campo">
+            <label for="codigo">Código</label>
+            <input class="ac-input ac-codigo" id="codigo" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required aria-describedby="erro-codigo">
+            <p class="ac-erro-campo" id="erro-codigo" hidden></p>
+          </div>
+          <button class="ac-btn ac-btn--bloco" id="btn-mfa" type="submit">Confirmar e salvar</button>
+        </form>
+      </section>
+
+      <!-- Link inválido ou expirado -->
+      <section id="painel-expirado" aria-labelledby="t-expirado" hidden>
+        <h1 id="t-expirado">Link expirado</h1>
+        <p class="ac-sub">Este link expirou ou já foi usado. Peça um novo em "Esqueci minha senha".</p>
+        <div class="ac-acoes">
+          <a class="ac-btn ac-btn--bloco" href="/academiadevirtudes/entrar/?esqueci=1">Pedir um novo link</a>
+          <a class="ac-link ac-centro" href="/academiadevirtudes/entrar/">Voltar para entrar</a>
+        </div>
+      </section>
+
+      <!-- E-mail confirmado (troca de e-mail) -->
+      <section id="painel-email" aria-labelledby="t-email" hidden>
+        <h1 id="t-email">E-mail confirmado</h1>
+        <p class="ac-sub">Seu novo e-mail foi confirmado.</p>
+        <div class="ac-acoes"><a class="ac-btn ac-btn--bloco" href="/academiadevirtudes/aluno/perfil/">Ir para o meu perfil</a></div>
+      </section>
+    </div>
+
+    <p class="ac-rodape-acesso">
+      <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> ·
+      <a href="/academiadevirtudes/">Academia de Virtudes</a>
+    </p>
+  </div>
+</main>
+</body>
+</html>
