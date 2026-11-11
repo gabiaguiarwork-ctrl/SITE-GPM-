@@ -42,7 +42,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 - `/academiadevirtudes/`: página pública da Academia (Encontro 2 com inscrições abertas).
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
 - `/academiadevirtudes/_inscricao-encontro-1.html`: página antiga guardada, sem link (noindex).
-- Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `encontro/?id=`, `aula/?id=`, `materiais/`, `perfil/`, `completar/`; dentro de `admin/`: `mfa/` e as abas `#alunos`, `#encontros`, `#conteudos`, `#avisos`, `#relatorios`.
+- Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `aula/?id=`, `materiais/`, `perfil/`, `completar/` (e `encontro/`, endereço antigo que leva para a vitrine); dentro de `admin/`: `mfa/` e as abas `#alunos`, `#aulas`, `#trilhas`, `#avisos`, `#relatorios` (`#encontros` e `#conteudos` abrem `#aulas`).
 
 ## Formulários
 
@@ -70,6 +70,14 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - Cabeçalhos de segurança (CSP, noindex, no-store, no-referrer, COOP) ficam no `.htaccess` de cada pasta: `entrar/`, `cadastro/`, `confirmar/`, `redefinir-senha/`, `aluno/`, `admin/`. Não em `academiadevirtudes/`, para não afetar a página pública. Pasta nova da Área do Aluno precisa estar dentro de uma delas ou ter o próprio `.htaccess`.
 - Para testar a CSP no computador: `node _notas/ferramentas/servidor-teste.cjs . 8080` na raiz do repositório e abrir `http://localhost:8080/academiadevirtudes/entrar/` (o Live Server da porta 5500 não lê `.htaccess`).
 - Configuração do painel, modelos de e-mail e primeiro admin: `supabase/PAINEL.md`.
+
+### Aulas e trilhas (decisão da GPM, 11/2026)
+
+- Não existe mais "Encontro" para o aluno nem para o admin: só **Aula** (videoaula do YouTube ou material em PDF), com **Trilha** opcional e **PDFs de apoio**.
+- Banco (nomes antigos mantidos para não perder dados): `public.conteudos` = aulas, `public.modulos` = trilhas, `public.anexos` = PDFs de apoio. Publicação e data de liberação valem por aula; a trilha só aparece para o aluno se tiver aula visível.
+- Vídeo: o admin cola o link; guarda-se só o ID (11 caracteres) e `provedor = 'youtube'`. Player `https://www.youtube-nocookie.com/embed/<id>` sem carregar o `iframe_api` (conversa por `postMessage`, em `_app/player.js`). Vimeo e Panda continuam aceitos.
+- CSP: `aluno/aula/.htaccess` libera `frame-src https://www.youtube-nocookie.com`; `aluno/`, `aluno/aula/` e `admin/` liberam `img-src https://i.ytimg.com` (capas); `admin/` libera também o `frame-src` do YouTube (prévia no formulário).
+- PDFs: bucket privado `materiais`, link assinado de 60 s gerado no clique (Abrir e Baixar). O envio no painel usa XHR com o token da sessão para mostrar a barra de progresso; a política do bucket continua decidindo quem grava.
 
 ### Cadastro aberto (decisão da GPM, 11/2026)
 

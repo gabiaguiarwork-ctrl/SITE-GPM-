@@ -3,8 +3,8 @@
 Projeto: `https://qfghgtrvwklzlsuawndm.supabase.co`. Quem altera o painel e roda SQL é a equipe GPM.
 Os nomes dos menus podem mudar um pouco entre versões do painel; procure pelo nome da opção.
 
-**Importante:** a 0006 substitui funções e privilégios das migrations anteriores. Se alguma migration anterior for rodada de novo, rode a 0006 logo depois. Os testes 0001 e 0002 continuam valendo depois da 0006.
-**Ordem de publicação:** rode a 0006 no Supabase **antes** de publicar o site com o cadastro aberto (as páginas novas leem as colunas novas).
+**Importante:** a 0006 e a 0007 substituem funções, políticas e privilégios das migrations anteriores. Se alguma migration anterior for rodada de novo, rode as seguintes logo depois, em ordem.
+**Ordem de publicação:** rode a 0006 e a 0007 no Supabase **antes** de publicar o site (as páginas novas leem as colunas e a tabela novas).
 
 ## 1. SQL (nesta ordem)
 
@@ -14,12 +14,12 @@ No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Ru
 2. `supabase/tests/0001_auth_base_test.sql`: o resultado é uma tabela com a coluna `ok`. Todas as linhas precisam estar `true`. O teste apaga os usuários de teste que cria.
 3. `supabase/migrations/0002_conteudo.sql`
 4. `supabase/migrations/0003_storage.sql`
-5. `supabase/tests/0002_conteudo_test.sql` (todas as linhas `ok = true`)
-6. `supabase/migrations/0004_admin.sql`
-7. `supabase/migrations/0005_hardening.sql` (tira de anon/authenticated o acesso à função `rls_auto_enable()` do "RLS automático"; se a função não existir, não faz nada)
-8. `supabase/migrations/0006_cadastro_aberto.sql` (cadastro aberto, CPF, cadastro completo, consentimento de comunicações)
-9. `supabase/tests/0003_cadastro_test.sql` (todas as linhas `ok = true`)
-10. Opcional, só para ver as telas com conteúdo: `supabase/seed/exemplo.sql` (o fim do arquivo explica como apagar).
+5. `supabase/migrations/0004_admin.sql`
+6. `supabase/migrations/0005_hardening.sql` (tira de anon/authenticated o acesso à função `rls_auto_enable()` do "RLS automático"; se a função não existir, não faz nada)
+7. `supabase/migrations/0006_cadastro_aberto.sql` (cadastro aberto, CPF, cadastro completo, consentimento de comunicações)
+8. `supabase/migrations/0007_aulas.sql` (aulas com YouTube ou PDF, trilhas opcionais, PDFs de apoio; adapta os encontros que já existem, sem apagar nada)
+9. Testes, depois de todas as migrations: `supabase/tests/0002_conteudo_test.sql`, `supabase/tests/0003_cadastro_test.sql` e `supabase/tests/0004_aulas_test.sql` (todas as linhas `ok = true`). O 0002 agora testa as regras da 0007 (publicação e liberação por aula), então só roda depois dela.
+10. Opcional, só para ver a vitrine cheia: `supabase/seed/exemplo.sql` (2 trilhas, 4 videoaulas de exemplo e 2 PDFs fictícios; o fim do arquivo explica como apagar).
 11. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
 
 ## 2. Senha
@@ -122,8 +122,15 @@ supabase functions deploy dados-aluno          --no-verify-jwt
 
 ## 11. Player de vídeo
 
+- **YouTube (padrão)**: suba o vídeo no canal da GPM como **Não listado** e confira em **Detalhes → Mostrar mais → Permitir incorporação** (ligado). No painel da Academia (aba **Aulas → Nova aula**), cole o link do vídeo (`youtube.com/watch?v=…`, `youtu.be/…`, `/shorts/` ou `/live/`): o sistema guarda só o ID. O player usa `youtube-nocookie.com` e a capa vem do YouTube (pode ser trocada por uma capa própria).
+  - "Não listado" não é sigiloso: quem tiver o link do YouTube consegue assistir fora da Área do Aluno. Para conteúdo que não pode vazar, use Vimeo ou Panda com restrição de domínio (abaixo).
 - **Vimeo**: em cada vídeo, **Privacidade → Onde o vídeo pode ser incorporado → Somente domínios especificados**: `gpmintegracao.com.br` (e `localhost` só durante os testes). "Quem pode assistir": **Ocultar do Vimeo**. No painel da Academia, use o número do vídeo; se o link do vídeo tiver um código depois do número (vídeo não listado, ex.: `vimeo.com/123456789/abc123def4`), use `123456789:abc123def4`.
 - **Panda Video**: em **Configurações → Segurança**, ligar a restrição de domínio para `gpmintegracao.com.br`; se quiser, ligar a marca d'água. Depois copie o endereço do player (formato `player-vz-xxxxxxxx-xxx.tv.pandavideo.com.br`) para `pandaHost` em `academiadevirtudes/_app/config.js` (e aumente o `?v=` de config.js nas páginas).
+
+## 11b. Armazenamento (PDFs e capas)
+
+- Os PDFs ficam no bucket privado `materiais` (até 20 MB cada) e as capas no bucket `capas`. O painel (aba **Aulas**) mostra o espaço usado e avisa ao passar de **80%** do limite do plano (grátis: 1 GB).
+- Se o plano mudar, ajuste `storageLimiteBytes` em `academiadevirtudes/_app/config.js` (e aumente o `?v=` de config.js nas páginas).
 
 ## 12. Primeiro admin e aluno de teste
 
