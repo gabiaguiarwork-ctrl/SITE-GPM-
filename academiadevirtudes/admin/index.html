@@ -8,19 +8,19 @@
 <meta name="theme-color" content="#08142E">
 <title>Painel · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
-<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=6">
+<script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/conteudo.js?v=2" defer></script>
+<script src="/academiadevirtudes/_app/conteudo.js?v=3" defer></script>
 <script src="/academiadevirtudes/_app/campos.js?v=1" defer></script>
-<script src="/academiadevirtudes/admin/admin.js?v=3" defer></script>
+<script src="/academiadevirtudes/admin/admin.js?v=4" defer></script>
 <script src="/academiadevirtudes/admin/alunos.js?v=2" defer></script>
-<script src="/academiadevirtudes/admin/encontros.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/aulas.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/avisos.js?v=1" defer></script>
-<script src="/academiadevirtudes/admin/relatorios.js?v=2" defer></script>
+<script src="/academiadevirtudes/admin/relatorios.js?v=3" defer></script>
 <script src="/academiadevirtudes/admin/iniciar.js?v=1" defer></script>
 </head>
 <body>
@@ -44,8 +44,8 @@
 
   <div class="ac-abas" role="tablist" aria-label="Seções do painel">
     <button class="ac-aba" role="tab" type="button" id="aba-alunos" aria-controls="painel-alunos" aria-selected="true">Alunos</button>
-    <button class="ac-aba" role="tab" type="button" id="aba-encontros" aria-controls="painel-encontros" aria-selected="false" tabindex="-1">Encontros</button>
-    <button class="ac-aba" role="tab" type="button" id="aba-conteudos" aria-controls="painel-conteudos" aria-selected="false" tabindex="-1">Conteúdos</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-aulas" aria-controls="painel-aulas" aria-selected="false" tabindex="-1">Aulas</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-trilhas" aria-controls="painel-trilhas" aria-selected="false" tabindex="-1">Trilhas</button>
     <button class="ac-aba" role="tab" type="button" id="aba-avisos" aria-controls="painel-avisos" aria-selected="false" tabindex="-1">Avisos</button>
     <button class="ac-aba" role="tab" type="button" id="aba-relatorios" aria-controls="painel-relatorios" aria-selected="false" tabindex="-1">Relatórios</button>
   </div>
@@ -121,62 +121,148 @@
     </table></div>
   </section>
 
-  <!-- ===================== Encontros ===================== -->
-  <section class="ac-painel" id="painel-encontros" role="tabpanel" aria-labelledby="aba-encontros" hidden>
-    <div class="ac-linha-acoes ac-linha-acoes--compacta"><button class="ac-btn" type="button" id="novo-encontro">Novo encontro</button></div>
-    <form class="ac-secao ac-formulario" id="form-encontro" novalidate hidden>
-      <h2 id="t-form-encontro">Novo encontro</h2>
-      <input type="hidden" id="en-id">
-      <div class="ac-campo"><label for="en-titulo">Título</label><input class="ac-input" id="en-titulo" maxlength="160" required aria-describedby="erro-en-titulo"><p class="ac-erro-campo" id="erro-en-titulo" hidden></p></div>
-      <div class="ac-campo"><label for="en-subtitulo">Subtítulo (opcional)</label><input class="ac-input" id="en-subtitulo" maxlength="240"></div>
-      <div class="ac-campo"><label for="en-descricao">Descrição (opcional, aceita **negrito**, *itálico* e listas)</label><textarea class="ac-input ac-textarea" id="en-descricao" maxlength="4000" rows="4"></textarea></div>
-      <div class="ac-grade-2">
-        <div class="ac-campo"><label for="en-liberado">Liberar em (opcional, horário de Brasília)</label><input class="ac-input" id="en-liberado" type="datetime-local" aria-describedby="ajuda-en-liberado"><p class="ac-ajuda" id="ajuda-en-liberado">Antes dessa data o aluno vê o card com "Em breve", sem os conteúdos.</p></div>
-        <div class="ac-campo"><label for="en-capa">Capa (JPG, PNG ou WebP até 2 MB, 16:9)</label><input class="ac-input" id="en-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-en-capa"><p class="ac-ajuda" id="ajuda-en-capa">Deixe em branco para manter a capa atual.</p></div>
+  <!-- ===================== Aulas ===================== -->
+  <section class="ac-painel" id="painel-aulas" role="tabpanel" aria-labelledby="aba-aulas" hidden>
+    <div class="ac-armazenamento" id="armazenamento" aria-live="polite" hidden></div>
+    <div class="ac-barra-ferramentas">
+      <div class="ac-campo ac-campo--busca">
+        <label for="busca-aulas">Buscar</label>
+        <input class="ac-input" id="busca-aulas" type="search" placeholder="Título da aula" autocomplete="off">
       </div>
-      <label class="ac-check" for="en-publicado"><input type="checkbox" id="en-publicado"><span>Publicado (visível para os alunos)</span></label>
+      <div class="ac-linha-acoes ac-linha-acoes--compacta"><button class="ac-btn" type="button" id="nova-aula">Nova aula</button></div>
+    </div>
+
+    <form class="ac-secao ac-formulario ac-form-aula" id="form-aula" novalidate hidden>
+      <h2 id="t-form-aula" tabindex="-1">Nova aula</h2>
+      <input type="hidden" id="au-id">
+
+      <fieldset class="ac-tipos">
+        <legend class="ac-rotulo">1. Tipo</legend>
+        <label class="ac-tipo"><input type="radio" name="au-tipo" value="video" checked><span class="ac-tipo__icone" aria-hidden="true">▶</span><span class="ac-tipo__nome">Videoaula</span><span class="ac-tipo__ajuda">Vídeo do YouTube</span></label>
+        <label class="ac-tipo"><input type="radio" name="au-tipo" value="pdf"><span class="ac-tipo__icone" aria-hidden="true">PDF</span><span class="ac-tipo__nome">Material em PDF</span><span class="ac-tipo__ajuda">Arquivo para abrir ou baixar</span></label>
+      </fieldset>
+
+      <div class="ac-campo">
+        <label for="au-titulo">2. Título</label>
+        <input class="ac-input" id="au-titulo" maxlength="160" required aria-describedby="erro-au-titulo">
+        <p class="ac-erro-campo" id="erro-au-titulo" hidden></p>
+      </div>
+      <div class="ac-campo">
+        <label for="au-descricao">Descrição curta (opcional)</label>
+        <textarea class="ac-input ac-textarea" id="au-descricao" maxlength="600" rows="3"></textarea>
+      </div>
+
+      <div data-so-tipo="video">
+        <div class="ac-campo">
+          <label for="au-youtube">3. Link do YouTube</label>
+          <input class="ac-input" id="au-youtube" type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=…" autocomplete="off" maxlength="300" aria-describedby="ajuda-au-youtube erro-au-youtube">
+          <p class="ac-ajuda ac-ajuda--destaque" id="ajuda-au-youtube">O vídeo precisa estar como Não listado no YouTube e com a incorporação permitida.</p>
+          <p class="ac-ajuda" id="au-provedor-antigo" hidden></p>
+          <p class="ac-erro-campo" id="erro-au-youtube" hidden></p>
+        </div>
+        <div class="ac-previa-video" id="au-previa" hidden></div>
+        <div class="ac-campo ac-campo--curto">
+          <label for="au-duracao">Duração em minutos (opcional)</label>
+          <input class="ac-input" id="au-duracao" type="number" min="0" max="1440" inputmode="numeric">
+        </div>
+      </div>
+
+      <div data-so-tipo="pdf" hidden>
+        <p class="ac-rotulo" id="r-au-pdf">3. Arquivo PDF</p>
+        <div class="ac-soltar" id="au-soltar-pdf">
+          <input class="ac-soltar__input" id="au-pdf" type="file" accept="application/pdf,.pdf" aria-labelledby="r-au-pdf au-soltar-pdf-texto" aria-describedby="erro-au-pdf">
+          <label class="ac-soltar__area" for="au-pdf" id="au-soltar-pdf-texto"><strong>Arraste o PDF para cá</strong> <span>ou clique para escolher</span><small>Só PDF, até 20 MB</small></label>
+        </div>
+        <p class="ac-arquivo-escolhido" id="au-pdf-info" aria-live="polite"></p>
+        <p class="ac-erro-campo" id="erro-au-pdf" hidden></p>
+        <div class="ac-campo">
+          <label for="au-pdf-nome">Nome do arquivo para o aluno</label>
+          <input class="ac-input" id="au-pdf-nome" maxlength="160" placeholder="Ex.: Guia dos 4 perfis">
+        </div>
+      </div>
+
+      <div class="ac-campo">
+        <p class="ac-rotulo" id="r-au-anexos">4. PDFs de apoio (opcional)</p>
+        <div class="ac-soltar ac-soltar--menor" id="au-soltar-anexos">
+          <input class="ac-soltar__input" id="au-anexos" type="file" accept="application/pdf,.pdf" multiple aria-labelledby="r-au-anexos au-soltar-anexos-texto" aria-describedby="erro-au-anexos">
+          <label class="ac-soltar__area" for="au-anexos" id="au-soltar-anexos-texto"><strong>Arraste PDFs de apoio para cá</strong> <span>ou clique para escolher</span><small>Vários arquivos; só PDF, até 20 MB cada</small></label>
+        </div>
+        <p class="ac-erro-campo" id="erro-au-anexos" hidden></p>
+        <ul class="ac-anexos-admin" id="au-anexos-lista"></ul>
+      </div>
+
+      <div class="ac-grade-2">
+        <div class="ac-campo">
+          <label for="au-trilha">5. Trilha (opcional)</label>
+          <select class="ac-select" id="au-trilha"></select>
+        </div>
+        <div class="ac-campo" id="campo-nova-trilha" hidden>
+          <label for="au-trilha-nova">Nome da nova trilha</label>
+          <input class="ac-input" id="au-trilha-nova" maxlength="160" aria-describedby="erro-au-trilha-nova">
+          <p class="ac-erro-campo" id="erro-au-trilha-nova" hidden></p>
+        </div>
+      </div>
+
+      <div class="ac-campo">
+        <label for="au-capa">6. Capa (opcional; JPG, PNG ou WebP até 2 MB, formato 16:9)</label>
+        <input class="ac-input" id="au-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-au-capa">
+        <p class="ac-ajuda" id="ajuda-au-capa">Videoaula sem capa usa a imagem do YouTube.</p>
+        <div class="ac-capa-previa" id="au-capa-previa"></div>
+        <label class="ac-check" for="au-capa-remover" id="campo-capa-remover" hidden><input type="checkbox" id="au-capa-remover"><span>Remover a capa própria (volta a usar a do YouTube)</span></label>
+      </div>
+
+      <fieldset class="ac-publicacao">
+        <legend class="ac-rotulo">7. Publicação</legend>
+        <label class="ac-check" for="au-pub-agora"><input type="radio" name="au-pub" id="au-pub-agora" value="agora" checked><span>Publicar agora</span></label>
+        <label class="ac-check" for="au-pub-rascunho"><input type="radio" name="au-pub" id="au-pub-rascunho" value="rascunho"><span>Salvar como rascunho (só a equipe vê)</span></label>
+        <label class="ac-check" for="au-pub-agendar"><input type="radio" name="au-pub" id="au-pub-agendar" value="agendar"><span>Agendar</span></label>
+        <div class="ac-campo ac-campo--curto" id="campo-agendar" hidden>
+          <label for="au-quando">Data e hora (horário de Brasília)</label>
+          <input class="ac-input" id="au-quando" type="datetime-local" aria-describedby="erro-au-quando">
+          <p class="ac-erro-campo" id="erro-au-quando" hidden></p>
+        </div>
+      </fieldset>
+      <label class="ac-check" for="au-destaque"><input type="checkbox" id="au-destaque"><span>Destacar na vitrine (banner do topo)</span></label>
+
+      <details class="ac-mais">
+        <summary>Texto de apoio (opcional)</summary>
+        <div class="ac-campo">
+          <label for="au-texto">Texto (## título, **negrito**, *itálico*, - lista, &gt; citação, [link](https://…))</label>
+          <textarea class="ac-input ac-textarea" id="au-texto" maxlength="20000" rows="8"></textarea>
+        </div>
+      </details>
+
+      <div class="ac-envio" id="au-envio" hidden>
+        <p class="ac-envio__texto" id="au-envio-texto" aria-live="polite"></p>
+        <div class="ac-progresso__trilho" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="au-envio-texto" id="au-envio-trilho"><div class="ac-progresso__barra ac-pct-0" id="au-envio-barra"></div></div>
+      </div>
+
       <div class="ac-linha-acoes">
-        <button class="ac-btn" type="submit" id="btn-encontro">Salvar encontro</button>
-        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-encontro">Cancelar</button>
+        <button class="ac-btn" type="submit" id="btn-aula">Publicar aula</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-aula">Cancelar</button>
       </div>
     </form>
-    <ul class="ac-lista ac-lista--admin" id="lista-encontros" aria-live="polite"></ul>
+
+    <p class="ac-ajuda" id="ajuda-ordem">Arraste as aulas para mudar a ordem (ou use as setas). A ordem vale para a vitrine e para as trilhas.</p>
+    <ul class="ac-lista ac-lista--admin" id="lista-aulas" aria-live="polite"></ul>
   </section>
 
-  <!-- ===================== Conteúdos ===================== -->
-  <section class="ac-painel" id="painel-conteudos" role="tabpanel" aria-labelledby="aba-conteudos" hidden>
-    <div class="ac-barra-ferramentas">
-      <div class="ac-campo"><label for="co-filtro">Encontro</label><select class="ac-select" id="co-filtro"></select></div>
-      <div class="ac-linha-acoes ac-linha-acoes--compacta"><button class="ac-btn" type="button" id="novo-conteudo">Novo conteúdo</button></div>
-    </div>
-    <form class="ac-secao ac-formulario" id="form-conteudo" novalidate hidden>
-      <h2 id="t-form-conteudo">Novo conteúdo</h2>
-      <input type="hidden" id="co-id">
-      <div class="ac-grade-2">
-        <div class="ac-campo"><label for="co-titulo">Título</label><input class="ac-input" id="co-titulo" maxlength="160" required aria-describedby="erro-co-titulo"><p class="ac-erro-campo" id="erro-co-titulo" hidden></p></div>
-        <div class="ac-campo"><label for="co-tipo">Tipo</label><select class="ac-select" id="co-tipo"><option value="video">Vídeo</option><option value="pdf">PDF</option><option value="texto">Texto</option><option value="link">Link</option></select></div>
-      </div>
-      <div class="ac-campo"><label for="co-descricao">Descrição curta (opcional)</label><input class="ac-input" id="co-descricao" maxlength="4000"></div>
-      <div class="ac-grade-2" data-so-tipo="video">
-        <div class="ac-campo"><label for="co-provedor">Player</label><select class="ac-select" id="co-provedor"><option value="vimeo">Vimeo</option><option value="panda">Panda Video</option></select></div>
-        <div class="ac-campo"><label for="co-video">ID do vídeo</label><input class="ac-input" id="co-video" maxlength="100" aria-describedby="ajuda-co-video erro-co-video" autocomplete="off"><p class="ac-ajuda" id="ajuda-co-video">Vimeo: o número do vídeo (não listado: número:hash). Panda: o ID do vídeo.</p><p class="ac-erro-campo" id="erro-co-video" hidden></p></div>
-      </div>
-      <div class="ac-grade-2">
-        <div class="ac-campo"><label for="co-duracao">Duração em minutos (opcional)</label><input class="ac-input" id="co-duracao" type="number" min="0" max="1440" inputmode="numeric"></div>
-        <div class="ac-campo" data-so-tipo="link"><label for="co-url">Endereço (https://)</label><input class="ac-input" id="co-url" type="url" maxlength="600" aria-describedby="erro-co-url"><p class="ac-erro-campo" id="erro-co-url" hidden></p></div>
-      </div>
-      <div class="ac-grade-2">
-        <div class="ac-campo"><label for="co-arquivo">Material em PDF (até 20 MB)</label><input class="ac-input" id="co-arquivo" type="file" accept="application/pdf" aria-describedby="ajuda-co-arquivo erro-co-arquivo"><p class="ac-ajuda" id="ajuda-co-arquivo">Opcional em vídeo e texto; obrigatório em PDF. Deixe em branco para manter o atual.</p><p class="ac-erro-campo" id="erro-co-arquivo" hidden></p></div>
-        <div class="ac-campo"><label for="co-arquivo-nome">Nome do material (opcional)</label><input class="ac-input" id="co-arquivo-nome" maxlength="160" placeholder="Ex.: Roteiro do Encontro 1"></div>
-      </div>
-      <div class="ac-campo"><label for="co-texto">Texto de apoio (opcional; ## título, **negrito**, *itálico*, - lista, &gt; citação, [link](https://…))</label><textarea class="ac-input ac-textarea" id="co-texto" maxlength="20000" rows="8"></textarea></div>
-      <label class="ac-check" for="co-publicado"><input type="checkbox" id="co-publicado"><span>Publicado (visível para os alunos quando o encontro estiver liberado)</span></label>
+  <!-- ===================== Trilhas ===================== -->
+  <section class="ac-painel" id="painel-trilhas" role="tabpanel" aria-labelledby="aba-trilhas" hidden>
+    <p class="ac-sub">Trilhas organizam as aulas em fileiras na vitrine. São opcionais: aula sem trilha aparece nas fileiras gerais. Uma trilha só aparece para o aluno quando tem aula publicada.</p>
+    <div class="ac-linha-acoes ac-linha-acoes--compacta"><button class="ac-btn" type="button" id="nova-trilha">Nova trilha</button></div>
+    <form class="ac-secao ac-formulario" id="form-trilha" novalidate hidden>
+      <h2 id="t-form-trilha" tabindex="-1">Nova trilha</h2>
+      <input type="hidden" id="tr-id">
+      <div class="ac-campo"><label for="tr-titulo">Nome</label><input class="ac-input" id="tr-titulo" maxlength="160" required aria-describedby="erro-tr-titulo"><p class="ac-erro-campo" id="erro-tr-titulo" hidden></p></div>
+      <div class="ac-campo"><label for="tr-descricao">Descrição (opcional)</label><textarea class="ac-input ac-textarea" id="tr-descricao" maxlength="600" rows="3"></textarea></div>
+      <div class="ac-campo"><label for="tr-capa">Capa (opcional; JPG, PNG ou WebP até 2 MB, 16:9)</label><input class="ac-input" id="tr-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-tr-capa"><p class="ac-ajuda" id="ajuda-tr-capa">Usada nas aulas da trilha que não têm capa própria. Deixe em branco para manter a atual.</p></div>
       <div class="ac-linha-acoes">
-        <button class="ac-btn" type="submit" id="btn-conteudo">Salvar conteúdo</button>
-        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-conteudo">Cancelar</button>
+        <button class="ac-btn" type="submit" id="btn-trilha">Salvar trilha</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-trilha">Cancelar</button>
       </div>
     </form>
-    <ul class="ac-lista ac-lista--admin" id="lista-conteudos" aria-live="polite"></ul>
+    <ul class="ac-lista ac-lista--admin" id="lista-trilhas" aria-live="polite"></ul>
   </section>
 
   <!-- ===================== Avisos ===================== -->
@@ -200,14 +286,14 @@
     <div class="ac-numeros" id="numeros"></div>
     <div class="ac-linha-acoes ac-linha-acoes--compacta">
       <button class="ac-btn ac-btn--contorno" type="button" id="csv-alunos">Exportar alunos (CSV)</button>
-      <button class="ac-btn ac-btn--contorno" type="button" id="csv-conteudos">Exportar conclusão por conteúdo (CSV)</button>
+      <button class="ac-btn ac-btn--contorno" type="button" id="csv-conteudos">Exportar conclusão por aula (CSV)</button>
     </div>
     <h2 class="ac-rotulo-secao">Nunca acessaram</h2>
     <div id="nunca-acessaram"></div>
-    <h2 class="ac-rotulo-secao">Conclusão por conteúdo</h2>
+    <h2 class="ac-rotulo-secao">Conclusão por aula</h2>
     <div class="ac-tabela-caixa"><table class="ac-tabela" id="tabela-conclusao">
-      <caption class="ac-sr-only">Conclusão por conteúdo</caption>
-      <thead><tr><th scope="col">Conteúdo</th><th scope="col">Encontro</th><th scope="col">Concluíram</th><th scope="col">Começaram</th></tr></thead>
+      <caption class="ac-sr-only">Conclusão por aula</caption>
+      <thead><tr><th scope="col">Aula</th><th scope="col">Trilha</th><th scope="col">Concluíram</th><th scope="col">Começaram</th></tr></thead>
       <tbody></tbody>
     </table></div>
     <h2 class="ac-rotulo-secao">Últimas ações (auditoria)</h2>

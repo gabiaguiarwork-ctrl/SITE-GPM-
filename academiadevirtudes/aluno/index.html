@@ -8,14 +8,14 @@
 <meta name="theme-color" content="#08142E">
 <title>Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
-<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=6">
+<script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/conteudo.js?v=2" defer></script>
-<script src="/academiadevirtudes/aluno/aluno.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/conteudo.js?v=3" defer></script>
+<script src="/academiadevirtudes/aluno/aluno.js?v=4" defer></script>
 </head>
 <body>
 <div class="ac-loader" role="status">Carregando…</div>
@@ -33,21 +33,22 @@
   </div>
 </header>
 
-<main class="ac-conteudo" id="conteudo">
-  <h1>Olá, <span data-nome>aluno</span></h1>
-  <p class="ac-sub">Boas-vindas à Área do Aluno da Academia de Virtudes.</p>
+<main class="ac-conteudo ac-vitrine" id="conteudo">
+  <div class="ac-vitrine__topo">
+    <h1 class="ac-saudacao">Olá, <span data-nome>aluno</span></h1>
+    <div class="ac-busca" id="busca-caixa">
+      <label class="ac-sr-only" for="busca">Buscar aulas pelo título</label>
+      <input class="ac-input ac-busca__campo" id="busca" type="search" placeholder="Buscar aulas" autocomplete="off" maxlength="80">
+    </div>
+  </div>
 
   <section id="avisos" class="ac-avisos" aria-label="Avisos" hidden></section>
 
-  <section id="bloco-continuar" aria-labelledby="t-continuar" hidden>
-    <h2 class="ac-rotulo-secao" id="t-continuar">Continuar de onde parou</h2>
-    <div id="continuar"></div>
-  </section>
+  <section id="destaque" class="ac-destaque" aria-label="Destaque" hidden></section>
 
-  <section aria-labelledby="t-encontros">
-    <h2 class="ac-rotulo-secao" id="t-encontros">Encontros</h2>
-    <div id="encontros" aria-live="polite"><p class="ac-vazio">Carregando os encontros…</p></div>
-  </section>
+  <section id="resultados" class="ac-resultados" aria-live="polite" hidden></section>
+
+  <div id="fileiras" aria-live="polite"><p class="ac-vazio">Carregando as aulas…</p></div>
 </main>
 
 <footer class="ac-pe">

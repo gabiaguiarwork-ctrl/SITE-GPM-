@@ -67,6 +67,10 @@
 
   /* ---------- CAPTCHA (Cloudflare Turnstile) ---------- */
   // Única exceção à regra de não carregar scripts de terceiros (entra explicitamente na CSP).
+  // Bloqueadores de anúncio às vezes impedem o Turnstile: se ele não aparecer em ~8 s ou der erro,
+  // a tela explica o que fazer.
+  var ESPERA_CAPTCHA = 8000;
+  A.MSG_CAPTCHA_BLOQUEADO = 'Não conseguimos carregar a verificação de segurança. Se você usa bloqueador de anúncios, desative para este site ou tente numa janela anônima.';
   var turnstileCarregando = null;
   function carregarTurnstile() {
     if (window.turnstile) return Promise.resolve(window.turnstile);
@@ -77,7 +81,7 @@
       s.async = true;
       s.defer = true;
       s.crossOrigin = 'anonymous';
-      var tempo = setTimeout(function () { reject(new Error('turnstile: tempo esgotado')); }, 15000);
+      var tempo = setTimeout(function () { reject(new Error('turnstile: tempo esgotado')); }, ESPERA_CAPTCHA);
       s.addEventListener('load', function () {
         clearTimeout(tempo);
         if (window.turnstile) resolve(window.turnstile); else reject(new Error('turnstile: indisponível'));
@@ -96,6 +100,12 @@
   A.captcha = function (elemento, ao, aoPerder, aoErro) {
     var atual = '';
     var widgetId = null;
+    var avisou = false;
+    function bloqueado() {
+      if (avisou) return;
+      avisou = true;
+      if (aoErro) aoErro(A.MSG_CAPTCHA_BLOQUEADO);
+    }
     var api = {
       token: function () { return atual; },
       reset: function () {
@@ -110,24 +120,31 @@
       api.pronto.catch(function () {});
       return api;
     }
+    // Se em ~8 s não houver nem o quadro da verificação nem um token, provavelmente foi bloqueado.
+    var vigia = setTimeout(function () {
+      // O Turnstile sempre coloca o quadro dentro do elemento; vazio = script bloqueado.
+      if (!atual && !elemento.firstElementChild) bloqueado();
+    }, ESPERA_CAPTCHA);
     api.pronto = carregarTurnstile().then(function (ts) {
       widgetId = ts.render(elemento, {
         sitekey: CFG.turnstileSiteKey,
         theme: 'dark',
         language: 'pt-br',
         size: 'flexible',
-        callback: function (t) { atual = t; if (ao) ao(t); },
+        callback: function (t) { atual = t; clearTimeout(vigia); if (ao) ao(t); },
         'expired-callback': function () { atual = ''; if (aoPerder) aoPerder(); },
         'timeout-callback': function () { atual = ''; if (aoPerder) aoPerder(); },
         'error-callback': function () {
           atual = '';
           if (aoPerder) aoPerder();
-          if (aoErro) aoErro('A verificação de segurança não carregou. Recarregue a página e tente de novo.');
+          clearTimeout(vigia);
+          bloqueado();
           return true;
         }
       });
     }).catch(function () {
-      if (aoErro) aoErro('A verificação de segurança não carregou. Verifique sua conexão e recarregue a página.');
+      clearTimeout(vigia);
+      bloqueado();
     });
     return api;
   };

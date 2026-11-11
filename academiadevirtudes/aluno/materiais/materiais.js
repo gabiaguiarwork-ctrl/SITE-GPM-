@@ -1,7 +1,7 @@
 /*
   /academiadevirtudes/aluno/materiais/
-  Biblioteca com todos os materiais (PDF) dos encontros liberados, com filtro por encontro.
-  O download é por URL assinada de 60 s, gerada no clique.
+  Todos os PDFs das aulas liberadas (o material principal das aulas em PDF e os PDFs de apoio),
+  com filtro por trilha e busca. Abrir e Baixar geram, no clique, um link assinado de 60 s.
 */
 (function () {
   'use strict';
@@ -12,40 +12,55 @@
   var h = AC.h;
   var $ = AC.$;
   var itens = [];
+  var SEM_TRILHA = 'sem-trilha';
 
   window.AcademiaAuth.proteger().then(function (ctx) {
     window.AcademiaLayout.montar(ctx);
-    return Promise.all([C.modulos(), C.conteudos()]);
+    return Promise.all([C.trilhas(), C.aulas(), C.anexos()]);
   }).then(function (r) {
-    var porId = {};
-    var modulos = r[0].filter(function (m) { return m.publicado && C.liberado(m); });
-    modulos.forEach(function (m) { porId[m.id] = m; });
-    itens = r[1].filter(function (c) { return c.publicado && c.arquivo_path && porId[c.modulo_id]; })
-      .map(function (c) { return { c: c, m: porId[c.modulo_id] }; });
+    var trilhas = C.porId(r[0]);
+    var aulas = r[1].filter(C.visivelAluno);
+    var porAula = C.porId(aulas);
+    itens = [];
+    aulas.forEach(function (a) {
+      if (a.tipo === 'pdf' && a.arquivo_path) {
+        itens.push({ aula: a, trilha: trilhas[a.modulo_id] || null, arq: { caminho: a.arquivo_path, nome: a.arquivo_nome || a.titulo, tamanho: a.arquivo_tamanho } });
+      }
+    });
+    r[2].forEach(function (x) {
+      var a = porAula[x.conteudo_id];
+      if (a) itens.push({ aula: a, trilha: trilhas[a.modulo_id] || null, arq: { caminho: x.arquivo_path, nome: x.nome, tamanho: x.tamanho } });
+    });
 
     var filtro = $('#filtro');
-    modulos.forEach(function (m) {
-      if (itens.some(function (i) { return i.m.id === m.id; })) filtro.appendChild(h('option', { value: m.id }, m.titulo));
+    r[0].forEach(function (t) {
+      if (itens.some(function (i) { return i.trilha && i.trilha.id === t.id; })) filtro.appendChild(h('option', { value: t.id }, t.titulo));
     });
-    var inicial = AC.parametro('encontro');
-    if (C.idValido(inicial) && porId[inicial]) filtro.value = inicial;
+    if (itens.some(function (i) { return !i.trilha; })) filtro.appendChild(h('option', { value: SEM_TRILHA }, 'Sem trilha'));
+    var inicial = AC.parametro('trilha');
+    if (C.idValido(inicial) && trilhas[inicial]) filtro.value = inicial;
     filtro.addEventListener('change', listar);
+    $('#busca').addEventListener('input', listar);
     listar();
   }).catch(function (err) { C.erro($('#materiais'), err); });
 
   function listar() {
     var sel = $('#filtro').value;
+    var termo = C.normalizar($('#busca').value.trim());
     var alvo = AC.limpar($('#materiais'));
-    var lista = itens.filter(function (i) { return !sel || i.m.id === sel; });
-    if (!lista.length) { alvo.appendChild(C.vazio('Ainda não há materiais publicados.')); return; }
+    var lista = itens.filter(function (i) {
+      if (sel === SEM_TRILHA && i.trilha) return false;
+      if (sel && sel !== SEM_TRILHA && (!i.trilha || i.trilha.id !== sel)) return false;
+      return !termo || C.normalizar(i.arq.nome + ' ' + i.aula.titulo).indexOf(termo) >= 0;
+    });
+    if (!itens.length) { alvo.appendChild(C.vazio('Os materiais em PDF vão aparecer aqui assim que forem publicados.')); return; }
+    if (!lista.length) { alvo.appendChild(C.vazio('Nenhum material encontrado.')); return; }
     var ul = h('ul', { class: 'ac-lista' });
     lista.forEach(function (i) {
       ul.appendChild(h('li', { class: 'ac-material' },
-        h('div', null,
-          h('p', { class: 'ac-material__titulo' }, i.c.arquivo_nome || i.c.titulo),
-          h('p', { class: 'ac-material__meta' }, i.m.titulo + ' · ',
-            h('a', { href: CFG.rotas.aula + '?id=' + encodeURIComponent(i.c.id) }, i.c.titulo))),
-        C.botaoBaixar(i.c)));
+        C.botoesArquivo(i.arq),
+        h('p', { class: 'ac-material__meta' }, i.trilha ? i.trilha.titulo + ' · ' : '',
+          h('a', { href: CFG.rotas.aula + '?id=' + encodeURIComponent(i.aula.id) }, i.aula.titulo))));
     });
     alvo.appendChild(ul);
   }

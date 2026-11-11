@@ -8,14 +8,14 @@
 <meta name="theme-color" content="#08142E">
 <title>Materiais · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=5">
-<script src="/academiadevirtudes/_app/config.js?v=3" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=6">
+<script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/auth.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/auth.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/conteudo.js?v=2" defer></script>
-<script src="/academiadevirtudes/aluno/materiais/materiais.js?v=1" defer></script>
+<script src="/academiadevirtudes/_app/conteudo.js?v=3" defer></script>
+<script src="/academiadevirtudes/aluno/materiais/materiais.js?v=2" defer></script>
 </head>
 <body>
 <div class="ac-loader" role="status">Carregando…</div>
@@ -35,10 +35,12 @@
 
 <main class="ac-conteudo" id="conteudo">
   <h1>Materiais</h1>
-  <p class="ac-sub">Todos os materiais dos encontros para baixar. Cada download vale por alguns segundos, só para você.</p>
+  <p class="ac-sub">Todos os PDFs das aulas, para abrir ou baixar. Cada link vale por alguns segundos, só para você.</p>
   <div class="ac-filtro">
-    <label for="filtro">Encontro</label>
-    <select class="ac-select" id="filtro"><option value="">Todos os encontros</option></select>
+    <label for="filtro">Trilha</label>
+    <select class="ac-select" id="filtro"><option value="">Todas as trilhas</option></select>
+    <label class="ac-sr-only" for="busca">Buscar material</label>
+    <input class="ac-input ac-busca__campo" id="busca" type="search" placeholder="Buscar material" autocomplete="off" maxlength="80">
   </div>
   <div id="materiais" aria-live="polite"><p class="ac-vazio">Carregando os materiais…</p></div>
 </main>

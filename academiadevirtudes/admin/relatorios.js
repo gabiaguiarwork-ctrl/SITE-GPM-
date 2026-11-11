@@ -16,6 +16,9 @@
   var ACOES = {
     convidar_aluno: 'Convidou', desativar_aluno: 'Desativou', reativar_aluno: 'Reativou', alterar_papel: 'Mudou o papel',
     criar_encontro: 'Criou encontro', publicar_encontro: 'Publicou encontro', despublicar_encontro: 'Despublicou encontro', excluir_encontro: 'Excluiu encontro',
+    criar_trilha: 'Criou trilha', publicar_trilha: 'Publicou trilha', despublicar_trilha: 'Despublicou trilha', excluir_trilha: 'Excluiu trilha',
+    criar_aula: 'Criou aula', publicar_aula: 'Publicou aula', despublicar_aula: 'Despublicou aula', excluir_aula: 'Excluiu aula',
+    anexar_pdf: 'Anexou PDF de apoio', remover_pdf: 'Removeu PDF de apoio',
     criar_conteudo: 'Criou conteúdo', publicar_conteudo: 'Publicou conteúdo', despublicar_conteudo: 'Despublicou conteúdo', excluir_conteudo: 'Excluiu conteúdo',
     criar_aviso: 'Criou aviso', publicar_aviso: 'Publicou aviso', despublicar_aviso: 'Despublicou aviso', excluir_aviso: 'Excluiu aviso',
     exportar_dados_aluno: 'Exportou dados (LGPD)', excluir_dados_aluno: 'Excluiu dados (LGPD)',
@@ -38,7 +41,7 @@
     var recentes = ativos.filter(function (a) { return a.ultimo_acesso && new Date(a.ultimo_acesso).getTime() >= semana; });
 
     var numeros = AC.limpar($('#numeros'));
-    [[ativos.length, 'alunos ativos'], [nunca.length, 'nunca acessaram'], [recentes.length, 'acessaram nos últimos 7 dias'], [validos.length, 'conteúdos liberados']]
+    [[ativos.length, 'alunos ativos'], [nunca.length, 'nunca acessaram'], [recentes.length, 'acessaram nos últimos 7 dias'], [validos.length, 'aulas publicadas']]
       .forEach(function (n) { numeros.appendChild(h('div', { class: 'ac-numero' }, h('strong', null, String(n[0])), h('span', null, n[1]))); });
 
     var caixa = AC.limpar($('#nunca-acessaram'));
@@ -54,10 +57,10 @@
     alunos.forEach(function (a) { ids[a.id] = true; });
     var mods = {};
     ADM.estado.modulos.forEach(function (m) { mods[m.id] = m; });
-    if (!validos.length) corpo.appendChild(h('tr', null, h('td', { colspan: '4' }, C.vazio('Nenhum conteúdo liberado ainda.'))));
+    if (!validos.length) corpo.appendChild(h('tr', null, h('td', { colspan: '4' }, C.vazio('Nenhuma aula publicada ainda.'))));
     linhasConclusao(validos, ids).forEach(function (l) {
       corpo.appendChild(h('tr', null,
-        h('td', { 'data-rotulo': 'Conteúdo' }, l.titulo), h('td', { 'data-rotulo': 'Encontro' }, l.encontro),
+        h('td', { 'data-rotulo': 'Aula' }, l.titulo), h('td', { 'data-rotulo': 'Trilha' }, l.encontro),
         h('td', { 'data-rotulo': 'Concluíram' }, l.concluiram + ' (' + l.pct + '%)'), h('td', { 'data-rotulo': 'Começaram' }, String(l.comecaram))));
     });
 
@@ -82,7 +85,7 @@
     return validos.map(function (c) {
       var linhas = ADM.estado.progresso.filter(function (p) { return p.conteudo_id === c.id && ids[p.aluno_id]; });
       var concl = linhas.filter(function (p) { return p.concluido; }).length;
-      return { titulo: c.titulo, encontro: mods[c.modulo_id].titulo, concluiram: concl, comecaram: linhas.length, pct: total ? Math.round(concl / total * 100) : 0 };
+      return { titulo: c.titulo, encontro: mods[c.modulo_id] ? mods[c.modulo_id].titulo : '—', concluiram: concl, comecaram: linhas.length, pct: total ? Math.round(concl / total * 100) : 0 };
     });
   }
 
@@ -107,7 +110,7 @@
   function csvConteudos() {
     var ids = {};
     alunosSemAdmin().forEach(function (a) { ids[a.id] = true; });
-    var linhas = [['Encontro', 'Conteúdo', 'Concluíram', 'Começaram', '% dos alunos']];
+    var linhas = [['Trilha', 'Aula', 'Concluíram', 'Começaram', '% dos alunos']];
     linhasConclusao(ADM.conteudosValidos(), ids).forEach(function (l) { linhas.push([l.encontro, l.titulo, l.concluiram, l.comecaram, l.pct]); });
     ADM.csv('conclusao-academia-' + new Date().toISOString().slice(0, 10) + '.csv', linhas);
   }

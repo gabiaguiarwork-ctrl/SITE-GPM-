@@ -30,7 +30,7 @@
       perfil: BASE + '/aluno/perfil/',
       admin: BASE + '/admin/',
       adminMfa: BASE + '/admin/mfa/',
-      encontro: BASE + '/aluno/encontro/',
+      encontro: BASE + '/aluno/encontro/', // endereço antigo: leva para a vitrine
       aula: BASE + '/aluno/aula/',
       materiais: BASE + '/aluno/materiais/'
     }),
@@ -39,6 +39,9 @@
     // no formato player-vz-xxxxxxxx-xxx.tv.pandavideo.com.br. Vazio = Panda ainda não configurado.
     // O Vimeo não precisa de configuração aqui.
     pandaHost: '',
+
+    // Limite de armazenamento do plano do Supabase (grátis: 1 GB). O painel avisa ao passar de 80%.
+    storageLimiteBytes: 1024 * 1024 * 1024,
 
     // Endereços que o Supabase usa nos e-mails de recuperação, convite e confirmação.
     // Em localhost o auth.js troca pelo endereço local automaticamente.

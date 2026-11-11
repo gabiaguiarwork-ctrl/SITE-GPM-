@@ -1,22 +1,25 @@
 /*
   Área do Aluno · Academia de Virtudes
-  Player de vídeo com a mesma interface para Vimeo e Panda Video (sem SDK de terceiros:
+  Player de vídeo com a mesma interface para YouTube, Vimeo e Panda Video (sem SDK de terceiros:
   o iframe do provedor + mensagens postMessage, conferindo a origem de cada mensagem).
+  YouTube: youtube-nocookie.com, sem carregar o iframe_api. A página avisa o player que está
+  "ouvindo" e ele passa a mandar o tempo (infoDelivery) e o fim do vídeo.
 
   Uso:
     var p = AcademiaPlayer.criar(caixa, {
-      provedor: 'vimeo' | 'panda', videoId: '…', inicio: 120,
+      provedor: 'youtube' | 'vimeo' | 'panda', videoId: '…', inicio: 120,
       aoTempo: function (seg, duracao) {}, aoFim: function () {}, aoErro: function (msg) {}
     });
     p.posicao()  → segundos atuais        p.duracao() → duração (0 se ainda não sabe)
     p.tocar()    p.irPara(seg)            p.destruir()
 
   ID do vídeo
+  - YouTube: os 11 caracteres do ID (o painel extrai do link).
   - Vimeo: número do vídeo; para vídeo "não listado", número:hash (ex.: 123456789:abc123def4).
   - Panda: ID do vídeo; o endereço do player da biblioteca fica em config.js (pandaHost).
 
   Restrição de domínio: o iframe envia só a origem do site (referrerpolicy="strict-origin"),
-  que é o que o Vimeo e o Panda conferem. A página em si continua com Referrer-Policy: no-referrer.
+  que é o que o Vimeo e o Panda conferem (e que o YouTube exige para tocar vídeo incorporado). A página em si continua com Referrer-Policy: no-referrer.
 */
 (function () {
   'use strict';
@@ -25,11 +28,44 @@
   var CFG = window.ACADEMIA_CONFIG;
 
   var VIMEO_ORIGEM = 'https://player.vimeo.com';
+  var YOUTUBE_ORIGEM = 'https://www.youtube-nocookie.com';
   var PANDA_HOST = /^[a-z0-9-]+\.tv\.pandavideo\.com\.br$/;
 
   function lerMensagem(d) {
     if (typeof d === 'string') { try { return JSON.parse(d); } catch (e) { return null; } }
     return d && typeof d === 'object' ? d : null;
+  }
+
+  /* ---------- YouTube (sem iframe_api) ---------- */
+  function youtube(opc) {
+    var id = String(opc.videoId || '');
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return null;
+    var inicio = Math.floor(opc.inicio || 0);
+    var q = new URLSearchParams({ rel: '0', modestbranding: '1', playsinline: '1', enablejsapi: '1', origin: location.origin });
+    if (inicio > 5) q.set('start', String(inicio));
+    return {
+      origem: YOUTUBE_ORIGEM,
+      src: YOUTUBE_ORIGEM + '/embed/' + id + '?' + q.toString(),
+      inicioNaUrl: true,
+      ehOrigem: function (o) { return o === YOUTUBE_ORIGEM; },
+      comando: function (metodo, valor) {
+        return JSON.stringify({ event: 'command', func: metodo, args: valor === undefined ? [] : [valor, true] });
+      },
+      // O player do YouTube só manda eventos depois que a página diz que está ouvindo.
+      aoCarregar: function (enviarBruto) { enviarBruto(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' })); },
+      aoPronto: function () {},
+      interpretar: function (d) {
+        if (d.event === 'onReady' || d.event === 'initialDelivery') return { tipo: 'pronto' };
+        if (d.event === 'onStateChange' && Number(d.info) === 0) return { tipo: 'fim' };
+        if (d.event === 'onError') return { tipo: 'erro' };
+        if (d.event === 'infoDelivery' && d.info && typeof d.info === 'object') {
+          if (d.info.playerState === 0) return { tipo: 'fim' };
+          if (typeof d.info.currentTime === 'number') return { tipo: 'tempo', seg: d.info.currentTime, duracao: Number(d.info.duration) || 0 };
+        }
+        return null;
+      },
+      tocar: ['playVideo'], irPara: function (s) { return ['seekTo', s]; }
+    };
   }
 
   /* ---------- Vimeo ---------- */
@@ -84,7 +120,7 @@
 
   function criar(caixa, opc) {
     opc = opc || {};
-    var prov = opc.provedor === 'vimeo' ? vimeo(opc) : opc.provedor === 'panda' ? panda(opc) : null;
+    var prov = opc.provedor === 'youtube' ? youtube(opc) : opc.provedor === 'vimeo' ? vimeo(opc) : opc.provedor === 'panda' ? panda(opc) : null;
     var falhar = function (msg) {
       AC.limpar(caixa);
       caixa.appendChild(AC.h('p', { class: 'ac-player__erro', role: 'alert' }, msg));
@@ -111,6 +147,24 @@
       if (!iframe.contentWindow) return;
       iframe.contentWindow.postMessage(prov.comando(metodo, valor), prov.origem);
     }
+    function enviarBruto(msg) {
+      if (iframe.contentWindow) iframe.contentWindow.postMessage(msg, prov.origem);
+    }
+    // Aperto de mão (YouTube): repete por alguns segundos até o player responder.
+    var tentativas = 0, aperto = null;
+    if (prov.aoCarregar) {
+      iframe.addEventListener('load', function () {
+        clearInterval(aperto);
+        tentativas = 0;
+        prov.aoCarregar(enviarBruto);
+        aperto = setInterval(function () {
+          if (pronto || ++tentativas > 40) { clearInterval(aperto); return; }
+          prov.aoCarregar(enviarBruto);
+        }, 250);
+      });
+    }
+    // Com o início no endereço (YouTube), não é preciso pedir para pular.
+    if (prov.inicioNaUrl) buscouInicio = true;
 
     function aoMensagem(e) {
       if (e.source !== iframe.contentWindow || !prov.ehOrigem(e.origin)) return;
@@ -124,7 +178,7 @@
         if (pos > 5 && !buscouInicio) { buscouInicio = true; var c = prov.irPara(pos); enviar(c[0], c[1]); }
       } else if (r.tipo === 'tempo') {
         // Antes de retomar, o player pode avisar 0 s: não sobrescreve a posição salva.
-        if (r.seg > 0 || buscouInicio || pos <= 5) pos = r.seg;
+        if (r.seg > 0 || (buscouInicio && !prov.inicioNaUrl) || pos <= 5) pos = r.seg;
         if (r.duracao) dur = r.duracao;
         if (opc.aoTempo) opc.aoTempo(pos, dur);
       } else if (r.tipo === 'fim') {
@@ -142,7 +196,7 @@
       pronto: function () { return pronto; },
       tocar: function () { enviar(prov.tocar[0]); },
       irPara: function (s) { var c = prov.irPara(Math.max(0, s)); enviar(c[0], c[1]); },
-      destruir: function () { window.removeEventListener('message', aoMensagem); AC.limpar(caixa); }
+      destruir: function () { clearInterval(aperto); window.removeEventListener('message', aoMensagem); AC.limpar(caixa); }
     };
   }
 
