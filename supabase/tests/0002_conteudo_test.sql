@@ -1,11 +1,13 @@
 -- =====================================================================
--- Teste das migrations 0002 e 0003 · rodar no SQL Editor DEPOIS delas
+-- Teste de trilhas, aulas, progresso, avisos e Storage (0002, 0003 e as regras da 0007)
+-- Rodar no SQL Editor DEPOIS de todas as migrations (até a 0007).
 --
--- Cria usuários e conteúdos de teste, simula cada perfil, confere as regras
+-- Cria usuários e aulas de teste, simula cada perfil, confere as regras
 -- e APAGA tudo no fim. Resultado: todas as linhas com ok = true.
 -- =====================================================================
 
 -- Limpeza de uma execução anterior
+delete from public.conteudos where id::text like '00000000-0000-4000-8000-0000000000f%';
 delete from public.modulos where id::text like '00000000-0000-4000-8000-0000000000f%';
 delete from public.avisos  where id::text like '00000000-0000-4000-8000-0000000000f%';
 delete from public.auditoria where alvo like '00000000-0000-4000-8000-0000000000f%' or alvo like '00000000-0000-4000-8000-0000000000b%';
@@ -35,17 +37,17 @@ do $$ begin
   end if;
 end $$;
 
--- Encontros: f1 publicado e liberado, f2 publicado mas só no futuro, f3 rascunho
+-- Trilhas: f1 com aula visível; f2 só com aula agendada; f3 só com aula em rascunho
 insert into public.modulos (id, titulo, ordem, publicado, liberado_em) values
-  ('00000000-0000-4000-8000-0000000000f1', 'TESTE liberado', 901, true,  null),
-  ('00000000-0000-4000-8000-0000000000f2', 'TESTE futuro',   902, true,  now() + interval '7 days'),
-  ('00000000-0000-4000-8000-0000000000f3', 'TESTE rascunho', 903, false, null);
--- Conteúdos: fa visível; fb rascunho; fc em encontro futuro; fd em encontro rascunho
-insert into public.conteudos (id, modulo_id, titulo, tipo, texto, arquivo_path, ordem, publicado) values
-  ('00000000-0000-4000-8000-0000000000fa', '00000000-0000-4000-8000-0000000000f1', 'TESTE visível',  'pdf',   null, 'teste/visivel.pdf',  1, true),
-  ('00000000-0000-4000-8000-0000000000fb', '00000000-0000-4000-8000-0000000000f1', 'TESTE rascunho', 'pdf',   null, 'teste/rascunho.pdf', 2, false),
-  ('00000000-0000-4000-8000-0000000000fc', '00000000-0000-4000-8000-0000000000f2', 'TESTE futuro',   'texto', 'x',  null,                 1, true),
-  ('00000000-0000-4000-8000-0000000000fd', '00000000-0000-4000-8000-0000000000f3', 'TESTE oculto',   'texto', 'x',  null,                 1, true);
+  ('00000000-0000-4000-8000-0000000000f1', 'TESTE com aula visível', 901, true, null),
+  ('00000000-0000-4000-8000-0000000000f2', 'TESTE só agendada',      902, true, null),
+  ('00000000-0000-4000-8000-0000000000f3', 'TESTE só rascunho',      903, true, null);
+-- Aulas: fa visível; fb rascunho; fc publicada mas agendada para o futuro; fd rascunho
+insert into public.conteudos (id, modulo_id, titulo, tipo, texto, arquivo_path, ordem, publicado, liberado_em) values
+  ('00000000-0000-4000-8000-0000000000fa', '00000000-0000-4000-8000-0000000000f1', 'TESTE visível',  'pdf',   null, 'teste/visivel.pdf',  1, true,  null),
+  ('00000000-0000-4000-8000-0000000000fb', '00000000-0000-4000-8000-0000000000f1', 'TESTE rascunho', 'pdf',   null, 'teste/rascunho.pdf', 2, false, null),
+  ('00000000-0000-4000-8000-0000000000fc', '00000000-0000-4000-8000-0000000000f2', 'TESTE futuro',   'texto', 'x',  null,                 1, true,  now() + interval '7 days'),
+  ('00000000-0000-4000-8000-0000000000fd', '00000000-0000-4000-8000-0000000000f3', 'TESTE oculto',   'texto', 'x',  null,                 1, false, null);
 insert into public.avisos (id, titulo, publicado) values
   ('00000000-0000-4000-8000-0000000000fe', 'TESTE aviso publicado', true),
   ('00000000-0000-4000-8000-0000000000ff', 'TESTE aviso rascunho',  false);
@@ -65,8 +67,12 @@ do $$ begin
   exception when others then insert into _r (teste, esperado, obtido) values ('caminho de arquivo sem ".."', 'erro', 'erro'); end;
   begin
     insert into public.conteudos (modulo_id, titulo, tipo, provedor, video_id) values ('00000000-0000-4000-8000-0000000000f1', 'x', 'video', 'youtube', 'abc');
-    insert into _r (teste, esperado, obtido) values ('vídeo só Panda ou Vimeo', 'erro', 'aceitou');
-  exception when others then insert into _r (teste, esperado, obtido) values ('vídeo só Panda ou Vimeo', 'erro', 'erro'); end;
+    insert into _r (teste, esperado, obtido) values ('ID do YouTube inválido é recusado', 'erro', 'aceitou');
+  exception when others then insert into _r (teste, esperado, obtido) values ('ID do YouTube inválido é recusado', 'erro', 'erro'); end;
+  begin
+    insert into public.conteudos (modulo_id, titulo, tipo, provedor, video_id) values ('00000000-0000-4000-8000-0000000000f1', 'x', 'video', 'outro', 'abcdefghijk');
+    insert into _r (teste, esperado, obtido) values ('vídeo só YouTube, Vimeo ou Panda', 'erro', 'aceitou');
+  exception when others then insert into _r (teste, esperado, obtido) values ('vídeo só YouTube, Vimeo ou Panda', 'erro', 'erro'); end;
 end $$;
 
 -- ---------------------------------------------------------------------
@@ -91,8 +97,8 @@ reset role;
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000b1","role":"authenticated","aal":"aal1"}', false);
 set role authenticated;
-insert into _r (teste, esperado, obtido) select 'aluno vê encontros publicados (liberado + futuro)', '2', count(*)::text from public.modulos where id::text like '00000000-0000-4000-8000-0000000000f%';
-insert into _r (teste, esperado, obtido) select 'aluno NÃO vê encontro rascunho', '0', count(*)::text from public.modulos where id = '00000000-0000-4000-8000-0000000000f3';
+insert into _r (teste, esperado, obtido) select 'aluno vê só a trilha que tem aula visível', '1', count(*)::text from public.modulos where id::text like '00000000-0000-4000-8000-0000000000f%';
+insert into _r (teste, esperado, obtido) select 'aluno NÃO vê trilha só com rascunho', '0', count(*)::text from public.modulos where id = '00000000-0000-4000-8000-0000000000f3';
 insert into _r (teste, esperado, obtido) select 'aluno vê só o conteúdo publicado e liberado', '00000000-0000-4000-8000-0000000000fa', string_agg(id::text, ',') from public.conteudos where id::text like '00000000-0000-4000-8000-0000000000f%';
 insert into _r (teste, esperado, obtido) select 'aluno vê só aviso publicado', '1', count(*)::text from public.avisos where id::text like '00000000-0000-4000-8000-0000000000f%';
 insert into _r (teste, esperado, obtido) select 'aluno NÃO vê progresso de outro aluno', '0', count(*)::text from public.progresso where aluno_id = '00000000-0000-4000-8000-0000000000b2';
@@ -112,8 +118,8 @@ do $$ declare n int; begin
   exception when others then insert into _r values (default, 'aluno NÃO grava progresso em rascunho', 'erro', 'erro'); end;
   begin
     insert into public.progresso (aluno_id, conteudo_id) values ('00000000-0000-4000-8000-0000000000b1', '00000000-0000-4000-8000-0000000000fc');
-    insert into _r values (default, 'aluno NÃO grava progresso em encontro não liberado', 'erro', 'gravou');
-  exception when others then insert into _r values (default, 'aluno NÃO grava progresso em encontro não liberado', 'erro', 'erro'); end;
+    insert into _r values (default, 'aluno NÃO grava progresso em aula agendada', 'erro', 'gravou');
+  exception when others then insert into _r values (default, 'aluno NÃO grava progresso em aula agendada', 'erro', 'erro'); end;
   begin
     insert into public.progresso (aluno_id, conteudo_id) values ('00000000-0000-4000-8000-0000000000b2', '00000000-0000-4000-8000-0000000000fa')
     on conflict (aluno_id, conteudo_id) do update set posicao_seg = 0;
@@ -129,8 +135,8 @@ do $$ declare n int; begin
   exception when others then insert into _r values (default, 'aluno NÃO apaga progresso', 'erro', 'erro'); end;
   begin
     insert into public.modulos (titulo) values ('invasor');
-    insert into _r values (default, 'aluno NÃO cria encontro', 'erro', 'criou');
-  exception when others then insert into _r values (default, 'aluno NÃO cria encontro', 'erro', 'erro'); end;
+    insert into _r values (default, 'aluno NÃO cria trilha', 'erro', 'criou');
+  exception when others then insert into _r values (default, 'aluno NÃO cria trilha', 'erro', 'erro'); end;
   update public.conteudos set publicado = true where id = '00000000-0000-4000-8000-0000000000fb';
   get diagnostics n = row_count;
   insert into _r values (default, 'aluno NÃO publica conteúdo', '0', n::text);
@@ -148,7 +154,7 @@ select 'upsert gravou concluído e posição', 'true/40', concluido::text || '/'
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000b3","role":"authenticated","aal":"aal1"}', false);
 set role authenticated;
-insert into _r (teste, esperado, obtido) select 'inativo NÃO vê encontros', '0', count(*)::text from public.modulos;
+insert into _r (teste, esperado, obtido) select 'inativo NÃO vê trilhas', '0', count(*)::text from public.modulos;
 insert into _r (teste, esperado, obtido) select 'inativo NÃO vê conteúdos', '0', count(*)::text from public.conteudos;
 insert into _r (teste, esperado, obtido) select 'inativo NÃO vê avisos', '0', count(*)::text from public.avisos;
 insert into _r (teste, esperado, obtido) select 'inativo: material bloqueado', 'false', privado.material_visivel('teste/visivel.pdf')::text;
@@ -166,8 +172,8 @@ set role authenticated;
 insert into _r (teste, esperado, obtido) select 'admin sem MFA NÃO vê rascunhos', '0', count(*)::text from public.conteudos where id = '00000000-0000-4000-8000-0000000000fb';
 do $$ begin
   insert into public.modulos (titulo) values ('sem mfa');
-  insert into _r values (default, 'admin sem MFA NÃO cria encontro', 'erro', 'criou');
-exception when others then insert into _r values (default, 'admin sem MFA NÃO cria encontro', 'erro', 'erro'); end $$;
+  insert into _r values (default, 'admin sem MFA NÃO cria trilha', 'erro', 'criou');
+exception when others then insert into _r values (default, 'admin sem MFA NÃO cria trilha', 'erro', 'erro'); end $$;
 reset role;
 
 -- ---------------------------------------------------------------------
@@ -175,8 +181,8 @@ reset role;
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000b4","role":"authenticated","aal":"aal2"}', false);
 set role authenticated;
-insert into _r (teste, esperado, obtido) select 'admin vê todos os encontros de teste', '3', count(*)::text from public.modulos where id::text like '00000000-0000-4000-8000-0000000000f%';
-insert into _r (teste, esperado, obtido) select 'admin vê todos os conteúdos de teste', '4', count(*)::text from public.conteudos where id::text like '00000000-0000-4000-8000-0000000000f%';
+insert into _r (teste, esperado, obtido) select 'admin vê todas as trilhas de teste', '3', count(*)::text from public.modulos where id::text like '00000000-0000-4000-8000-0000000000f%';
+insert into _r (teste, esperado, obtido) select 'admin vê todas as aulas de teste', '4', count(*)::text from public.conteudos where id::text like '00000000-0000-4000-8000-0000000000f%';
 insert into _r (teste, esperado, obtido) select 'admin vê progresso dos alunos', '2', count(*)::text from public.progresso where conteudo_id = '00000000-0000-4000-8000-0000000000fa';
 insert into _r (teste, esperado, obtido) select 'admin: material de rascunho liberado (pré-visualização)', 'true', (privado.is_admin() or privado.material_visivel('teste/rascunho.pdf'))::text;
 do $$ declare n int; begin
@@ -192,7 +198,7 @@ reset role;
 insert into _r (teste, esperado, obtido)
 select 'auditoria: publicar, criar e excluir pelo admin', '3', count(*)::text from public.auditoria
  where quem = '00000000-0000-4000-8000-0000000000b4'
-   and ((acao = 'publicar_conteudo' and alvo = '00000000-0000-4000-8000-0000000000fb')
+   and ((acao = 'publicar_aula' and alvo = '00000000-0000-4000-8000-0000000000fb')
      or (acao in ('criar_aviso', 'excluir_aviso') and alvo = '00000000-0000-4000-8000-0000000000f9'));
 
 -- ---------------------------------------------------------------------
@@ -209,6 +215,7 @@ select 'bucket capas: público, só imagens, 2 MB', 'true/{image/jpeg,image/png,
 -- Limpeza e resultado
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claims', '{}', false);
+delete from public.conteudos where id::text like '00000000-0000-4000-8000-0000000000f%';
 delete from public.modulos where id::text like '00000000-0000-4000-8000-0000000000f%';
 delete from public.avisos  where id::text like '00000000-0000-4000-8000-0000000000f%';
 delete from public.auditoria where alvo like '00000000-0000-4000-8000-0000000000f%' or alvo like '00000000-0000-4000-8000-0000000000b%';

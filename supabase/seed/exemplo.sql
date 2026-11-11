@@ -1,49 +1,64 @@
 -- =====================================================================
 -- Dados de EXEMPLO da Área do Aluno (opcional)
--- Rodar no SQL Editor depois das migrations 0001–0003, só para ver as telas
--- com conteúdo. Todos os registros têm IDs fixos terminados em "e…"; o bloco
--- no fim do arquivo (comentado) apaga tudo.
+-- Rodar no SQL Editor depois de todas as migrations (até a 0007), só para ver
+-- a vitrine cheia. Todos os registros têm IDs fixos que começam com
+-- "00000000-0000-4000-8000-000000ee00"; o bloco no fim do arquivo apaga tudo.
 --
--- - O vídeo de exemplo usa um ID público do Vimeo; troque pelo vídeo real.
--- - O PDF de exemplo só baixa depois que um arquivo for enviado para
---   materiais/encontro-1/roteiro-encontro-1.pdf (pelo painel admin, Fase 3).
+-- - Os vídeos são EXEMPLOS: filmes abertos da Blender Foundation no YouTube
+--   (Big Buck Bunny, Sintel, Tears of Steel, Cosmos Laundromat). Troque pelos
+--   vídeos "Não listados" da GPM pelo painel (Aulas → Editar → Link do YouTube).
+-- - Os PDFs são fictícios: só abrem depois que um arquivo for enviado pelo
+--   painel (Aulas → Editar → trocar o PDF). Até lá, o aluno vê o card, mas
+--   "Abrir"/"Baixar" mostram erro.
 -- =====================================================================
 
-insert into public.modulos (id, titulo, subtitulo, descricao, ordem, publicado, liberado_em) values
-  ('00000000-0000-4000-8000-0000000000e1', 'Encontro 1 · Aula inaugural',
-   'O que nos torna humanos na era da inteligência artificial',
-   'O primeiro encontro da Academia de Virtudes: a proposta, o método e as virtudes que vamos cultivar ao longo da jornada.',
-   1, true, null),
-  ('00000000-0000-4000-8000-0000000000e2', 'Encontro 2 · Essência Humana',
-   'Sexta-feira, 20 de novembro de 2026, às 9h',
-   'A gravação e os materiais do Encontro 2 ficam disponíveis aqui depois do encontro.',
-   2, true, '2026-11-21 09:00:00-03')
+-- Trilhas
+insert into public.modulos (id, titulo, descricao, ordem) values
+  ('00000000-0000-4000-8000-000000ee0001', 'Os 4 perfis diante da IA',
+   'Como cada perfil de liderança reage à inteligência artificial, e o que cultivar em cada um.', 10),
+  ('00000000-0000-4000-8000-000000ee0002', 'Essência Humana',
+   'O que nos torna humanos no trabalho, e por que isso importa mais agora.', 20)
 on conflict (id) do nothing;
 
-insert into public.conteudos (id, modulo_id, titulo, tipo, descricao, provedor, video_id, duracao_min, arquivo_path, arquivo_nome, texto, ordem, publicado) values
-  ('00000000-0000-4000-8000-0000000000e3', '00000000-0000-4000-8000-0000000000e1',
-   'Gravação do encontro', 'video', 'A aula inaugural completa.',
-   'vimeo', '76979871', 62, 'encontro-1/roteiro-encontro-1.pdf', 'Roteiro do Encontro 1 (PDF)',
-   E'## Para refletir\n\nAntes do próximo encontro, anote:\n\n- uma virtude que você já pratica no trabalho;\n- uma virtude que quer **desenvolver**;\n- uma situação recente em que a tecnologia ajudou *ou atrapalhou* uma conversa importante.\n\nLeia também a [página da Academia](https://gpmintegracao.com.br/academiadevirtudes/).',
-   1, true),
-  ('00000000-0000-4000-8000-0000000000e4', '00000000-0000-4000-8000-0000000000e1',
-   'Exercício: mapa de virtudes', 'texto', 'Um exercício curto para fazer em 15 minutos.',
-   null, null, 15, null, null,
-   E'## Mapa de virtudes\n\n1. Liste cinco decisões que você tomou nesta semana.\n2. Para cada uma, escreva qual virtude esteve presente.\n3. Marque a que mais faltou.\n\n> A prática vem antes da teoria.',
-   2, true),
-  ('00000000-0000-4000-8000-0000000000e5', '00000000-0000-4000-8000-0000000000e1',
-   'Rascunho que o aluno não vê', 'texto', 'Conteúdo em rascunho (teste da RLS).',
-   null, null, null, null, null, 'Este texto não deve aparecer para alunos.', 3, false),
-  ('00000000-0000-4000-8000-0000000000e6', '00000000-0000-4000-8000-0000000000e2',
-   'Gravação do Encontro 2', 'video', 'Disponível depois do encontro.',
-   'vimeo', '76979871', 90, null, null, null, 1, true)
+-- Aulas: 4 videoaulas (YouTube, EXEMPLO) e 2 materiais em PDF (fictícios)
+insert into public.conteudos (id, modulo_id, titulo, tipo, descricao, provedor, video_id, duracao_min, arquivo_path, arquivo_nome, arquivo_tamanho, ordem, publicado, destaque) values
+  ('00000000-0000-4000-8000-000000ee0011', '00000000-0000-4000-8000-000000ee0001',
+   'Aula 1 · Os 4 perfis (EXEMPLO)', 'video', 'Uma visão geral dos quatro perfis e de como cada um se relaciona com a tecnologia.',
+   'youtube', 'aqz-KE-bpKQ', 10, null, null, null, 10, true, true),
+  ('00000000-0000-4000-8000-000000ee0012', '00000000-0000-4000-8000-000000ee0001',
+   'Aula 2 · O perfil analítico (EXEMPLO)', 'video', 'Dados, método e o risco de terceirizar o julgamento.',
+   'youtube', 'eRsGyueVLvQ', 15, null, null, null, 20, true, false),
+  ('00000000-0000-4000-8000-000000ee0013', '00000000-0000-4000-8000-000000ee0002',
+   'Aula 3 · Prudência e decisão (EXEMPLO)', 'video', 'A virtude da prudência em decisões apoiadas por IA.',
+   'youtube', 'R6MlUcmOul8', 12, null, null, null, 30, true, false),
+  ('00000000-0000-4000-8000-000000ee0014', null,
+   'Conversa aberta com a turma (EXEMPLO)', 'video', 'Perguntas e respostas sem trilha específica.',
+   'youtube', 'Y-rmzh0PI3c', 12, null, null, null, 40, true, false),
+  ('00000000-0000-4000-8000-000000ee0015', '00000000-0000-4000-8000-000000ee0001',
+   'Guia dos 4 perfis (EXEMPLO)', 'pdf', 'Resumo para imprimir e consultar.',
+   null, null, null, 'exemplo/guia-dos-4-perfis.pdf', 'Guia dos 4 perfis', 2411724, 50, true, false),
+  ('00000000-0000-4000-8000-000000ee0016', null,
+   'Caderno de exercícios (EXEMPLO)', 'pdf', 'Exercícios para fazer entre as aulas.',
+   null, null, null, 'exemplo/caderno-de-exercicios.pdf', 'Caderno de exercícios', 845000, 60, true, false)
+on conflict (id) do nothing;
+
+-- PDF de apoio da Aula 1 (fictício)
+insert into public.anexos (id, conteudo_id, nome, arquivo_path, tamanho, ordem) values
+  ('00000000-0000-4000-8000-000000ee0021', '00000000-0000-4000-8000-000000ee0011',
+   'Slides da Aula 1', 'exemplo/slides-aula-1.pdf', 1520000, 10)
 on conflict (id) do nothing;
 
 insert into public.avisos (id, titulo, texto, publicado) values
-  ('00000000-0000-4000-8000-0000000000e7', 'Encontro 2 na sexta, 20/11, às 9h',
-   'Centro Empresarial Office Tower, Barra da Tijuca. Chegue 15 minutos antes para o credenciamento.', true)
+  ('00000000-0000-4000-8000-000000ee0031', 'Novas aulas toda semana (EXEMPLO)',
+   'As próximas aulas da trilha Essência Humana entram na sexta-feira.', true)
 on conflict (id) do nothing;
 
--- Para apagar os dados de exemplo:
--- delete from public.avisos  where id = '00000000-0000-4000-8000-0000000000e7';
--- delete from public.modulos where id in ('00000000-0000-4000-8000-0000000000e1', '00000000-0000-4000-8000-0000000000e2');
+-- Para apagar os dados de exemplo (as aulas apagam junto os PDFs de apoio e o progresso):
+-- delete from public.conteudos where id::text like '00000000-0000-4000-8000-000000ee00%';
+-- delete from public.modulos   where id::text like '00000000-0000-4000-8000-000000ee00%';
+-- delete from public.avisos    where id::text like '00000000-0000-4000-8000-000000ee00%';
+--
+-- Dados de exemplo da versão anterior deste arquivo (se ainda estiverem no banco):
+-- delete from public.conteudos where id::text like '00000000-0000-4000-8000-0000000000e%';
+-- delete from public.modulos   where id::text like '00000000-0000-4000-8000-0000000000e%';
+-- delete from public.avisos    where id = '00000000-0000-4000-8000-0000000000e7';

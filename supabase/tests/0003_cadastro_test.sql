@@ -15,6 +15,7 @@
 
 -- Limpeza de uma execução anterior que tenha parado no meio
 select set_config('request.jwt.claims', '{}', false);
+delete from public.conteudos where id = '00000000-0000-4000-8000-0000000000d2';
 delete from public.modulos where id = '00000000-0000-4000-8000-0000000000d1';
 delete from public.avisos  where id = '00000000-0000-4000-8000-0000000000d3';
 delete from public.auditoria where alvo like '00000000-0000-4000-8000-0000000000c%' or alvo like '00000000-0000-4000-8000-0000000000d%';
@@ -283,6 +284,7 @@ reset role;
 -- Limpeza e resultado
 -- ---------------------------------------------------------------------
 select set_config('request.jwt.claims', '{}', false);
+delete from public.conteudos where id = '00000000-0000-4000-8000-0000000000d2';
 delete from public.modulos where id = '00000000-0000-4000-8000-0000000000d1';
 delete from public.avisos  where id = '00000000-0000-4000-8000-0000000000d3';
 delete from public.auditoria where alvo like '00000000-0000-4000-8000-0000000000c%' or alvo like '00000000-0000-4000-8000-0000000000d%';
