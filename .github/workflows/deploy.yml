@@ -18,9 +18,10 @@ jobs:
       # FTPS (FTP com TLS): a senha e os arquivos trafegam criptografados (FTP comum envia tudo aberto).
       # lftp em vez do FTP-Deploy-Action: com a Hostinger, o FTP-Deploy-Action caía na conexão de
       # dados criptografada ("ECONNRESET (data socket)").
-      # - A conta FTP da Hostinger abre na raiz da conta; o site fica em public_html/.
-      # - O certificado do servidor é conferido (padrão do lftp). Ele é emitido para *.hstgr.io,
-      #   então o FTP_SERVER precisa ser o NOME do servidor da Hostinger (ex.: srvXXXX.hstgr.io),
+      # - Conta FTP só de publicação (FTP_USERNAME = u977135034.deploy): ela abre DENTRO do
+      #   public_html e não enxerga o resto da hospedagem. Por isso o destino é "./".
+      # - O certificado do servidor é conferido. Ele é emitido para *.hstgr.io, então o
+      #   FTP_SERVER é o nome do servidor da Hostinger (srv1896.hstgr.io, informado pelo suporte),
       #   sem ftp://, barra ou porta. Com o IP, a conferência falha.
       # - Envia só o que mudou e NUNCA apaga nada no servidor (sem --delete).
       # - A senha vai por variável de ambiente (--env-password), não na linha de comando.
@@ -50,7 +51,7 @@ jobs:
               --exclude '\.ps1$' \
               --exclude '\.sql$' \
               --exclude '(^|/)\.env' \
-              ./ public_html/;
+              ./ ./;
             bye
           "
           # Nada da lista acima vai para o site. Não remova itens sem revisar a segurança.
