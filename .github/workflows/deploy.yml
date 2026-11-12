@@ -23,6 +23,9 @@ jobs:
       # - O certificado do servidor é conferido. Ele é emitido para *.hstgr.io, então o
       #   FTP_SERVER é o nome do servidor da Hostinger (srv1896.hstgr.io, informado pelo suporte),
       #   sem ftp://, barra ou porta. Com o IP, a conferência falha.
+      # - Trava: só envia se a pasta de chegada for a do site (tem academiadevirtudes/); se não for,
+      #   para sem enviar nada e o "pwd" mostra no registro onde estava.
+      # - Destino "." sem barra no fim (com barra, o lftp pode criar uma subpasta).
       # - Envia só o que mudou e NUNCA apaga nada no servidor (sem --delete).
       # - A senha vai por variável de ambiente (--env-password), não na linha de comando.
       - name: Enviar arquivos via FTPS para a Hostinger
@@ -39,6 +42,10 @@ jobs:
             set ftp:passive-mode true;
             set net:max-retries 3;
             set net:timeout 30;
+            set cmd:fail-exit yes;
+            pwd;
+            cd academiadevirtudes;
+            cd ..;
             mirror --reverse --verbose=1 --parallel=3 \
               --exclude '(^|/)\.git' \
               --exclude '(^|/)node_modules/' \
@@ -51,7 +58,7 @@ jobs:
               --exclude '\.ps1$' \
               --exclude '\.sql$' \
               --exclude '(^|/)\.env' \
-              ./ ./;
+              . .;
             bye
           "
           # Nada da lista acima vai para o site. Não remova itens sem revisar a segurança.
