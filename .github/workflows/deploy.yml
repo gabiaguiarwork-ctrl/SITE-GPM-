@@ -23,8 +23,11 @@ jobs:
       # - O certificado do servidor é conferido. Ele é emitido para *.hstgr.io, então o
       #   FTP_SERVER é o nome do servidor da Hostinger (srv1896.hstgr.io, informado pelo suporte),
       #   sem ftp://, barra ou porta. Com o IP, a conferência falha.
-      # - Trava: só envia se a pasta de chegada for a do site (tem academiadevirtudes/); se não for,
-      #   para sem enviar nada e o "pwd" mostra no registro onde estava.
+      # - Trava: só envia se a pasta de chegada tiver o arquivo vazio ".pasta-do-site", que existe
+      #   só no public_html do site (criado à mão no Gerenciador de arquivos). Se não tiver, para
+      #   sem enviar nada e o "pwd" mostra no registro onde estava.
+      # - A conta FTP de publicação é criada com o campo "Diretório" VAZIO: na Hostinger esse campo
+      #   já começa dentro do public_html (com "/public_html" ela aponta para public_html/public_html).
       # - Destino "." sem barra no fim (com barra, o lftp pode criar uma subpasta).
       # - Envia só o que mudou e NUNCA apaga nada no servidor (sem --delete).
       # - A senha vai por variável de ambiente (--env-password), não na linha de comando.
@@ -44,8 +47,7 @@ jobs:
             set net:timeout 30;
             set cmd:fail-exit yes;
             pwd;
-            cd academiadevirtudes;
-            cd ..;
+            cls -1 .pasta-do-site;
             mirror --reverse --verbose=1 --parallel=3 \
               --exclude '(^|/)\.git' \
               --exclude '(^|/)node_modules/' \
