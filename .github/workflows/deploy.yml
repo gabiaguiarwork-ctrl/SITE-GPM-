@@ -12,29 +12,45 @@ jobs:
       - name: Baixar código do repositório
         uses: actions/checkout@v4
 
+      - name: Instalar o lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      # FTPS (FTP com TLS): a senha e os arquivos trafegam criptografados (FTP comum envia tudo aberto).
+      # lftp em vez do FTP-Deploy-Action: com a Hostinger, o FTP-Deploy-Action caía na conexão de
+      # dados criptografada ("ECONNRESET (data socket)").
+      # - A conta FTP da Hostinger abre na raiz da conta; o site fica em public_html/.
+      # - O certificado do servidor é conferido (padrão do lftp). Ele é emitido para *.hstgr.io,
+      #   então o FTP_SERVER precisa ser o NOME do servidor da Hostinger (ex.: srvXXXX.hstgr.io),
+      #   sem ftp://, barra ou porta. Com o IP, a conferência falha.
+      # - Envia só o que mudou e NUNCA apaga nada no servidor (sem --delete).
+      # - A senha vai por variável de ambiente (--env-password), não na linha de comando.
       - name: Enviar arquivos via FTPS para a Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          # FTPS: a senha e os arquivos trafegam criptografados (FTP comum envia tudo aberto)
-          protocol: ftps
-          # A conta FTP da Hostinger abre na raiz da conta (o hPanel indica "Pasta para upload: public_html").
-          # O FTP_SERVER é só o IP/host, sem ftp://, barra ou porta.
-          server-dir: public_html/
-          # Nada disso vai para o site. Não remova itens desta lista sem revisar a segurança.
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            **/node_modules/**
-            **/GPM_CRM/**
-            **/CRM/**
-            **/supabase/**
-            **/_notas/**
-            **/academiadevirtudes/fotos/**
-            **/*.md
-            **/*.ps1
-            **/*.sql
-            **/.env*
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp --env-password -u "$FTP_USERNAME" "$FTP_SERVER" -e "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate yes;
+            set ssl:check-hostname yes;
+            set ftp:passive-mode true;
+            set net:max-retries 3;
+            set net:timeout 30;
+            mirror --reverse --verbose=1 --parallel=3 \
+              --exclude '(^|/)\.git' \
+              --exclude '(^|/)node_modules/' \
+              --exclude '^GPM_CRM/' \
+              --exclude '^CRM/' \
+              --exclude '^supabase/' \
+              --exclude '^_notas/' \
+              --exclude '^academiadevirtudes/fotos/' \
+              --exclude '\.md$' \
+              --exclude '\.ps1$' \
+              --exclude '\.sql$' \
+              --exclude '(^|/)\.env' \
+              ./ public_html/;
+            bye
+          "
+          # Nada da lista acima vai para o site. Não remova itens sem revisar a segurança.
