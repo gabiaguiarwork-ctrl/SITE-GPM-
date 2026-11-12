@@ -11,7 +11,9 @@ Leia antes de alterar qualquer arquivo deste repositório.
 
 ## Publicação
 
-- Todo push na branch `main` dispara `.github/workflows/deploy.yml`, que envia o repositório por **FTPS** para a Hostinger.
+- Todo push na branch `main` dispara `.github/workflows/deploy.yml`, que envia o repositório por **FTPS** (lftp, certificado conferido) para a Hostinger. Envia só o que mudou e nunca apaga nada no servidor.
+- Servidor: `srv1896.hstgr.io` (o certificado é `*.hstgr.io`; com o IP a conferência falha). Conta FTP só de publicação: `u977135034.deploy`. Nessa conta a raiz `/` é o `public_html` do site, mas o login abre em `/public_html` (subpasta): por isso o `cd /`.
+- Trava: só publica se encontrar o arquivo vazio `public_html/.pasta-do-site` no servidor. **Não apague esse arquivo.**
 - **Tudo o que for commitado vira público na internet**, exceto o que está no `exclude` do deploy.
 - `exclude` atual (não remova nenhum item sem revisar a segurança): `.git*`, `.github/`, `node_modules/`, `GPM_CRM/`, `CRM/`, `supabase/`, `_notas/`, `academiadevirtudes/fotos/`, `**/*.md`, `**/*.ps1`, `**/*.sql`, `**/.env*`.
 - **Nunca envie o repositório inteiro à mão para o `public_html`.** Publicação só pelo GitHub Actions. Se for indispensável subir algo à mão, envie só os arquivos específicos.
@@ -100,7 +102,7 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 ## Pendências
 
 - HSTS começa com `max-age=300` e **sem** `includeSubDomains`. Depois de confirmar que todas as páginas abrem normalmente, subir para `31536000` em outro commit (e só incluir subdomínios depois de confirmar quais existem).
-- A publicação automática depende de corrigir o segredo `FTP_SERVER` no GitHub (só o host/IP de FTP do hPanel, sem `ftp://`, barra ou porta) e de confirmar o `server-dir` (`/` ou `public_html/`).
+- Limpar no servidor (`public_html`) o que ficou de envios manuais antigos: a pasta `public_html/` criada por engano em 12/11/2026, `.github/`, `.gitignore`, `._tmp_sobre_patch.txt`, `index.html.html`, os `.ps1` e o CRM antigo (`crm/`, `CRM/`, `GPM_CRM/`).
 
 ## Histórico
 
