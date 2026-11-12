@@ -20,8 +20,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           # FTPS: a senha e os arquivos trafegam criptografados (FTP comum envia tudo aberto)
           protocol: ftps
-          # "/" se a conta FTP já abre dentro do public_html; "public_html/" se abre na raiz da conta
-          server-dir: /
+          # A conta FTP da Hostinger abre na raiz da conta (o hPanel indica "Pasta para upload: public_html").
+          # O FTP_SERVER é só o IP/host, sem ftp://, barra ou porta.
+          server-dir: public_html/
           # Nada disso vai para o site. Não remova itens desta lista sem revisar a segurança.
           exclude: |
             **/.git*
