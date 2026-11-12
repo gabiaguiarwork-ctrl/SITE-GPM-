@@ -26,8 +26,8 @@ jobs:
       # - Trava: só envia se a pasta de chegada tiver o arquivo vazio ".pasta-do-site", que existe
       #   só no public_html do site (criado à mão no Gerenciador de arquivos). Se não tiver, para
       #   sem enviar nada e o "pwd" mostra no registro onde estava.
-      # - A conta FTP de publicação é criada com o campo "Diretório" VAZIO: na Hostinger esse campo
-      #   já começa dentro do public_html (com "/public_html" ela aponta para public_html/public_html).
+      # - Na conta FTP da Hostinger, a raiz "/" já é o public_html do site, mas o login abre em
+      #   "/public_html" (uma subpasta). Por isso o "cd /" antes da trava.
       # - Destino "." sem barra no fim (com barra, o lftp pode criar uma subpasta).
       # - Envia só o que mudou e NUNCA apaga nada no servidor (sem --delete).
       # - A senha vai por variável de ambiente (--env-password), não na linha de comando.
@@ -46,6 +46,7 @@ jobs:
             set net:max-retries 3;
             set net:timeout 30;
             set cmd:fail-exit yes;
+            cd /;
             pwd;
             cls -1 .pasta-do-site;
             mirror --reverse --verbose=1 --parallel=3 \
