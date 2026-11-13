@@ -433,8 +433,8 @@
     }
 
     .btn-nav {
-      padding: 7px 18px;
-      font-size: 0.8rem;
+      padding: 6px 14px;
+      font-size: 0.74rem;
       font-weight: 500;
       border-radius: 8px;
       background: linear-gradient(135deg, var(--dourado-brilho), var(--dourado) 60%, var(--dourado-escuro));
@@ -443,6 +443,30 @@
 
     .btn-nav:hover {
       box-shadow: 0 2px 10px rgba(201,168,76,0.3) !important;
+    }
+
+    /* botão dourado do topo menor (a regra .button, mais abaixo, deixava ele grande) */
+    .button.btn-nav { padding: 7px 16px; font-size: 0.76rem; border-radius: 8px; }
+
+    /* botão "Sou aluno": quadrado vazado ao lado do botão dourado; leva ao login da Área do Aluno */
+    .btn-aluno {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 16px;
+      font-size: 0.76rem;
+      font-weight: 500;
+      line-height: 1.6;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-aluno:hover {
+      color: var(--dourado);
+      border-color: var(--dourado);
     }
 
     .button {
@@ -3025,10 +3049,11 @@
       }
     }
 
-    /* ── Menu: item da Academia de Virtudes (símbolo + texto dourado) ── */
-    .menu-academia { display: inline-flex; align-items: center; gap: 0.45rem; color: #c9a45c !important; white-space: nowrap; }
-    .menu-academia:hover { color: #e2c88e !important; }
+    /* ── Menu: item da Academia de Virtudes (símbolo dourado; texto na cor dos outros itens) ── */
+    .menu-academia { display: inline-flex; align-items: center; gap: 0.45rem; white-space: nowrap; }
     .menu-academia img { width: 20px; height: 20px; }
+    .menu-academia picture { display: inline-flex; flex-shrink: 0; }
+    @media (max-width: 1366px) { .menu { gap: 1.4rem; } }
     .mobile-menu .menu-academia { display: flex; }
     /* com o item da Academia, o menu completo só cabe acima de 1200px: abaixo disso, hambúrguer */
     @media (max-width: 1200px) { .menu { display: none; } .hamburger { display: inline-flex; } }
@@ -3090,13 +3115,14 @@
         </div>
 
         <a href="#metodologia">Metodologia</a>
-        <a class="menu-academia" href="academiadevirtudes/"><picture><source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="#contato">Contato</a>
+        <a class="menu-academia" href="academiadevirtudes/"><picture><source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
       </nav>
 
       <!-- Ações (CTA + hambúrguer) -->
       <div class="topbar-actions">
         <a class="button button-primary btn-nav" href="mentoria.html"><span>Como se tornar um <strong>Nexialista</strong></span></a>
+        <a class="btn-aluno" href="academiadevirtudes/entrar/">Sou aluno</a>
         <button class="hamburger" id="menuToggle" aria-label="Abrir menu">
           <span></span>
         </button>
@@ -3127,8 +3153,8 @@
         </div>
 
         <a href="#metodologia">Metodologia</a>
-        <a class="menu-academia" href="academiadevirtudes/"><picture><source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="#contato">Contato</a>
+        <a class="menu-academia" href="academiadevirtudes/"><picture><source srcset="assets/academia-de-virtudes-simbolo.webp" type="image/webp"><img src="assets/academia-de-virtudes-simbolo.png" alt="" width="20" height="20"></picture>Academia de Virtudes</a>
         <a href="mentoria.html" class="button button-primary mobile-menu-cta"><span>Como se tornar um <strong>Nexialista</strong></span></a>
       </div>
     </div>

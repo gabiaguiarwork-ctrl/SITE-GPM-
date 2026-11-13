@@ -35,7 +35,8 @@ Leia antes de alterar qualquer arquivo deste repositório.
 
 ## Menu
 
-Início · Sobre ▾ (Nossa Tese, Mentoria Nexialista) · Unidades · Metodologia · Academia de Virtudes (com o símbolo dourado) · Contato.
+Início · Sobre ▾ (Nossa Tese, Mentoria Nexialista) · Unidades · Metodologia · Contato · Academia de Virtudes (com o símbolo dourado; o texto tem a mesma cor dos outros itens).
+À direita do menu: o botão dourado (pequeno, cantos de 8 px) e, ao lado, o botão vazado branco "Sou aluno", que leva ao login (`/academiadevirtudes/entrar/`). No celular, o botão dourado some e o "Sou aluno" fica ao lado do hambúrguer.
 Só em `academiadevirtudes/index.html`, "Academia de Virtudes ▾" abre "A Academia" e "Área do Aluno" (o menu do celular e o hero também têm o link). As outras páginas continuam com o link simples.
 O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo de 1200 px e o botão "Como se tornar um Nexialista" continua até 768 px).
 
