@@ -234,8 +234,13 @@
     var p = opcoes.progresso;
     var feito = !!(p && p.concluido);
     var pct = opcoes.mostrarBarra && !feito ? C.pctAssistido(a, p) : null;
-    // Pôster em pé (vitrine): imagem, sombra embaixo e o título escrito por cima da imagem.
-    var capa = h('div', { class: 'ac-tile__capa' + (pct !== null ? ' ac-tile__capa--barra' : '') },
+    // Cartão no estilo Netflix: imagem deitada (16:9) com o título por cima; ao passar o mouse,
+    // aparece o botão ▶ e quanto já foi visto ("12 de 25 min"). A barra de progresso fica embaixo da imagem.
+    var meta = C.metaAula(a);
+    var visto = p && !feito && p.posicao_seg && a.duracao_min && a.tipo === 'video'
+      ? Math.max(1, Math.round(p.posicao_seg / 60)) + ' de ' + a.duracao_min + ' min' : '';
+    var info = visto || meta;
+    var capa = h('div', { class: 'ac-tile__capa' },
       C.imagem(C.capaAulaUrl(a, opcoes.trilha), 'ac-tile__img', a.tipo),
       h('span', { class: 'ac-tile__sombra', 'aria-hidden': 'true' }),
       C.novo(a) && !feito ? h('span', { class: 'ac-tile__selo' }, 'Novo') : null,
@@ -243,11 +248,13 @@
       h('span', { class: 'ac-tile__sobre' },
         opcoes.trilha && opcoes.mostrarTrilha ? h('span', { class: 'ac-tile__trilha' }, opcoes.trilha.titulo) : null,
         h('span', { class: 'ac-tile__titulo' }, a.titulo)),
-      pct !== null ? h('span', { class: 'ac-tile__trilho', 'aria-hidden': 'true' }, h('span', { class: 'ac-tile__barra', 'data-pct': String(pct) })) : null);
-    var meta = C.metaAula(a);
+      h('span', { class: 'ac-tile__hover', 'aria-hidden': 'true' },
+        h('span', { class: 'ac-tile__play' }, a.tipo === 'pdf' ? '↗' : '▶'),
+        info ? h('span', { class: 'ac-tile__info' }, info) : null));
     return h('a', { class: 'ac-tile', href: CFG.rotas.aula + '?id=' + encodeURIComponent(a.id) },
       capa,
-      meta ? h('span', { class: 'ac-tile__corpo' }, h('span', { class: 'ac-tile__meta' }, meta)) : null);
+      pct !== null ? h('span', { class: 'ac-tile__trilho', 'aria-hidden': 'true' }, h('span', { class: 'ac-tile__barra', 'data-pct': String(pct) })) : null,
+      info ? h('span', { class: 'ac-tile__corpo' }, h('span', { class: 'ac-tile__meta' }, info)) : null);
   };
 
   /* ---------- Markdown simples → elementos ---------- */
