@@ -80,6 +80,7 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - Banco (nomes antigos mantidos para não perder dados): `public.conteudos` = aulas, `public.modulos` = trilhas, `public.anexos` = PDFs de apoio. Publicação e data de liberação valem por aula; a trilha só aparece para o aluno se tiver aula visível.
 - Vídeo: o admin cola o link; guarda-se só o ID (11 caracteres) e `provedor = 'youtube'`. Player `https://www.youtube-nocookie.com/embed/<id>` sem carregar o `iframe_api` (conversa por `postMessage`, em `_app/player.js`). Vimeo e Panda continuam aceitos.
 - CSP: `aluno/aula/.htaccess` libera `frame-src https://www.youtube-nocookie.com`; `aluno/`, `aluno/aula/` e `admin/` liberam `img-src https://i.ytimg.com` (capas); `admin/` libera também o `frame-src` do YouTube (prévia no formulário).
+- Vitrine do aluno (decisão da GPM, 13/11/2026): estilo Hotmart, com fileiras por trilha e cada cartão sendo uma aula, como um pôster em pé (3:4) com o título em letras grandes sobre a imagem. A capa ideal é em pé (por exemplo 900 × 1200 px). Sem capa, usa a imagem do YouTube (`hq720`, ou `hqdefault` se não houver), recortada no centro.
 - PDFs: bucket privado `materiais`, link assinado de 60 s gerado no clique (Abrir e Baixar). O envio no painel usa XHR com o token da sessão para mostrar a barra de progresso; a política do bucket continua decidindo quem grava.
 
 ### Cadastro aberto (decisão da GPM, 11/2026)

@@ -8,13 +8,13 @@
 <meta name="theme-color" content="#08142E">
 <title>Painel · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=6">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=7">
 <script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
 <script src="/academiadevirtudes/_app/auth.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/layout.js?v=1" defer></script>
-<script src="/academiadevirtudes/_app/conteudo.js?v=3" defer></script>
+<script src="/academiadevirtudes/_app/conteudo.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/campos.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/admin.js?v=4" defer></script>
 <script src="/academiadevirtudes/admin/alunos.js?v=2" defer></script>
@@ -204,7 +204,7 @@
       </div>
 
       <div class="ac-campo">
-        <label for="au-capa">6. Capa (opcional; JPG, PNG ou WebP até 2 MB, formato 16:9)</label>
+        <label for="au-capa">6. Capa (opcional; JPG, PNG ou WebP até 2 MB, em pé, 3:4, por exemplo 900 × 1200 px)</label>
         <input class="ac-input" id="au-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-au-capa">
         <p class="ac-ajuda" id="ajuda-au-capa">Videoaula sem capa usa a imagem do YouTube.</p>
         <div class="ac-capa-previa" id="au-capa-previa"></div>
@@ -256,7 +256,7 @@
       <input type="hidden" id="tr-id">
       <div class="ac-campo"><label for="tr-titulo">Nome</label><input class="ac-input" id="tr-titulo" maxlength="160" required aria-describedby="erro-tr-titulo"><p class="ac-erro-campo" id="erro-tr-titulo" hidden></p></div>
       <div class="ac-campo"><label for="tr-descricao">Descrição (opcional)</label><textarea class="ac-input ac-textarea" id="tr-descricao" maxlength="600" rows="3"></textarea></div>
-      <div class="ac-campo"><label for="tr-capa">Capa (opcional; JPG, PNG ou WebP até 2 MB, 16:9)</label><input class="ac-input" id="tr-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-tr-capa"><p class="ac-ajuda" id="ajuda-tr-capa">Usada nas aulas da trilha que não têm capa própria. Deixe em branco para manter a atual.</p></div>
+      <div class="ac-campo"><label for="tr-capa">Capa (opcional; JPG, PNG ou WebP até 2 MB, em pé, 3:4, por exemplo 900 × 1200 px)</label><input class="ac-input" id="tr-capa" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="ajuda-tr-capa"><p class="ac-ajuda" id="ajuda-tr-capa">Usada nas aulas da trilha que não têm capa própria. Deixe em branco para manter a atual.</p></div>
       <div class="ac-linha-acoes">
         <button class="ac-btn" type="submit" id="btn-trilha">Salvar trilha</button>
         <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-trilha">Cancelar</button>

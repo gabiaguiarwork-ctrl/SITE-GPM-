@@ -543,27 +543,33 @@ h1[tabindex="-1"]:focus { outline: none; }
 .ac-fileira__seta:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 2px; }
 .ac-fileira__trilho {
   list-style: none; margin: 0 -20px; padding: 4px 20px 14px; display: grid; grid-auto-flow: column;
-  grid-auto-columns: 72%; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain;
+  grid-auto-columns: 44%; gap: 12px; overflow-x: auto; overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: thin; scrollbar-color: rgba(201, 164, 92, .35) transparent;
 }
-@media (min-width: 560px) { .ac-fileira__trilho { grid-auto-columns: 44%; } }
-@media (min-width: 900px) { .ac-fileira__trilho { grid-auto-columns: calc((100% - 3 * 16px) / 4); gap: 16px; margin: 0; padding: 4px 0 14px; scroll-padding: 0; } }
-@media (min-width: 1200px) { .ac-fileira__trilho { grid-auto-columns: calc((100% - 4 * 16px) / 5); } }
+@media (min-width: 560px) { .ac-fileira__trilho { grid-auto-columns: 29%; } }
+@media (min-width: 900px) { .ac-fileira__trilho { grid-auto-columns: calc((100% - 4 * 16px) / 5); gap: 16px; margin: 0; padding: 4px 0 14px; scroll-padding: 0; } }
+@media (min-width: 1200px) { .ac-fileira__trilho { grid-auto-columns: calc((100% - 5 * 16px) / 6); } }
 .ac-fileira__item { scroll-snap-align: start; min-width: 0; }
-.ac-grade-aulas { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.ac-grade-aulas { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+@media (min-width: 900px) { .ac-grade-aulas { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
 .ac-resultados { margin-bottom: 30px; }
 
-/* Card de aula */
-.ac-tile { display: grid; gap: 10px; color: var(--ivory); text-decoration: none; border-radius: 14px; }
+/* Card de aula: pôster em pé (3:4), com o título escrito sobre a imagem */
+.ac-tile { display: grid; gap: 8px; color: var(--ivory); text-decoration: none; border-radius: 14px; }
 .ac-tile__capa {
-  position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden;
+  position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden;
   background: var(--bg-3); border: 1px solid var(--line-2); transition: border-color .2s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
 }
 .ac-tile__img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ac-tile__img--vazia, .ac-lista-aulas__capa--vazia, .ac-pdf-principal__capa--vazia, .ac-capa-previa__img--vazia {
   position: relative; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, rgba(201, 164, 92, .2), var(--bg-3) 72%);
 }
-.ac-tile__img--vazia img { width: 44px; height: 44px; opacity: .85; }
+.ac-tile__img--vazia { place-items: start center; padding-top: 26%; }
+.ac-tile__img--vazia img { width: 64px; height: 64px; opacity: .85; }
+.ac-tile__img--vazia .ac-capa-pdf { display: none; } /* o tipo já aparece embaixo do pôster */
+.ac-tile__sombra { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8, 20, 46, .96) 0%, rgba(8, 20, 46, .72) 30%, rgba(8, 20, 46, 0) 62%); pointer-events: none; }
+.ac-tile__sobre { position: absolute; left: 12px; right: 12px; bottom: 14px; display: grid; gap: 5px; }
+.ac-tile__capa--barra .ac-tile__sobre { bottom: 18px; }
 .ac-tile:hover .ac-tile__capa, .ac-tile:focus-visible .ac-tile__capa { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0, 0, 0, .35); }
 .ac-tile:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 4px; }
 .ac-tile__selo {
@@ -577,8 +583,12 @@ h1[tabindex="-1"]:focus { outline: none; }
 .ac-tile__trilho { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(244, 238, 226, .2); }
 .ac-tile__barra { display: block; height: 100%; width: 0; background: var(--gold-2); }
 .ac-tile__corpo { display: grid; gap: 3px; padding: 0 2px; }
-.ac-tile__trilha { font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
-.ac-tile__titulo { font-weight: 500; font-size: 15px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ac-tile__trilha { font: 600 10.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-2); text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+.ac-tile__titulo {
+  font: 600 15px/1.15 var(--sans); letter-spacing: .02em; text-transform: uppercase; color: var(--ivory); text-shadow: 0 2px 6px rgba(0, 0, 0, .55);
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: break-word; hyphens: auto;
+}
+@media (min-width: 900px) { .ac-tile__titulo { font-size: 16px; } }
 .ac-tile__meta { font-size: 13px; color: var(--mist); }
 
 /* Página da aula */

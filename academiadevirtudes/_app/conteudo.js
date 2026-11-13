@@ -90,7 +90,8 @@
     }
     return YT_ID.test(id) ? id : '';
   };
-  C.youtubeCapa = function (id) { return C.youtubeIdValido(id) ? 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg' : ''; };
+  // hq720: 16:9 sem as faixas pretas da hqdefault (que apareciam no pôster em pé). Se o vídeo não tiver, C.imagem tenta a hqdefault.
+  C.youtubeCapa = function (id) { return C.youtubeIdValido(id) ? 'https://i.ytimg.com/vi/' + id + '/hq720.jpg' : ''; };
 
   /* ---------- Capas ---------- */
   // Bucket público "capas" (só caminhos no formato aceito pelo banco).
@@ -111,7 +112,10 @@
     if (!url) return capaVazia(classe, tipo);
     var img = h('img', { class: classe, src: url, alt: '', loading: 'lazy', decoding: 'async' });
     // Capa apagada ou fora do ar: mostra o símbolo da Academia no lugar do ícone de imagem quebrada.
-    img.addEventListener('error', function () { if (img.parentNode) img.parentNode.replaceChild(capaVazia(classe, tipo), img); });
+    img.addEventListener('error', function () {
+      if (/\/hq720\.jpg$/.test(img.src)) { img.src = img.src.replace(/hq720\.jpg$/, 'hqdefault.jpg'); return; }
+      if (img.parentNode) img.parentNode.replaceChild(capaVazia(classe, tipo), img);
+    });
     return img;
   };
   C.capa = function (m, classe) { return C.imagem(C.capaUrl(m.capa_path), classe); };
@@ -230,18 +234,20 @@
     var p = opcoes.progresso;
     var feito = !!(p && p.concluido);
     var pct = opcoes.mostrarBarra && !feito ? C.pctAssistido(a, p) : null;
-    var capa = h('div', { class: 'ac-tile__capa' },
+    // Pôster em pé (vitrine): imagem, sombra embaixo e o título escrito por cima da imagem.
+    var capa = h('div', { class: 'ac-tile__capa' + (pct !== null ? ' ac-tile__capa--barra' : '') },
       C.imagem(C.capaAulaUrl(a, opcoes.trilha), 'ac-tile__img', a.tipo),
+      h('span', { class: 'ac-tile__sombra', 'aria-hidden': 'true' }),
       C.novo(a) && !feito ? h('span', { class: 'ac-tile__selo' }, 'Novo') : null,
       feito ? h('span', { class: 'ac-tile__feito' }, h('span', { 'aria-hidden': 'true' }, '✓'), h('span', { class: 'ac-sr-only' }, 'Concluída')) : null,
+      h('span', { class: 'ac-tile__sobre' },
+        opcoes.trilha && opcoes.mostrarTrilha ? h('span', { class: 'ac-tile__trilha' }, opcoes.trilha.titulo) : null,
+        h('span', { class: 'ac-tile__titulo' }, a.titulo)),
       pct !== null ? h('span', { class: 'ac-tile__trilho', 'aria-hidden': 'true' }, h('span', { class: 'ac-tile__barra', 'data-pct': String(pct) })) : null);
     var meta = C.metaAula(a);
     return h('a', { class: 'ac-tile', href: CFG.rotas.aula + '?id=' + encodeURIComponent(a.id) },
       capa,
-      h('span', { class: 'ac-tile__corpo' },
-        opcoes.trilha && opcoes.mostrarTrilha ? h('span', { class: 'ac-tile__trilha' }, opcoes.trilha.titulo) : null,
-        h('span', { class: 'ac-tile__titulo' }, a.titulo),
-        meta ? h('span', { class: 'ac-tile__meta' }, meta) : null));
+      meta ? h('span', { class: 'ac-tile__corpo' }, h('span', { class: 'ac-tile__meta' }, meta)) : null);
   };
 
   /* ---------- Markdown simples → elementos ---------- */
