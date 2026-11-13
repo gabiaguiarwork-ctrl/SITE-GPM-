@@ -84,6 +84,7 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 ### Cadastro aberto (decisão da GPM, 11/2026)
 
 - Plataforma gratuita, com cadastro aberto em `/academiadevirtudes/cadastro/`. O convite pelo painel continua existindo, e o admin pode desativar qualquer pessoa.
+- Cadastro aberto no Supabase desde 13/11/2026 ("Allow new users to sign up" ligado), testado do cadastro à confirmação. Os e-mails saem por SMTP próprio: caixa `academiadevirtudes@gpmintegracao.com.br` da Hostinger (`smtp.hostinger.com`, porta 465), remetente "Academia de Virtudes", limite de 100 e-mails por hora. Se a senha dessa caixa mudar, atualize em Authentication → Emails → SMTP Settings, senão os e-mails de cadastro param.
 - Acesso só depois de: cadastro completo (nome, sobrenome, e-mail, WhatsApp, CPF, empresa, cargo, senha), CAPTCHA, aceite da privacidade e confirmação do e-mail (`/academiadevirtudes/confirmar/`, que grava o aceite com `aceitar_privacidade()`).
 - No banco, conteúdo só aparece com `is_active() and cadastro_completo()` (admin com MFA vê tudo). No site, quem está com o cadastro incompleto vai para `/aluno/completar/` antes de qualquer página.
 - Regras dos campos: `_app/campos.js` no navegador e a migration 0006 no banco (as duas precisam bater). WhatsApp e CPF ficam só com dígitos; o CPF é validado, só é preenchido pelo aluno se estiver vazio e sai dos metadados da conta (não vai no token de sessão).
