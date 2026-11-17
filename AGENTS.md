@@ -44,6 +44,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 
 - `/academiadevirtudes/`: página pública da Academia (Encontro 2 com inscrições abertas).
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
+- `/academiadevirtudes/presenca/?c=CÓDIGO&n=Nome`: confirmação de presença do Encontro 2. Cada inscrito recebe pelo WhatsApp um link com um código sorteado e responde com um toque ("Confirmo minha presença" ou "Não irei comparecer"). A página é noindex e fica fora do menu. A lista com os telefones e as ferramentas (`gerar-links.js`, `enviar.html` e `conciliar.js`) ficam só em `_notas/presenca/`.
 - `/academiadevirtudes/encontro2/`: QR code do slide final do Encontro 2. A página é noindex e fica fora do menu. A pessoa avalia (NPS), indica 5 pessoas e baixa o e-book *O Tempo da Vida*. O link do PDF só aparece depois que as indicações chegam.
   - O aparelho guarda só a etapa e a nota, nunca nome ou telefone.
   - `?teste` simula os envios; `?zerar` recomeça o fluxo naquele aparelho.
@@ -59,6 +60,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 | `academiadevirtudes/index.html` | Formspree `xoeernrz` | inscrição no Encontro 2 |
 | `npsencontro1/index.html` | Formspree `mljjeqwp` | NPS anônimo do Encontro 1 |
 | `academiadevirtudes/encontro2/index.html` | Formspree `mwlooqgn` | NPS anônimo do Encontro 2 |
+| `academiadevirtudes/presenca/index.html` | Formspree `meaggrbr` | confirmação de presença do Encontro 2 (link individual `?c=código&n=Nome`) |
 | `academiadevirtudes/encontro2/index.html` | Formspree `xbgooknp` | 5 indicações (identificado). É separado do NPS para a nota continuar anônima. |
 | `mentoria.html` e `mentoria-formulario.html` | Google Forms `forms.gle/UFvUrSbM4izxHkzA7` | questionário da Mentoria Nexialista (`mentoria-formulario.html` só redireciona) |
 | `academiadevirtudes/_inscricao-encontro-1.html` | Formspree `xoejvbdd` | inscrição do Encontro 1 (página antiga, formulário inativo) |
