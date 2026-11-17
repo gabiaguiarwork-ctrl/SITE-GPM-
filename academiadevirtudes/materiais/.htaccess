@@ -1,0 +1,4 @@
+# Materiais da Academia (e-books entregues por link): fora do Google. A listagem da pasta é evitada pelo index.html.
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

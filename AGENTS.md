@@ -44,6 +44,10 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 
 - `/academiadevirtudes/`: página pública da Academia (Encontro 2 com inscrições abertas).
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
+- `/academiadevirtudes/encontro2/`: QR code do slide final do Encontro 2. A página é noindex e fica fora do menu. A pessoa avalia (NPS), indica 5 pessoas e baixa o e-book *O Tempo da Vida*. O link do PDF só aparece depois que as indicações chegam.
+  - O aparelho guarda só a etapa e a nota, nunca nome ou telefone.
+  - `?teste` simula os envios; `?zerar` recomeça o fluxo naquele aparelho.
+  - O PDF fica em `academiadevirtudes/materiais/`, pasta com `X-Robots-Tag: noindex` e um `index.html` que impede a listagem. O nome do arquivo não deve aparecer em outra página nem no sitemap.
 - `/academiadevirtudes/_inscricao-encontro-1.html`: página antiga guardada, sem link (noindex).
 - Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `aula/?id=`, `materiais/`, `perfil/`, `completar/` (e `encontro/`, endereço antigo que leva para a vitrine); dentro de `admin/`: `mfa/` e as abas `#alunos`, `#aulas`, `#trilhas`, `#avisos`, `#relatorios` (`#encontros` e `#conteudos` abrem `#aulas`).
 
@@ -54,6 +58,8 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 | `playbook.html` | Formspree `xwvdapgq` | download do playbook |
 | `academiadevirtudes/index.html` | Formspree `xoeernrz` | inscrição no Encontro 2 |
 | `npsencontro1/index.html` | Formspree `mljjeqwp` | NPS anônimo do Encontro 1 |
+| `academiadevirtudes/encontro2/index.html` | Formspree `mwlooqgn` | NPS anônimo do Encontro 2 |
+| `academiadevirtudes/encontro2/index.html` | Formspree `xbgooknp` | 5 indicações (identificado). É separado do NPS para a nota continuar anônima. |
 | `mentoria.html` e `mentoria-formulario.html` | Google Forms `forms.gle/UFvUrSbM4izxHkzA7` | questionário da Mentoria Nexialista (`mentoria-formulario.html` só redireciona) |
 | `academiadevirtudes/_inscricao-encontro-1.html` | Formspree `xoejvbdd` | inscrição do Encontro 1 (página antiga, formulário inativo) |
 
