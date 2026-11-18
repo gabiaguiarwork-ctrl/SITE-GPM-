@@ -87,6 +87,22 @@
   .agenda{display:grid;gap:10px;margin:24px 0 0}
   .nota{color:var(--dim);font-size:13.5px;margin:22px 0 0}
   .principal{width:100%}
+  .prog-abrir{margin:16px auto 0;max-width:440px;text-align:left}
+  .prog-abrir summary{cursor:pointer;color:var(--gold-2);font:500 15px var(--sans);padding:12px 4px;min-height:48px;display:flex;align-items:center;gap:8px;list-style:none}
+  .prog-abrir summary::-webkit-details-marker{display:none}
+  .prog-abrir summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--card-line);font-size:15px;line-height:1}
+  .prog-abrir[open] summary::before{content:"–"}
+  .prog-abrir summary:focus-visible{outline:2px solid var(--ivory);outline-offset:2px;border-radius:8px}
+  .prog-abrir .prog{margin-top:4px}
+  .prog{margin:26px auto 0;max-width:440px;text-align:left;padding:18px 18px 8px;border:1px solid var(--card-line);border-radius:16px;background:var(--card)}
+  .prog__titulo{font:500 22px var(--serif);color:var(--gold-2);margin:0 0 10px}
+  .prog-abrir .prog__titulo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .prog__lista{list-style:none;margin:0;padding:0}
+  .prog__lista li{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);font-size:15px}
+  .prog__lista li:first-child{border-top:0}
+  .prog__h{color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums}
+  .prog__lista strong{display:block;font-weight:600}
+  .prog__lista small{display:block;color:var(--dim);font-size:13.5px;margin-top:1px}
   .quem{margin-top:26px}
   footer{margin-top:36px;text-align:center;color:var(--dim);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
   .test{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);background:#1A2A52;color:var(--mist);font-size:12px;padding:6px 12px;border-radius:999px;border:1px dashed var(--gold);z-index:5;white-space:nowrap}
@@ -106,9 +122,25 @@
       <p class="lead">Para organizarmos o espaço, confirme sua presença. É só um toque.</p>
 
       <div class="evento">
-        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><strong>Sexta-feira, 20 de novembro, às 9h</strong><small>Chegue um pouco antes para o credenciamento.</small></span></p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><strong>Sexta-feira, 20 de novembro, das 9h às 17h</strong><small>Com café da manhã e almoço.</small></span></p>
         <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span><strong><a class="mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Centro+Empresarial+Office+Tower%2C+Av.+Evandro+Lins+e+Silva%2C+840+-+Barra+da+Tijuca%2C+Rio+de+Janeiro+-+RJ%2C+22631-470" target="_blank" rel="noopener noreferrer">Centro Empresarial Office Tower</a></strong><small>Av. Evandro Lins e Silva, 840 · Barra da Tijuca, Rio de Janeiro</small></span></p>
       </div>
+
+      <details class="prog-abrir">
+        <summary>Ver a programação do dia</summary>
+        <section class="prog" aria-labelledby="prog-1">
+          <h2 class="prog__titulo" id="prog-1">Programação do dia</h2>
+          <ol class="prog__lista">
+            <li><span class="prog__h">9h</span><span><strong>Café da manhã e recepção</strong><small>Chegada dos convidados e entrega das doações ao Pró-Vida</small></span></li>
+            <li><span class="prog__h">10h</span><span><strong>Abertura com Lilia Nunes</strong><small>Instituto Pró-Vida</small></span></li>
+            <li><span class="prog__h">10h30</span><span><strong>Palestra Essência Humana</strong><small>Com Eduardo Pitombo Mesquita</small></span></li>
+            <li><span class="prog__h">13h</span><span><strong>Almoço</strong></span></li>
+            <li><span class="prog__h">14h</span><span><strong>Dinâmica de fotos</strong><small>Fotos profissionais dos participantes</small></span></li>
+            <li><span class="prog__h">15h</span><span><strong>Atividades com o Eduardo</strong><small>Dinâmicas, perguntas e conversa</small></span></li>
+            <li><span class="prog__h">17h</span><span><strong>Encerramento</strong></span></li>
+          </ol>
+        </section>
+      </details>
 
       <form id="form" novalidate>
         <div id="quem" class="quem hidden">
@@ -137,12 +169,24 @@
       <div class="selo ok" aria-hidden="true">✓</div>
       <p class="eyebrow">Presença confirmada</p>
       <h1 id="t-sim">Nos vemos <em>sexta-feira.</em></h1>
-      <p class="lead">Sexta, 20 de novembro, às 9h, no Centro Empresarial Office Tower.</p>
+      <p class="lead">Sexta, 20 de novembro, a partir das 9h, no Centro Empresarial Office Tower.</p>
       <div class="agenda">
         <a class="btn" id="agenda-google" href="#" target="_blank" rel="noopener noreferrer">Adicionar ao Google Agenda</a>
         <a class="btn ghost" id="agenda-ics" href="#" download="academia-de-virtudes-encontro-2.ics">Adicionar na agenda do iPhone ou Outlook</a>
         <a class="btn fraco" href="https://www.google.com/maps/search/?api=1&amp;query=Centro+Empresarial+Office+Tower%2C+Av.+Evandro+Lins+e+Silva%2C+840+-+Barra+da+Tijuca%2C+Rio+de+Janeiro+-+RJ%2C+22631-470" target="_blank" rel="noopener noreferrer">Ver no mapa</a>
       </div>
+      <section class="prog" aria-labelledby="prog-2">
+        <h2 class="prog__titulo" id="prog-2">Programação do dia</h2>
+        <ol class="prog__lista">
+          <li><span class="prog__h">9h</span><span><strong>Café da manhã e recepção</strong><small>Chegada dos convidados e entrega das doações ao Pró-Vida</small></span></li>
+          <li><span class="prog__h">10h</span><span><strong>Abertura com Lilia Nunes</strong><small>Instituto Pró-Vida</small></span></li>
+          <li><span class="prog__h">10h30</span><span><strong>Palestra Essência Humana</strong><small>Com Eduardo Pitombo Mesquita</small></span></li>
+          <li><span class="prog__h">13h</span><span><strong>Almoço</strong></span></li>
+          <li><span class="prog__h">14h</span><span><strong>Dinâmica de fotos</strong><small>Fotos profissionais dos participantes</small></span></li>
+          <li><span class="prog__h">15h</span><span><strong>Atividades com o Eduardo</strong><small>Dinâmicas, perguntas e conversa</small></span></li>
+          <li><span class="prog__h">17h</span><span><strong>Encerramento</strong></span></li>
+        </ol>
+      </section>
       <p class="nota">Mudou de ideia? <button type="button" class="link" data-trocar>Alterar minha resposta</button></p>
     </section>
 
@@ -167,10 +211,10 @@
   /* ============================ CONFIGURAÇÃO ============================ */
   var FORM = "https://formspree.io/f/meaggrbr";
   var EVENTO = "Encontro 2 · Essência Humana · 20/11/2026";
-  // Agenda: 9h às 12h de Brasília (UTC-3). Ajuste os dois horários se a duração for outra.
-  var INICIO_UTC = "20261120T120000Z", FIM_UTC = "20261120T150000Z";
+  // Agenda: 9h às 17h de Brasília (UTC-3), conforme o cronograma do dia.
+  var INICIO_UTC = "20261120T120000Z", FIM_UTC = "20261120T200000Z";
   var LOCAL = "Centro Empresarial Office Tower, Av. Evandro Lins e Silva, 840 - Barra da Tijuca, Rio de Janeiro - RJ, 22631-470";
-  var DESCRICAO = "Academia de Virtudes · Encontro 2 · Essência Humana. Com Eduardo Pitombo Mesquita · Grupo GPM.";
+  var DESCRICAO = "Academia de Virtudes · Encontro 2 · Essência Humana. 9h café da manhã e recepção · 10h abertura com Lilia Nunes (Instituto Pró-Vida) · 10h30 palestra com Eduardo Pitombo Mesquita · 13h almoço · 14h dinâmica de fotos · 15h atividades com o Eduardo · 17h encerramento. Grupo GPM.";
   /* ===================================================================== */
 
   var TEST = /[?&]teste\b/.test(location.search) || location.protocol === "file:";
