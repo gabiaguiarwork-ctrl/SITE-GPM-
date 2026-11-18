@@ -155,6 +155,16 @@
         return m;
       });
   };
+  // "Mais assistidas pelos alunos": lista de ids em ordem (função da migration 0008).
+  // Se a função ainda não existir no banco, a fileira simplesmente não aparece.
+  C.maisVistas = function (limite) {
+    return A.cliente().rpc('aulas_mais_vistas', { limite: limite || 10 }).then(function (r) {
+      if (r.error || !Array.isArray(r.data)) return [];
+      return r.data.filter(function (l) { return l && C.idValido(l.conteudo_id); })
+        .sort(function (a, b) { return a.posicao - b.posicao; })
+        .map(function (l) { return l.conteudo_id; });
+    }, function () { return []; });
+  };
   C.salvarProgresso = function (alunoId, aulaId, campos) {
     var linha = { aluno_id: alunoId, conteudo_id: aulaId };
     if ('concluido' in campos) linha.concluido = !!campos.concluido;
@@ -243,7 +253,8 @@
     var capa = h('div', { class: 'ac-tile__capa' },
       C.imagem(C.capaAulaUrl(a, opcoes.trilha), 'ac-tile__img', a.tipo),
       h('span', { class: 'ac-tile__sombra', 'aria-hidden': 'true' }),
-      C.novo(a) && !feito ? h('span', { class: 'ac-tile__selo' }, 'Novo') : null,
+      opcoes.posicao ? h('span', { class: 'ac-tile__posicao' }, h('span', { class: 'ac-sr-only' }, 'Posição '), String(opcoes.posicao)) : null,
+      C.novo(a) && !feito && !opcoes.posicao ? h('span', { class: 'ac-tile__selo' }, 'Novo') : null,
       feito ? h('span', { class: 'ac-tile__feito' }, h('span', { 'aria-hidden': 'true' }, '✓'), h('span', { class: 'ac-sr-only' }, 'Concluída')) : null,
       h('span', { class: 'ac-tile__sobre' },
         opcoes.trilha && opcoes.mostrarTrilha ? h('span', { class: 'ac-tile__trilha' }, opcoes.trilha.titulo) : null,

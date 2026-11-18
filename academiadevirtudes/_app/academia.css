@@ -511,6 +511,60 @@ h1[tabindex="-1"]:focus { outline: none; }
 .ac-banner__marca { display: inline-flex; align-items: center; gap: 10px; margin: 0; font: 600 12.5px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--gold-2); }
 .ac-banner__titulo { margin: 0; font-size: clamp(36px, 7vw, 64px); line-height: 1.02; color: var(--ivory); }
 .ac-banner__sub { margin: 0; font-size: clamp(17px, 2.4vw, 21px); line-height: 1.4; color: var(--ivory); }
+/* Aula em destaque (estilo COR, 18/11/2026): foto grande, título, resumo e botões */
+.ac-banner--aula { min-height: 520px; }
+@media (min-width: 760px) { .ac-banner--aula { aspect-ratio: 16 / 7; min-height: 440px; } }
+@media (min-width: 1200px) { .ac-banner--aula { aspect-ratio: 16 / 6.4; } }
+.ac-banner--aula .ac-banner__fundo img { object-position: 60% 30%; }
+.ac-banner--aula::after {
+  background: linear-gradient(90deg, rgba(8, 20, 46, .94) 0%, rgba(8, 20, 46, .7) 38%, rgba(8, 20, 46, .1) 75%),
+              linear-gradient(0deg, rgba(8, 20, 46, .98) 0%, rgba(8, 20, 46, .35) 45%, rgba(8, 20, 46, 0) 70%);
+}
+.ac-banner--aula .ac-banner__texto { gap: 12px; max-width: 700px; }
+@media (max-width: 759px) { .ac-banner--aula .ac-banner__texto { padding-top: 190px; } }
+@media (min-width: 760px) { .ac-banner--aula .ac-banner__texto { padding: 48px 56px; } }
+.ac-banner__ola { margin: 0; font-size: 16px; color: var(--mist); }
+.ac-banner--aula .ac-banner__titulo { font-size: clamp(38px, 6.2vw, 72px); font-variant-numeric: lining-nums; text-wrap: balance; }
+.ac-banner--aula .ac-banner__sub { font-size: clamp(16.5px, 1.8vw, 19px); color: var(--ivory); opacity: .92; max-width: 60ch; }
+.ac-banner__parou { margin: 0; font: 600 14.5px var(--sans); color: var(--gold-2); }
+.ac-banner__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.ac-banner__acoes .ac-btn { border-radius: 10px; min-height: 52px; font-size: 16px; }
+.ac-btn--vidro { background: rgba(244, 238, 226, .1); border-color: rgba(244, 238, 226, .45); color: var(--ivory); backdrop-filter: blur(4px); }
+.ac-btn--vidro:hover { background: rgba(244, 238, 226, .18); color: var(--ivory); }
+@media (max-width: 480px) { .ac-banner__acoes .ac-btn { flex: 1 1 100%; } }
+
+/* Onde você está crescendo: um cartão por trilha com o progresso */
+.ac-crescendo { margin: 6px 0 30px; }
+.ac-crescendo__lista { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); }
+.ac-crescendo__cartao {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 6px 14px; padding: 14px 16px 16px;
+  border-radius: 14px; border: 1px solid var(--line); background: rgba(14, 31, 69, .6); color: var(--ivory); text-decoration: none;
+  transition: border-color .2s var(--ease), transform .2s var(--ease);
+}
+.ac-crescendo__cartao:hover, .ac-crescendo__cartao:focus-visible { border-color: var(--gold); transform: translateY(-2px); }
+.ac-crescendo__icone { width: 46px; height: 46px; border-radius: 10px; display: grid; place-items: center; background: rgba(201, 164, 92, .16); border: 1px solid var(--line); }
+.ac-crescendo__texto { display: grid; gap: 2px; min-width: 0; }
+.ac-crescendo__nome { font: 600 17px/1.25 var(--sans); overflow-wrap: break-word; }
+.ac-crescendo__conta { font-size: 14.5px; color: var(--mist); }
+.ac-crescendo__pct { font: 600 17px var(--sans); color: var(--gold-2); font-variant-numeric: tabular-nums; }
+.ac-crescendo__trilho { grid-column: 1 / -1; display: block; height: 6px; margin-top: 8px; border-radius: 999px; background: rgba(244, 238, 226, .1); overflow: hidden; }
+.ac-crescendo__barra { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--gold), var(--gold-2)); }
+.ac-crescendo__cartao--completa .ac-crescendo__pct { color: var(--ok); }
+
+/* Mais assistidas: número da posição no cartão */
+.ac-tile__posicao {
+  position: absolute; left: 8px; top: 8px; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px; display: grid; place-items: center;
+  font: 600 20px/1 var(--serif); font-variant-numeric: lining-nums; color: var(--bg); background: var(--gold-2); box-shadow: 0 2px 8px rgba(0, 0, 0, .4);
+}
+
+/* Seu aproveitamento */
+.ac-aproveitamento { margin: 10px 0 34px; }
+.ac-aproveitamento__numeros { list-style: none; padding: 0; margin: 12px 0 0; }
+.ac-aproveitamento__numeros { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 559px) { .ac-aproveitamento .ac-numero { padding: 14px 12px; } .ac-aproveitamento .ac-numero strong { font-size: 32px; } .ac-aproveitamento .ac-numero span { font-size: 14px; } }
+.ac-aproveitamento .ac-numero span { font-size: 15px; }
+.ac-fileira, .ac-crescendo { scroll-margin-top: 90px; }
+
 .ac-vitrine__topo { display: flex; justify-content: flex-end; margin: 0 0 12px; }
 .ac-busca { flex: 1 1 240px; max-width: 360px; }
 .ac-busca__campo { min-height: 46px; }
