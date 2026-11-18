@@ -60,7 +60,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 | `academiadevirtudes/index.html` | Formspree `xoeernrz` | inscrição no Encontro 2 |
 | `npsencontro1/index.html` | Formspree `mljjeqwp` | NPS anônimo do Encontro 1 |
 | `academiadevirtudes/encontro2/index.html` | Formspree `mwlooqgn` | NPS anônimo do Encontro 2 |
-| `academiadevirtudes/presenca/index.html` | Formspree `meaggrbr` | confirmação de presença do Encontro 2 (link individual `?c=código&n=Nome`) |
+| `academiadevirtudes/presenca/index.html` | Formspree `mbgoyzga` (outra conta do Formspree, desde 18/11/2026; antes `meaggrbr`, que passou do limite do plano gratuito) | confirmação de presença do Encontro 2 (link individual `?c=código&n=Nome`) |
 | `academiadevirtudes/encontro2/index.html` | Formspree `xbgooknp` | 5 indicações (identificado). É separado do NPS para a nota continuar anônima. |
 | `mentoria.html` e `mentoria-formulario.html` | Google Forms `forms.gle/UFvUrSbM4izxHkzA7` | questionário da Mentoria Nexialista (`mentoria-formulario.html` só redireciona) |
 | `academiadevirtudes/_inscricao-encontro-1.html` | Formspree `xoejvbdd` | inscrição do Encontro 1 (página antiga, formulário inativo) |
