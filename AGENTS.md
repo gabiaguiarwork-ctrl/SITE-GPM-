@@ -49,6 +49,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
   - O aparelho guarda só a etapa e a nota, nunca nome ou telefone.
   - `?teste` simula os envios; `?zerar` recomeça o fluxo naquele aparelho.
   - O PDF fica em `academiadevirtudes/materiais/`, pasta com `X-Robots-Tag: noindex` e um `index.html` que impede a listagem. O nome do arquivo não deve aparecer em outra página nem no sitemap.
+- `/academiadevirtudes/checkin/#chave=…`: check-in da equipe no dia do Encontro 2 (noindex, fora do menu). Os nomes dos inscritos ficam criptografados na página (AES-GCM) e só abrem com a chave do link; sem a chave, nenhum nome aparece. Presenças e pessoas adicionadas (nome, WhatsApp, quem convidou) ficam só no aparelho até baixar a planilha. Para gerar ou atualizar a lista: `node _notas/checkin/gerar.js` (a chave fica em `_notas/checkin/chave.txt`).
 - `/academiadevirtudes/_inscricao-encontro-1.html`: página antiga guardada, sem link (noindex).
 - Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `aula/?id=`, `materiais/`, `perfil/`, `completar/` (e `encontro/`, endereço antigo que leva para a vitrine); dentro de `admin/`: `mfa/` e as abas `#alunos`, `#aulas`, `#trilhas`, `#avisos`, `#relatorios` (`#encontros` e `#conteudos` abrem `#aulas`).
 

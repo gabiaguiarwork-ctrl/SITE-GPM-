@@ -1,0 +1,6 @@
+# Check-in do Encontro 2 (equipe): fora do Google e sem cache, para a lista atualizada abrir sempre.
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow"
+  Header set Cache-Control "no-store"
+  Header set Referrer-Policy "no-referrer"
+</IfModule>
