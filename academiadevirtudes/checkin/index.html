@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#08142E">
+<title>Check-in · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<!--
+  Check-in do Encontro 2 (uso da equipe no dia do evento). Fora do menu e do Google.
+  A lista de inscritos está criptografada (AES-GCM) em DADOS; a chave vem só no link (#chave),
+  que nunca é enviado ao servidor. Sem a chave, a página não mostra nenhum nome.
+  Presenças e pessoas adicionadas ficam só neste aparelho (localStorage) até a equipe baixar a lista.
+  Para gerar ou atualizar a lista: node _notas/checkin/gerar.js (fora do site).
+-->
+<style>
+  @font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500 600; font-display: swap; src: url("/academiadevirtudes/_app/fonts/cormorant-garamond-latin.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-style: normal; font-weight: 400 600; font-display: swap; src: url("/academiadevirtudes/_app/fonts/inter-latin.woff2") format("woff2"); }
+  :root {
+    color-scheme: dark;
+    --bg: #08142E; --bg-2: #0E1F45; --bg-3: #13285A; --gold: #C9A45C; --gold-2: #E2C88E; --ivory: #F4EEE2;
+    --mist: #B9C0CF; --line: rgba(201, 164, 92, .22); --line-2: rgba(244, 238, 226, .12); --ok: #8FD3A8; --erro: #F0A595;
+    --serif: "Cormorant Garamond", Georgia, serif; --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ivory); font: 400 16px/1.5 var(--sans); }
+  :focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; border-radius: 6px; }
+  [hidden] { display: none !important; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pagina { max-width: 720px; margin: 0 auto; padding: 18px 16px 120px; }
+
+  .topo { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .topo img { width: 40px; height: 40px; }
+  .topo p { margin: 0; font: 600 12px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+  .topo h1 { margin: 2px 0 0; font: 500 28px/1.1 var(--serif); font-variant-numeric: lining-nums; }
+
+  .placar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; position: sticky; top: 0; z-index: 5; padding: 8px 0; background: var(--bg); }
+  .num { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-2); }
+  .num strong { display: block; font: 500 34px/1 var(--serif); font-variant-numeric: lining-nums; color: var(--gold-2); }
+  .num span { font-size: 13px; color: var(--mist); }
+  .num--destaque { border-color: var(--gold); }
+
+  .abas { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; border-radius: 12px; background: var(--bg-2); border: 1px solid var(--line-2); margin-bottom: 14px; }
+  .aba { min-height: 46px; border: 0; border-radius: 9px; background: transparent; color: var(--mist); font: 600 15px var(--sans); cursor: pointer; }
+  .aba[aria-selected="true"] { background: var(--gold); color: #0B1733; }
+
+  .busca { width: 100%; min-height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-2); color: var(--ivory); font: 400 16px var(--sans); margin-bottom: 10px; }
+  .busca::placeholder, .campo input::placeholder { color: #8791A6; }
+
+  .lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .pessoa { display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 14px; border-radius: 12px; border: 1px solid var(--line-2); background: rgba(14, 31, 69, .55); }
+  .pessoa--presente { border-color: rgba(143, 211, 168, .55); background: rgba(143, 211, 168, .08); }
+  .pessoa__nome { flex: 1; min-width: 0; font-size: 16.5px; overflow-wrap: anywhere; }
+  .pessoa__extra { display: block; font-size: 13.5px; color: var(--mist); }
+
+  /* Botão liga/desliga */
+  .chave { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--mist); font: 600 13px var(--sans); cursor: pointer; }
+  .chave__trilho { position: relative; width: 54px; height: 30px; border-radius: 999px; background: rgba(244, 238, 226, .18); transition: background .15s; }
+  .chave__trilho::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--ivory); transition: transform .15s; }
+  .chave[aria-checked="true"] { color: var(--ok); }
+  .chave[aria-checked="true"] .chave__trilho { background: #3E9E66; }
+  .chave[aria-checked="true"] .chave__trilho::after { transform: translateX(24px); }
+  .chave__rotulo { width: 58px; text-align: left; }
+
+  .cartao { padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-2); margin-bottom: 16px; }
+  .cartao h2 { margin: 0 0 12px; font: 500 24px var(--serif); }
+  .campo { display: grid; gap: 6px; margin-bottom: 12px; }
+  .campo label { font-size: 14.5px; color: var(--mist); }
+  .campo input { min-height: 50px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ivory); font: 400 16px var(--sans); }
+  .campo input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 164, 92, .25); }
+  .msg { min-height: 1.5em; margin: 0 0 10px; font-size: 14.5px; }
+  .msg--erro { color: var(--erro); } .msg--ok { color: var(--ok); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 20px; border-radius: 10px; border: 1px solid var(--gold); background: linear-gradient(180deg, #D7B673, #B88F45); color: #0B1733; font: 600 15px var(--sans); cursor: pointer; text-decoration: none; }
+  .btn--bloco { width: 100%; }
+  .btn--contorno { background: transparent; color: var(--gold-2); }
+  .btn--mini { min-height: 40px; padding: 0 12px; font-size: 13px; border-color: rgba(240, 165, 149, .6); background: transparent; color: var(--erro); }
+  .vazio { color: var(--mist); text-align: center; padding: 18px 8px; margin: 0; }
+  .titulo-lista { margin: 18px 0 8px; font: 600 12.5px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+
+  .rodape { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(8, 20, 46, .96); border-top: 1px solid var(--line); }
+  .rodape__dentro { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rodape .btn { min-height: 46px; font-size: 14px; padding: 0 10px; }
+  .aviso { padding: 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-2); text-align: center; color: var(--mist); }
+  .nota { font-size: 13.5px; color: var(--mist); margin: 18px 0 0; }
+</style>
+</head>
+<body>
+<main class="pagina">
+  <header class="topo">
+    <img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="40" height="40">
+    <div><p>Academia de Virtudes · Check-in</p><h1>Encontro 2 · Essência Humana</h1></div>
+  </header>
+
+  <div id="sem-chave" class="aviso" hidden>
+    <p><strong>Lista protegida.</strong></p>
+    <p>Abra esta página pelo link completo de check-in enviado à equipe (ele termina com <code>#chave=…</code>).</p>
+  </div>
+
+  <div id="app" hidden>
+    <section class="placar" aria-label="Contagem">
+      <div class="num"><strong id="n-inscritos">0</strong><span>inscritos</span></div>
+      <div class="num"><strong id="n-presentes">0</strong><span>inscritos presentes</span></div>
+      <div class="num num--destaque"><strong id="n-total">0</strong><span id="t-total">no evento</span></div>
+    </section>
+
+    <div class="abas" role="tablist" aria-label="Check-in">
+      <button class="aba" role="tab" id="aba-inscritos" aria-controls="painel-inscritos" aria-selected="true" type="button">Inscritos</button>
+      <button class="aba" role="tab" id="aba-adicionar" aria-controls="painel-adicionar" aria-selected="false" type="button" tabindex="-1">Adicionar pessoa</button>
+    </div>
+
+    <section id="painel-inscritos" role="tabpanel" aria-labelledby="aba-inscritos">
+      <label class="sr" for="busca">Buscar pelo nome</label>
+      <input class="busca" id="busca" type="search" placeholder="Buscar pelo nome" autocomplete="off">
+      <ul class="lista" id="lista-inscritos"></ul>
+      <p class="vazio" id="nada" hidden>Nenhum nome encontrado. Se a pessoa não se inscreveu, use a aba “Adicionar pessoa”.</p>
+    </section>
+
+    <section id="painel-adicionar" role="tabpanel" aria-labelledby="aba-adicionar" hidden>
+      <form class="cartao" id="form-add" novalidate>
+        <h2>Pessoa que veio sem inscrição</h2>
+        <div class="campo"><label for="add-nome">Nome completo</label><input id="add-nome" autocomplete="off" maxlength="120" required></div>
+        <div class="campo"><label for="add-tel">WhatsApp (com DDD)</label><input id="add-tel" type="tel" inputmode="numeric" autocomplete="off" placeholder="(21) 99999-9999" maxlength="16" required></div>
+        <div class="campo"><label for="add-convite">Quem convidou</label><input id="add-convite" autocomplete="off" maxlength="120" required></div>
+        <p class="msg" id="add-msg" role="status" aria-live="polite"></p>
+        <button class="btn btn--bloco" type="submit">Adicionar como presente</button>
+      </form>
+      <h2 class="titulo-lista" id="t-extras">Adicionadas no dia (0)</h2>
+      <ul class="lista" id="lista-extras" aria-labelledby="t-extras"></ul>
+      <p class="vazio" id="sem-extras">Ninguém adicionado ainda.</p>
+    </section>
+
+    <p class="nota">As marcações ficam salvas neste aparelho (mesmo sem internet). No fim do evento, toque em “Baixar lista” para guardar a planilha.</p>
+  </div>
+</main>
+
+<footer class="rodape" id="rodape" hidden>
+  <div class="rodape__dentro">
+    <button class="btn" type="button" id="baixar">Baixar lista (planilha)</button>
+    <button class="btn btn--contorno" type="button" id="copiar">Copiar resumo</button>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  // Lista criptografada gerada por _notas/checkin/gerar.js (não edite à mão).
+  var DADOS = "RtzlYciAzY7TUXdH2sVLf4rZq6x-J9dkzaVTL8A2vFiRcOD6nW4koHJSWQfJdPirjySVEZ84pi13QfOHK1Xq2JPW_7zwYBrvAkQjZVAHQvQ3SWTp_hWh6kpHTf_s7MX0up1jQWFRYtCBEuhGxP8GRy8kshxlzIHDv_ARPviU6y64Fj-3vl7unOI61IYOEWzXIMGE3btvSUj79E1ScB4O2qRTLVzsk_LiS02UdS325ibBv6GQ_IXYjpVtd7F5lHQDMaIJSyQr1al6lK9bhgpA0aKqlk2MNYAk3pTmA_BfnCyVTV4zbz5QlbVIsPca8C2l0jNL4JFlrhCfwOj_ArAPV_vaVWpPg2rBagUkfdnbeGsxo3VxkgfToDq4rp_nysay-ZLNQxhB9iwdnDjtCDc_HnlY1SQ1U_0HlRVTafzp7nfX6Rf0fIK681mu_bHiMpGutbGb37N38gDCS2OvVrldsB1mxxf54IM68UyyrlE3zlskQUmyhUVaZhNAXQUjf77j1UljuhNlbs0mrxqflnJFi7bcrScVrZN5bnCjsoSOB85YmVlXz-Q1AuLxHkIFwnWn6Z4_OqyFnyhrF6wE7YHY77N-8g9Zm_M2vuHaeqY0VMysGhTqL0zXkb1cpI2NPh1rwXi23lIsiZHWt7XXG1OGkoa8WcEbF33Y8Sggo4UPWUxZ8x6sjz8V_ekNBszVSGEit6W9BExyxnDnREerKbVHLhf8GEZsywFDZvbMXSkKv9fBI9jYffKnUgnB3i3xV-WRT-WjDDUD-d5Efi3kft6eTuowv5NMg8HadbAnFRMq9SdIbkec_CsJwxdzk-up2-EfNahxhdBPU9ps-z_ZiACFQVdcrZpg4_NO23T0F0wseTeVvt_0fmhm5l6lU3vxXxLrmq69_XZmInNkRBJOy3RbkWhrO7Un5W5AvcszIXHlNV5VJNQRQb-aJkKWNknoEInY9NiEWQKCwv3pjJWES-Ue-M2BvH-a1y4KMIDrwVJfty-4J6BXHMFX0KwLAJs88x1gviplevQteMVA7v6m56lzjVAL5VSYl8M4x0rILvoomZ4XnxU_37tFWHvio-D1oyFV5Mt7p1suz6RYgICiVLZK0sjiqBDm_5xAuslou1oNxJY7ZTqudWHacHuefNhzfZWPlGiNTDjxKFQQcA";
+  var GUARDA = "av-checkin-encontro2";
+
+  var $ = function (s) { return document.querySelector(s); };
+  function el(tag, attrs, filhos) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    [].concat(filhos || []).forEach(function (f) { if (f != null) e.appendChild(typeof f === "string" ? document.createTextNode(f) : f); });
+    return e;
+  }
+  function b64(s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function norm(t) { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  function digitos(v) { return String(v || "").replace(/\D/g, ""); }
+  function telFormatado(d) { return d.length === 11 ? "(" + d.slice(0, 2) + ") " + d.slice(2, 7) + "-" + d.slice(7) : d.length === 10 ? "(" + d.slice(0, 2) + ") " + d.slice(2, 6) + "-" + d.slice(6) : d; }
+
+  var estado = { presentes: {}, extras: [] };
+  var inscritos = [];
+  function ler() { try { var s = JSON.parse(localStorage.getItem(GUARDA) || "{}"); estado.presentes = s.presentes || {}; estado.extras = Array.isArray(s.extras) ? s.extras : []; } catch (e) { /* começa vazio */ } }
+  function salvar() { try { localStorage.setItem(GUARDA, JSON.stringify(estado)); } catch (e) { /* sem armazenamento: continua na tela */ } }
+
+  var chave = (location.hash.match(/chave=([A-Za-z0-9_-]{40,})/) || [])[1];
+  if (!chave || !DADOS || !window.crypto || !crypto.subtle) { $("#sem-chave").hidden = false; return; }
+  var bruto = b64(DADOS);
+  crypto.subtle.importKey("raw", b64(chave), "AES-GCM", false, ["decrypt"])
+    .then(function (k) { return crypto.subtle.decrypt({ name: "AES-GCM", iv: bruto.slice(0, 12) }, k, bruto.slice(12)); })
+    .then(function (buf) {
+      inscritos = JSON.parse(new TextDecoder().decode(buf));
+      inscritos.sort(function (a, b) { return a.localeCompare(b, "pt-BR", { sensitivity: "base" }); });
+      iniciar();
+    })
+    .catch(function () { $("#sem-chave").hidden = false; });
+
+  function iniciar() {
+    ler();
+    $("#app").hidden = false; $("#rodape").hidden = false;
+    var ul = $("#lista-inscritos");
+    inscritos.forEach(function (nome) {
+      var chaveBtn = el("button", { type: "button", class: "chave", role: "switch", "aria-checked": "false", "aria-label": "Presente: " + nome },
+        [el("span", { class: "chave__trilho", "aria-hidden": "true" }), el("span", { class: "chave__rotulo", "aria-hidden": "true" }, "Ausente")]);
+      var li = el("li", { class: "pessoa", "data-busca": norm(nome) }, [el("span", { class: "pessoa__nome" }, nome), chaveBtn]);
+      function pintar() {
+        var on = !!estado.presentes[nome];
+        chaveBtn.setAttribute("aria-checked", on ? "true" : "false");
+        chaveBtn.lastChild.textContent = on ? "Presente" : "Ausente";
+        li.classList.toggle("pessoa--presente", on);
+      }
+      chaveBtn.addEventListener("click", function () {
+        if (estado.presentes[nome]) delete estado.presentes[nome]; else estado.presentes[nome] = true;
+        salvar(); pintar(); contar();
+      });
+      pintar();
+      ul.appendChild(li);
+    });
+    $("#busca").addEventListener("input", function () {
+      var t = norm(this.value.trim()), vis = 0;
+      Array.prototype.forEach.call(ul.children, function (li) { var ok = !t || li.getAttribute("data-busca").indexOf(t) >= 0; li.hidden = !ok; if (ok) vis++; });
+      $("#nada").hidden = vis > 0;
+    });
+    abas(); formulario(); desenharExtras(); contar();
+    $("#baixar").addEventListener("click", baixar);
+    $("#copiar").addEventListener("click", copiar);
+  }
+
+  function presentesInscritos() { return inscritos.filter(function (n) { return estado.presentes[n]; }).length; }
+  function contar() {
+    var p = presentesInscritos(), x = estado.extras.length;
+    $("#n-inscritos").textContent = inscritos.length;
+    $("#n-presentes").textContent = p;
+    $("#n-total").textContent = p + x;
+    $("#t-total").textContent = x ? "no evento (com " + x + " sem inscrição)" : "no evento";
+  }
+
+  function abas() {
+    var lista = [$("#aba-inscritos"), $("#aba-adicionar")];
+    function abrir(aba) {
+      lista.forEach(function (a) {
+        var sim = a === aba;
+        a.setAttribute("aria-selected", sim ? "true" : "false"); a.tabIndex = sim ? 0 : -1;
+        document.getElementById(a.getAttribute("aria-controls")).hidden = !sim;
+      });
+    }
+    lista.forEach(function (a, i) {
+      a.addEventListener("click", function () { abrir(a); });
+      a.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") { var o = lista[(i + 1) % 2]; abrir(o); o.focus(); }
+      });
+    });
+  }
+
+  function formulario() {
+    var tel = $("#add-tel");
+    tel.addEventListener("input", function () {
+      var d = digitos(tel.value).slice(0, 11), o = d;
+      if (d.length > 2) o = "(" + d.slice(0, 2) + ") " + d.slice(2);
+      if (d.length > 7) o = "(" + d.slice(0, 2) + ") " + d.slice(2, d.length === 11 ? 7 : 6) + "-" + d.slice(d.length === 11 ? 7 : 6);
+      tel.value = o;
+    });
+    $("#form-add").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var msg = $("#add-msg"), nome = $("#add-nome").value.trim().replace(/\s+/g, " "), d = digitos(tel.value), quem = $("#add-convite").value.trim().replace(/\s+/g, " ");
+      msg.className = "msg msg--erro";
+      if (nome.length < 3) { msg.textContent = "Digite o nome completo."; $("#add-nome").focus(); return; }
+      if (d.length < 10 || d.length > 11) { msg.textContent = "Digite o WhatsApp com DDD."; tel.focus(); return; }
+      if (quem.length < 2) { msg.textContent = "Digite quem convidou."; $("#add-convite").focus(); return; }
+      estado.extras.push({ nome: nome, whatsapp: d, convidou: quem });
+      salvar(); desenharExtras(); contar();
+      this.reset();
+      msg.className = "msg msg--ok"; msg.textContent = nome + " foi adicionado(a) como presente.";
+      $("#add-nome").focus();
+    });
+  }
+
+  function desenharExtras() {
+    var ul = $("#lista-extras");
+    while (ul.firstChild) ul.removeChild(ul.firstChild);
+    var ordem = estado.extras.map(function (x, i) { return { x: x, i: i }; })
+      .sort(function (a, b) { return a.x.nome.localeCompare(b.x.nome, "pt-BR", { sensitivity: "base" }); });
+    ordem.forEach(function (o) {
+      var rem = el("button", { type: "button", class: "btn btn--mini", "aria-label": "Remover " + o.x.nome }, "Remover");
+      rem.addEventListener("click", function () {
+        if (!confirm("Remover " + o.x.nome + " da lista?")) return;
+        estado.extras.splice(estado.extras.indexOf(o.x), 1);
+        salvar(); desenharExtras(); contar();
+      });
+      ul.appendChild(el("li", { class: "pessoa pessoa--presente" }, [
+        el("span", { class: "pessoa__nome" }, [o.x.nome, el("span", { class: "pessoa__extra" }, telFormatado(o.x.whatsapp) + " · convite de " + o.x.convidou)]), rem]));
+    });
+    $("#t-extras").textContent = "Adicionadas no dia (" + estado.extras.length + ")";
+    $("#sem-extras").hidden = estado.extras.length > 0;
+  }
+
+  function baixar() {
+    var esc = function (v) { v = String(v == null ? "" : v); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var linhas = [["Nome", "Situação", "WhatsApp", "Quem convidou"]];
+    inscritos.forEach(function (n) { linhas.push([n, estado.presentes[n] ? "Presente" : "Ausente", "", ""]); });
+    estado.extras.slice().sort(function (a, b) { return a.nome.localeCompare(b.nome, "pt-BR"); })
+      .forEach(function (x) { linhas.push([x.nome, "Presente (sem inscrição)", telFormatado(x.whatsapp), x.convidou]); });
+    var csv = "\ufeff" + linhas.map(function (l) { return l.map(esc).join(";"); }).join("\r\n") + "\r\n";
+    var a = el("a", { href: URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })), download: "checkin-encontro2.csv" });
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
+  function copiar() {
+    var p = inscritos.filter(function (n) { return estado.presentes[n]; });
+    var t = "Check-in · Encontro 2 · Essência Humana\n" +
+      "Inscritos: " + inscritos.length + "\nInscritos presentes: " + p.length + "\nSem inscrição: " + estado.extras.length + "\nTotal no evento: " + (p.length + estado.extras.length) + "\n\n" +
+      "Presentes:\n" + p.map(function (n) { return "• " + n; }).join("\n") +
+      (estado.extras.length ? "\n\nSem inscrição:\n" + estado.extras.map(function (x) { return "• " + x.nome + " · " + telFormatado(x.whatsapp) + " · convite de " + x.convidou; }).join("\n") : "");
+    var botao = $("#copiar");
+    function ok() { botao.textContent = "Copiado!"; setTimeout(function () { botao.textContent = "Copiar resumo"; }, 2000); }
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function () { prompt("Copie o resumo:", t); });
+    else prompt("Copie o resumo:", t);
+  }
+})();
+</script>
+</body>
+</html>
