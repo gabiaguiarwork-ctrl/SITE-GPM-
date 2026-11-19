@@ -57,7 +57,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 | Página | Destino | Uso |
 |---|---|---|
 | `playbook.html` | Formspree `xwvdapgq` | download do playbook |
-| `academiadevirtudes/index.html` | Formspree `xoeernrz` | inscrição no Encontro 2 |
+| `academiadevirtudes/index.html` | Formspree `xoedlyqp` (desde 19/11/2026; antes `xoeernrz`) | inscrição no Encontro 2 |
 | `npsencontro1/index.html` | Formspree `mljjeqwp` | NPS anônimo do Encontro 1 |
 | `academiadevirtudes/encontro2/index.html` | Formspree `mwlooqgn` | NPS anônimo do Encontro 2 |
 | `academiadevirtudes/presenca/index.html` | Formspree `mbgoyzga` (outra conta do Formspree, desde 18/11/2026; antes `meaggrbr`, que passou do limite do plano gratuito) | confirmação de presença do Encontro 2 (link individual `?c=código&n=Nome`) |
