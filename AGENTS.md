@@ -42,7 +42,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 
 ## Endereços
 
-- `/academiadevirtudes/`: página pública da Academia. Inscrições do Encontro 2 encerradas em 18/11/2026, reabertas em 19/11/2026 e encerradas de novo em 19/11/2026 ("Em breve, mais informações"); o formulário continua no HTML com `hidden`, para reabrir se for preciso.
+- `/academiadevirtudes/`: página pública da Academia. Inscrições do Encontro 2 encerradas em 18/11/2026, reabertas em 19/11/2026 e encerradas de novo em 19/11/2026 ("Próximo encontro: 11 de dezembro · Em breve, mais informações"; Encontro 3 em 11/12/2026); o formulário continua no HTML com `hidden`, para reabrir se for preciso.
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
 - `/academiadevirtudes/presenca/?c=CÓDIGO&n=Nome`: confirmação de presença do Encontro 2. Cada inscrito recebe pelo WhatsApp um link com um código sorteado e responde com um toque ("Confirmo minha presença" ou "Não irei comparecer"). A página é noindex e fica fora do menu. A lista com os telefones e as ferramentas (`gerar-links.js`, `enviar.html` e `conciliar.js`) ficam só em `_notas/presenca/`.
 - `/academiadevirtudes/encontro2/`: QR code do slide final do Encontro 2. A página é noindex e fica fora do menu. A pessoa avalia (NPS), indica 5 pessoas e baixa o e-book *O Tempo da Vida*. O link do PDF só aparece depois que as indicações chegam.
