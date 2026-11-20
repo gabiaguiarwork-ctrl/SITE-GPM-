@@ -45,7 +45,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 - `/academiadevirtudes/`: página pública da Academia. Inscrições do Encontro 2 encerradas em 18/11/2026, reabertas em 19/11/2026 e encerradas de novo em 19/11/2026 ("Próximo encontro: 11 de dezembro · Em breve, mais informações"; Encontro 3 em 11/12/2026); o formulário continua no HTML com `hidden`, para reabrir se for preciso.
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
 - `/academiadevirtudes/presenca/?c=CÓDIGO&n=Nome`: confirmação de presença do Encontro 2. Cada inscrito recebe pelo WhatsApp um link com um código sorteado e responde com um toque ("Confirmo minha presença" ou "Não irei comparecer"). A página é noindex e fica fora do menu. A lista com os telefones e as ferramentas (`gerar-links.js`, `enviar.html` e `conciliar.js`) ficam só em `_notas/presenca/`.
-- `/academiadevirtudes/encontro2/`: QR code do slide final do Encontro 2. A página é noindex e fica fora do menu. A pessoa avalia (NPS), indica 5 pessoas e baixa o e-book *O Tempo da Vida*. O link do PDF só aparece depois que as indicações chegam.
+- `/academiadevirtudes/encontro2/`: QR code do slide final do Encontro 2. A página é noindex e fica fora do menu. A pessoa avalia (NPS), indica 1 pessoa (ou marca "Não tenho ninguém para indicar", desde 20/11/2026; antes eram 5) e baixa o e-book *O Tempo da Vida*. O link do PDF só aparece depois que as indicações chegam.
   - O aparelho guarda só a etapa e a nota, nunca nome ou telefone.
   - `?teste` simula os envios; `?zerar` recomeça o fluxo naquele aparelho.
   - O PDF fica em `academiadevirtudes/materiais/`, pasta com `X-Robots-Tag: noindex` e um `index.html` que impede a listagem. O nome do arquivo não deve aparecer em outra página nem no sitemap.
@@ -62,7 +62,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 | `npsencontro1/index.html` | Formspree `mljjeqwp` | NPS anônimo do Encontro 1 |
 | `academiadevirtudes/encontro2/index.html` | Formspree `mwlooqgn` | NPS anônimo do Encontro 2 |
 | `academiadevirtudes/presenca/index.html` | Formspree `mbgoyzga` (outra conta do Formspree, desde 18/11/2026; antes `meaggrbr`, que passou do limite do plano gratuito) | confirmação de presença do Encontro 2 (link individual `?c=código&n=Nome`) |
-| `academiadevirtudes/encontro2/index.html` | Formspree `xbgooknp` | 5 indicações (identificado). É separado do NPS para a nota continuar anônima. |
+| `academiadevirtudes/encontro2/index.html` | Formspree `xbgooknp` | indicação (identificado: 1 pessoa ou "não tenho ninguém para indicar"). É separado do NPS para a nota continuar anônima. |
 | `mentoria.html` e `mentoria-formulario.html` | Google Forms `forms.gle/UFvUrSbM4izxHkzA7` | questionário da Mentoria Nexialista (`mentoria-formulario.html` só redireciona) |
 | `academiadevirtudes/_inscricao-encontro-1.html` | Formspree `xoejvbdd` | inscrição do Encontro 1 (página antiga, formulário inativo) |
 
