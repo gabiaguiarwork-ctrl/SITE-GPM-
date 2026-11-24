@@ -3059,6 +3059,37 @@
     @media (max-width: 1200px) { .menu { display: none; } .hamburger { display: inline-flex; } }
 
     /* ── Faixa da Academia de Virtudes (logo abaixo do hero) ── */
+    /* Seção da Academia de Virtudes (antes da Mentoria), com A Escola de Atenas, de Rafael (domínio público) */
+    .academia-destaque { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; min-height: 640px; background: #08142E; color: #F4EEE2; }
+    @media (min-width: 761px) { .academia-destaque { width: 100%; min-height: 560px; height: min(56.25vw, 92vh); } }
+    .academia-destaque__fundo, .academia-destaque__fundo img { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .academia-destaque__fundo { z-index: -2; }
+    .academia-destaque__fundo img { object-fit: cover; object-position: 50% 35%; display: block; }
+    .academia-destaque::after { content: ""; position: absolute; inset: 0; z-index: -1;
+      background: linear-gradient(0deg, rgba(8,20,46,.92) 0%, rgba(8,20,46,.45) 20%, rgba(8,20,46,0) 42%),
+                  linear-gradient(90deg, rgba(8,20,46,.92) 0%, rgba(8,20,46,.7) 28%, rgba(8,20,46,0) 50%); }
+    .academia-destaque__conteudo { width: 100%; max-width: 760px; margin: 0; padding: 0 24px 64px; }
+    @media (min-width: 761px) { .academia-destaque__conteudo { padding: 0 0 64px clamp(28px, 3.2vw, 56px); } }
+    .academia-destaque__olho { margin: 0 0 6px; font: 500 13px 'Inter', sans-serif; letter-spacing: .26em; text-transform: uppercase; color: #D9B45E; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .academia-destaque__titulo { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-variant: small-caps; font-variant-numeric: lining-nums; font-size: clamp(42px, 5.4vw, 88px); line-height: .95; letter-spacing: .01em; color: #D9B45E; text-shadow: 0 4px 24px rgba(0,0,0,.45); }
+    .academia-destaque__texto { max-width: 540px; margin: 18px 0 0; font: 400 clamp(16.5px, 1.6vw, 19px)/1.6 'Inter', sans-serif; color: #F4EEE2; }
+    .academia-destaque__frase { margin: 10px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: clamp(21px, 2.2vw, 26px); color: #E2C88E; }
+    .academia-destaque__proximo { margin: 14px 0 0; font: 600 14px 'Inter', sans-serif; color: #E2C88E; font-variant-numeric: lining-nums; }
+    .academia-destaque__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .academia-destaque__acoes a { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 26px; border-radius: 8px; font: 600 15px 'Inter', sans-serif; text-decoration: none; transition: transform .2s ease, background .2s ease; }
+    .academia-destaque__acoes a:hover { transform: translateY(-1px); }
+    .academia-destaque__acoes a:focus-visible { outline: 2px solid #E2C88E; outline-offset: 3px; }
+    .academia-destaque__btn { background: linear-gradient(180deg, #D7B673, #B88F45); color: #0B1733; border: 1px solid #C9A45C; }
+    .academia-destaque__acoes .academia-destaque__btn--vazado { background: rgba(244,238,226,.08); color: #F4EEE2; border: 1px solid rgba(244,238,226,.6); }
+    .academia-destaque__acoes .academia-destaque__btn--vazado:hover { background: rgba(244,238,226,.16); }
+    .academia-destaque__credito { position: absolute; right: 24px; bottom: 18px; margin: 0; font: 400 12.5px 'Inter', sans-serif; color: rgba(244,238,226,.75); }
+    @media (max-width: 760px) {
+      .academia-destaque { min-height: 820px; }
+      .academia-destaque::after { background: linear-gradient(0deg, rgba(8,20,46,.98) 0%, rgba(8,20,46,.92) 48%, rgba(8,20,46,.35) 70%, rgba(8,20,46,0) 84%); }
+      .academia-destaque__conteudo { padding: 0 20px 56px; }
+      .academia-destaque__acoes a { flex: 1 1 100%; }
+      .academia-destaque__credito { right: 16px; bottom: 14px; font-size: 11.5px; }
+    }
     .faixa-academia { padding: 0; background: #08142E; border-top: 1px solid rgba(201,164,92,.35); border-bottom: 1px solid rgba(201,164,92,.35); }
     .faixa-academia__inner { max-width: 1120px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 18px; }
     .faixa-academia__inner > picture img { width: 40px; height: 40px; }
@@ -3572,6 +3603,27 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- Academia de Virtudes (A Escola de Atenas, Rafael, 1511: domínio público) -->
+    <section id="academia" class="academia-destaque" aria-labelledby="academia-titulo">
+      <picture class="academia-destaque__fundo">
+        <source media="(max-width: 760px)" srcset="assets/academia-atenas-mobile-800.webp" type="image/webp">
+        <source srcset="assets/academia-atenas-1280.webp 1280w, assets/academia-atenas-1920.webp 1920w" sizes="100vw" type="image/webp">
+        <img src="assets/academia-atenas-1280.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+      </picture>
+      <div class="academia-destaque__conteudo">
+        <p class="academia-destaque__olho">Ciclo de encontros · Grupo GPM</p>
+        <h2 class="academia-destaque__titulo" id="academia-titulo">Academia de Virtudes</h2>
+        <p class="academia-destaque__texto">Encontros conduzidos por Eduardo Pitombo sobre comportamento humano, estratégia e tecnologia: o desenvolvimento humano que transforma potencial artificial em resultado real.</p>
+        <p class="academia-destaque__frase">Essência humana, potencial artificial.</p>
+        <p class="academia-destaque__proximo">Próximo encontro: 11 de dezembro de 2026</p>
+        <div class="academia-destaque__acoes">
+          <a class="academia-destaque__btn" href="academiadevirtudes/">Conhecer a Academia</a>
+          <a class="academia-destaque__btn--vazado" href="academiadevirtudes/entrar/">Área do Aluno</a>
+        </div>
+      </div>
+      <p class="academia-destaque__credito">Rafael, A Escola de Atenas, 1511</p>
     </section>
 
     <section id="mentoria" class="section-mentoria-convite">
