@@ -3066,13 +3066,13 @@
     .academia-destaque__fundo { z-index: -2; }
     .academia-destaque__fundo img { object-fit: cover; object-position: 50% 35%; display: block; }
     .academia-destaque::after { content: ""; position: absolute; inset: 0; z-index: -1;
-      background: linear-gradient(0deg, rgba(8,20,46,.97) 0%, rgba(8,20,46,.8) 30%, rgba(8,20,46,.25) 60%, rgba(8,20,46,0) 78%),
-                  linear-gradient(90deg, rgba(8,20,46,.88) 0%, rgba(8,20,46,.6) 38%, rgba(8,20,46,0) 68%); }
-    .academia-destaque__conteudo { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px 64px; }
-    @media (min-width: 761px) { .academia-destaque__conteudo { padding: 0 64px 72px; } }
+      background: linear-gradient(0deg, rgba(8,20,46,.92) 0%, rgba(8,20,46,.45) 20%, rgba(8,20,46,0) 42%),
+                  linear-gradient(90deg, rgba(8,20,46,.92) 0%, rgba(8,20,46,.7) 28%, rgba(8,20,46,0) 50%); }
+    .academia-destaque__conteudo { width: 100%; max-width: 760px; margin: 0; padding: 0 24px 64px; }
+    @media (min-width: 761px) { .academia-destaque__conteudo { padding: 0 0 64px clamp(28px, 3.2vw, 56px); } }
     .academia-destaque__olho { margin: 0 0 6px; font: 500 13px 'Inter', sans-serif; letter-spacing: .26em; text-transform: uppercase; color: #D9B45E; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
-    .academia-destaque__titulo { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-variant: small-caps; font-variant-numeric: lining-nums; font-size: clamp(46px, 7.2vw, 108px); line-height: .95; letter-spacing: .01em; color: #D9B45E; text-shadow: 0 4px 24px rgba(0,0,0,.45); }
-    .academia-destaque__texto { max-width: 620px; margin: 18px 0 0; font: 400 clamp(16.5px, 1.6vw, 19px)/1.6 'Inter', sans-serif; color: #F4EEE2; }
+    .academia-destaque__titulo { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-variant: small-caps; font-variant-numeric: lining-nums; font-size: clamp(42px, 5.4vw, 88px); line-height: .95; letter-spacing: .01em; color: #D9B45E; text-shadow: 0 4px 24px rgba(0,0,0,.45); }
+    .academia-destaque__texto { max-width: 540px; margin: 18px 0 0; font: 400 clamp(16.5px, 1.6vw, 19px)/1.6 'Inter', sans-serif; color: #F4EEE2; }
     .academia-destaque__frase { margin: 10px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: clamp(21px, 2.2vw, 26px); color: #E2C88E; }
     .academia-destaque__proximo { margin: 14px 0 0; font: 600 14px 'Inter', sans-serif; color: #E2C88E; font-variant-numeric: lining-nums; }
     .academia-destaque__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
