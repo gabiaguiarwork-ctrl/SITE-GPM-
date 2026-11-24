@@ -372,3 +372,28 @@ section[id] { scroll-margin-top: 90px; }
 @media (max-width: 1440px) { .av-marca__texto small { display: none; } .av-menu { gap: 18px; } }
 .av-titulo { max-width: 24ch; }
 @media (max-width: 899px) { .av-hero__conteudo { padding-top: 280px; } }
+
+/* Rodada de ajustes 1 (24/11/2026) */
+/* Hero: texto mais legível e botões lado a lado no desktop */
+@media (min-width: 900px) {
+  .av-hero::after { background: linear-gradient(90deg, rgba(8, 20, 46, .94) 0%, rgba(8, 20, 46, .82) 40%, rgba(8, 20, 46, .5) 55%, rgba(8, 20, 46, 0) 72%), linear-gradient(0deg, rgba(8, 20, 46, .85) 0%, rgba(8, 20, 46, 0) 30%); }
+  .av-hero__texto { max-width: 720px; }
+  .av-hero__acoes { flex-wrap: nowrap; }
+  .av-hero__acoes .av-btn { white-space: nowrap; }
+}
+.av-hero__texto > p:not(.av-programa) { max-width: 34rem; }
+/* Ação beneficente: logo do Instituto Pró-Vida */
+.av-provida { display: grid; place-items: center; width: 108px; height: 108px; margin: 0 auto 22px; border-radius: 50%; background: #fff; border: 1px solid var(--av-line-light); }
+.av-provida img { width: 88px; height: 88px; }
+.av-provida:focus-visible { outline: 2px solid var(--av-gold-dark); outline-offset: 3px; }
+@media (min-width: 900px) { .av-provida { margin-left: 0; } }
+.av-doacao__link { margin-top: 22px; }
+/* Galeria: legenda e fotos deitadas */
+.av-galeria picture { display: block; width: 100%; height: 100%; }
+.av-galeria img { object-position: center; }
+.av-galeria li.ativa.av-galeria__deitada { background: var(--av-navy); }
+.av-galeria li.ativa.av-galeria__deitada img { object-fit: contain; }
+.av-galeria__legenda { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 16px 12px; font: 600 12px var(--sans); letter-spacing: .06em; color: var(--av-ivory); background: linear-gradient(0deg, rgba(8, 20, 46, .85), rgba(8, 20, 46, 0)); opacity: 0; transition: opacity .3s ease; font-variant-numeric: lining-nums; }
+.av-galeria li.ativa .av-galeria__legenda, .av-galeria--simples .av-galeria__legenda { opacity: 1; }
+@media (max-width: 760px) { .av-galeria__legenda { opacity: 1; } }
+@media (min-width: 900px) { .av-galeria li.ativa { flex: 6; } }

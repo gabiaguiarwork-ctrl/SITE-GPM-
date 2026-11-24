@@ -64,16 +64,20 @@
   if (atual) abrirAba(atual);
 
   /* ---------- Galeria em tiras ---------- */
-  var fotos = Array.isArray(CFG.GALERIA) ? CFG.GALERIA.filter(function (f) { return f && f.src; }) : [];
+  var fotos = Array.isArray(CFG.GALERIA) ? CFG.GALERIA.filter(function (f) { return f && /^[A-Za-z0-9_/.-]+$/.test(f.base || ''); }) : [];
   var galeria = $('#galeria');
   if (!fotos.length) { $('#experiencia').hidden = true; }
   else {
     var tiras = fotos.length >= 4;
     if (!tiras) galeria.classList.add('av-galeria--simples');
     fotos.forEach(function (f, i) {
-      var img = el('img', { src: f.src, alt: f.alt || '', loading: 'lazy', decoding: 'async', width: '800', height: '600' });
-      if (f.grande) { img.setAttribute('srcset', f.src + ' 800w, ' + f.grande + ' 1600w'); img.setAttribute('sizes', '(max-width: 760px) 82vw, 60vw'); }
-      var li = el('li', tiras ? { tabindex: '0' } : null, img);
+      var base = f.base.charAt(0) === '/' ? f.base : '/assets/academia/galeria/' + f.base;
+      var w = Number(f.w) || 1600, h = Number(f.h) || 900;
+      var fonte = el('source', { type: 'image/webp', srcset: base + '-800.webp 800w, ' + base + '-1600.webp ' + w + 'w', sizes: '(max-width: 760px) 82vw, 60vw' });
+      var img = el('img', { src: base + '.jpg', alt: f.alt || '', loading: 'lazy', decoding: 'async', width: String(w), height: String(h) });
+      var li = el('li', tiras ? { tabindex: '0' } : null, el('picture', null, [fonte, img]));
+      if (w > h) li.classList.add('av-galeria__deitada');
+      if (f.legenda) li.appendChild(el('span', { 'class': 'av-galeria__legenda' }, f.legenda));
       if (tiras && i === 0) li.classList.add('ativa');
       galeria.appendChild(li);
     });

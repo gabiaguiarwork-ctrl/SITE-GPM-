@@ -29,11 +29,20 @@ window.AV_CONFIG = {
   // Exemplo de item: { youtube: "ID_DE_11_CARACTERES", nome: "Nome da pessoa", cargo: "Cargo · Empresa" }
   DEPOIMENTOS: [],
 
-  // Fotos da galeria "A experiência" (largura 800 e 1600 em WebP).
+  // Fotos da galeria "A experiência". A primeira abre expandida.
+  // base: nome do arquivo em /assets/academia/galeria/ (ou caminho começando com "/"), sem extensão.
+  // Cada foto precisa de: base.jpg, base-800.webp e base-1600.webp. w e h: tamanho da -1600.webp.
   GALERIA: [
-    { src: "/assets/academia-encontro1-1-800.webp", grande: "/assets/academia-encontro1-1-1600.webp", alt: "Eduardo Pitombo Mesquita diante do slide “O problema é a sua percepção.”" },
-    { src: "/assets/academia-encontro1-2-800.webp", grande: "/assets/academia-encontro1-2-1600.webp", alt: "Eduardo apresenta o slide “As cinco zonas” para os participantes no auditório" },
-    { src: "/assets/academia-encontro1-3-800.webp", grande: "/assets/academia-encontro1-3-1600.webp", alt: "Eduardo aponta o mapa das cinco zonas na tela" },
-    { src: "/assets/academia-encontro1-4-800.webp", grande: "/assets/academia-encontro1-4-1600.webp", alt: "Eduardo no palco do auditório durante o Encontro 1" }
+    { base: "encontro2-01", w: 900,  h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Eduardo Pitombo Mesquita fala ao público diante do slide 'Empreender é a arte de resolver problemas'" },
+    { base: "encontro2-02", w: 1600, h: 900,  legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Eduardo no palco do Encontro 2, com a plateia em primeiro plano" },
+    { base: "encontro2-03", w: 1200, h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Plateia acompanha a palestra no auditório com luz azul" },
+    { base: "encontro2-04", w: 960,  h: 1280, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Apresentação do Instituto Pró-Vida no palco, com câmera registrando o encontro" },
+    { base: "encontro2-05", w: 1600, h: 900,  legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Eduardo com representantes do Instituto Pró-Vida no palco" },
+    { base: "encontro2-06", w: 1066, h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Participantes posam juntas no Encontro 2" },
+    { base: "encontro2-07", w: 1200, h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Participantes posam juntos no Encontro 2" },
+    { base: "/assets/academia-encontro1-1", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo Pitombo Mesquita diante do slide “O problema é a sua percepção.”" },
+    { base: "/assets/academia-encontro1-2", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo apresenta o slide “As cinco zonas” para os participantes no auditório" },
+    { base: "/assets/academia-encontro1-3", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo aponta o mapa das cinco zonas na tela" },
+    { base: "/assets/academia-encontro1-4", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo no palco do auditório durante o Encontro 1" }
   ]
 };
