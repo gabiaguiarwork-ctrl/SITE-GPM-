@@ -397,3 +397,12 @@ section[id] { scroll-margin-top: 90px; }
 .av-galeria li.ativa .av-galeria__legenda, .av-galeria--simples .av-galeria__legenda { opacity: 1; }
 @media (max-width: 760px) { .av-galeria__legenda { opacity: 1; } }
 @media (min-width: 900px) { .av-galeria li.ativa { flex: 6; } }
+
+/* Inscrições no Supabase (24/11/2026): doação, avisos e verificação */
+.av-etapa__texto { margin: 0 0 18px; font-size: 16.5px; color: var(--av-ivory); max-width: 52ch; }
+.av-etapa__texto strong { color: var(--av-gold-light); }
+.av-etapa__aviso { margin: 0 0 18px; padding: 12px 14px; border-left: 3px solid var(--av-gold); background: rgba(201, 164, 92, .1); border-radius: 0 6px 6px 0; font-size: 15px; color: var(--av-ivory); max-width: 56ch; }
+@media (min-width: 560px) { .av-opcoes--linha { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+#f-acomp-dados .av-opcoes { margin-top: 6px; }
+.av-captcha { margin-top: 22px; min-height: 0; }
+.av-fim strong { color: var(--av-ivory); }

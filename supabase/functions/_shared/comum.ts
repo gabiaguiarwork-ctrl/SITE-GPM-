@@ -7,11 +7,13 @@
 //   Ela nunca aparece no repositório nem volta para o navegador.
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2.119.0';
 
-const ORIGENS = new Set([
+export const ORIGENS = new Set([
   'https://gpmintegracao.com.br',
   'https://www.gpmintegracao.com.br',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
+  'http://localhost:8080', // servidor de teste da CSP (_notas/ferramentas/servidor-teste.cjs)
+  'http://127.0.0.1:8080',
 ]);
 
 export const SITE = 'https://gpmintegracao.com.br';

@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#08142E">
 <title>Painel · Área do Aluno · Academia de Virtudes</title>
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
-<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=10">
+<link rel="stylesheet" href="/academiadevirtudes/_app/academia.css?v=11">
 <script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_app/vendor/supabase-2.119.0.js" defer></script>
 <script src="/academiadevirtudes/_app/academia.js?v=1" defer></script>
@@ -21,6 +21,7 @@
 <script src="/academiadevirtudes/admin/aulas.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/avisos.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/relatorios.js?v=3" defer></script>
+<script src="/academiadevirtudes/admin/inscricoes.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/iniciar.js?v=1" defer></script>
 </head>
 <body>
@@ -48,6 +49,7 @@
     <button class="ac-aba" role="tab" type="button" id="aba-trilhas" aria-controls="painel-trilhas" aria-selected="false" tabindex="-1">Trilhas</button>
     <button class="ac-aba" role="tab" type="button" id="aba-avisos" aria-controls="painel-avisos" aria-selected="false" tabindex="-1">Avisos</button>
     <button class="ac-aba" role="tab" type="button" id="aba-relatorios" aria-controls="painel-relatorios" aria-selected="false" tabindex="-1">Relatórios</button>
+    <button class="ac-aba" role="tab" type="button" id="aba-inscricoes" aria-controls="painel-inscricoes" aria-selected="false" tabindex="-1">Inscrições</button>
   </div>
   <p class="ac-msg" id="msg-admin" role="status" aria-live="polite" hidden></p>
 
@@ -279,6 +281,197 @@
       </div>
     </form>
     <ul class="ac-lista ac-lista--admin" id="lista-avisos" aria-live="polite"></ul>
+  </section>
+
+  <!-- ===================== Inscrições (encontros) ===================== -->
+  <section class="ac-painel" id="painel-inscricoes" role="tabpanel" aria-labelledby="aba-inscricoes" hidden>
+    <div class="ac-barra-ferramentas">
+      <div class="ac-campo">
+        <label for="in-evento">Evento</label>
+        <select class="ac-select" id="in-evento"></select>
+      </div>
+      <div class="ac-linha-acoes ac-linha-acoes--compacta">
+        <button class="ac-btn ac-btn--contorno" type="button" id="in-editar-evento">Editar evento</button>
+        <button class="ac-btn ac-btn--contorno" type="button" id="in-novo-evento">Novo evento</button>
+        <button class="ac-btn" type="button" id="in-abrir-checkin">Modo check-in</button>
+      </div>
+    </div>
+    <p class="ac-meta in-evento-info" id="in-evento-info"></p>
+
+    <form class="ac-secao ac-formulario" id="form-evento" novalidate hidden>
+      <h2 id="t-form-evento">Editar evento</h2>
+      <input type="hidden" id="ev-id">
+      <div class="ac-grade-2">
+        <div class="ac-campo"><label for="ev-titulo">Título</label><input class="ac-input" id="ev-titulo" maxlength="120" required aria-describedby="erro-ev-titulo"><p class="ac-erro-campo" id="erro-ev-titulo" hidden></p></div>
+        <div class="ac-campo"><label for="ev-slug">Endereço curto (slug)</label><input class="ac-input" id="ev-slug" maxlength="60" required placeholder="encontro-4" aria-describedby="ajuda-ev-slug erro-ev-slug"><p class="ac-opcional" id="ajuda-ev-slug">Letras minúsculas, números e hífen. É o que o site usa para achar o evento.</p><p class="ac-erro-campo" id="erro-ev-slug" hidden></p></div>
+        <div class="ac-campo"><label for="ev-data">Data e horário (Brasília)</label><input class="ac-input" id="ev-data" type="datetime-local" required aria-describedby="erro-ev-data"><p class="ac-erro-campo" id="erro-ev-data" hidden></p></div>
+        <div class="ac-campo"><label for="ev-local">Local e endereço</label><input class="ac-input" id="ev-local" maxlength="200"></div>
+        <div class="ac-campo"><label for="ev-capacidade">Lugares no total (com acompanhantes)</label><input class="ac-input" id="ev-capacidade" type="number" min="0" max="5000" step="1" inputmode="numeric" required aria-describedby="erro-ev-capacidade"><p class="ac-erro-campo" id="erro-ev-capacidade" hidden></p></div>
+        <div class="ac-campo"><label for="ev-reservados">Lugares da organização</label><input class="ac-input" id="ev-reservados" type="number" min="0" max="5000" step="1" inputmode="numeric" aria-describedby="ajuda-ev-reservados"><p class="ac-opcional" id="ajuda-ev-reservados">Ex.: o palestrante. São descontados das vagas.</p></div>
+      </div>
+      <label class="ac-check" for="ev-abertas"><input type="checkbox" id="ev-abertas"><span>Inscrições abertas no site</span></label>
+      <label class="ac-check in-check-espaco" for="ev-espera"><input type="checkbox" id="ev-espera"><span>Quando lotar, novas inscrições entram na lista de espera</span></label>
+
+      <fieldset class="in-cotas">
+        <legend>Doação de fraldas (pacotes por tamanho, contando titulares e acompanhantes)</legend>
+        <div class="ac-campo"><label for="ev-marca">Marca</label><input class="ac-input" id="ev-marca" maxlength="80" placeholder="Pampers ou Huggies"></div>
+        <div class="in-cotas__grade">
+          <div class="ac-campo"><label for="ev-cota-P">Tamanho P</label><input class="ac-input" id="ev-cota-P" type="number" min="0" max="5000" step="1" inputmode="numeric"></div>
+          <div class="ac-campo"><label for="ev-cota-M">Tamanho M</label><input class="ac-input" id="ev-cota-M" type="number" min="0" max="5000" step="1" inputmode="numeric"></div>
+          <div class="ac-campo"><label for="ev-cota-G">Tamanho G</label><input class="ac-input" id="ev-cota-G" type="number" min="0" max="5000" step="1" inputmode="numeric"></div>
+        </div>
+        <p class="ac-opcional">Deixe em branco o tamanho que não for usado. Não dá para baixar uma cota abaixo do que já está reservado.</p>
+        <p class="in-aviso" id="ev-aviso-cotas" role="status" hidden></p>
+      </fieldset>
+
+      <div class="ac-campo"><label for="ev-mensagem">Mensagem do pedido de confirmação (WhatsApp)</label><textarea class="ac-input ac-textarea" id="ev-mensagem" maxlength="1000" rows="3" aria-describedby="ajuda-ev-mensagem"></textarea><p class="ac-opcional" id="ajuda-ev-mensagem">Use {nome} para o primeiro nome, {evento} para o título e {link} para o link individual de presença.</p></div>
+      <div class="ac-linha-acoes">
+        <button class="ac-btn" type="submit" id="btn-evento">Salvar evento</button>
+        <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-evento">Cancelar</button>
+      </div>
+    </form>
+
+    <div id="in-conteudo">
+      <div class="ac-numeros in-numeros" id="in-numeros" aria-live="polite"></div>
+      <p class="in-linha-info" id="in-fraldas"></p>
+      <p class="in-linha-info" id="in-emails"></p>
+      <p class="in-aviso" id="in-aviso-cotas" hidden></p>
+
+      <div id="in-modo-lista">
+        <div class="ac-barra-ferramentas">
+          <div class="ac-campo ac-campo--busca">
+            <label for="in-busca">Buscar</label>
+            <input class="ac-input" id="in-busca" type="search" placeholder="Nome, WhatsApp ou e-mail" autocomplete="off">
+          </div>
+          <div class="ac-campo">
+            <label for="in-f-status">Status</label>
+            <select class="ac-select" id="in-f-status">
+              <option value="ativos">Inscritos e lista de espera</option>
+              <option value="inscrito">Inscritos</option>
+              <option value="lista_espera">Lista de espera</option>
+              <option value="cancelado">Cancelados</option>
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div class="ac-campo">
+            <label for="in-f-confirmacao">Confirmação</label>
+            <select class="ac-select" id="in-f-confirmacao">
+              <option value="">Todas</option>
+              <option value="sim">Sim</option>
+              <option value="aguardando">Aguardando</option>
+              <option value="nao_vai">Não vai</option>
+            </select>
+          </div>
+          <div class="ac-campo">
+            <label for="in-f-equipe">Equipe GPM</label>
+            <select class="ac-select" id="in-f-equipe">
+              <option value="">Todos</option>
+              <option value="sim">Da equipe</option>
+              <option value="nao">De fora</option>
+            </select>
+          </div>
+          <div class="ac-campo">
+            <label for="in-f-convite">Quem convidou</label>
+            <select class="ac-select" id="in-f-convite"><option value="">Todos</option></select>
+          </div>
+          <div class="ac-campo">
+            <label for="in-f-participou">Encontros anteriores</label>
+            <select class="ac-select" id="in-f-participou">
+              <option value="">Todos</option>
+              <option value="sim">Já participou</option>
+              <option value="nao">Primeira vez</option>
+            </select>
+          </div>
+          <div class="ac-campo">
+            <label for="in-f-fralda">Fralda</label>
+            <select class="ac-select" id="in-f-fralda">
+              <option value="">Todos os tamanhos</option>
+              <option value="P">Tamanho P</option>
+              <option value="M">Tamanho M</option>
+              <option value="G">Tamanho G</option>
+            </select>
+          </div>
+        </div>
+        <div class="ac-linha-acoes ac-linha-acoes--compacta in-acoes">
+          <button class="ac-btn ac-btn--contorno" type="button" id="in-copiar">Copiar lista de quem não confirmou</button>
+          <button class="ac-btn ac-btn--contorno" type="button" id="in-reenviar-falhas">Reenviar para todos com falha</button>
+          <button class="ac-btn ac-btn--contorno" type="button" id="in-csv-completo">Exportar CSV completo</button>
+          <button class="ac-btn ac-btn--contorno" type="button" id="in-csv-simples">Exportar só nome e WhatsApp</button>
+          <button class="ac-btn ac-btn--contorno" type="button" id="in-abrir-importar">Importar CSV</button>
+        </div>
+
+        <form class="ac-secao ac-formulario" id="form-in-importar" novalidate hidden>
+          <h2>Importar inscrições (CSV)</h2>
+          <p class="ac-sub">Arquivo .csv separado por ponto e vírgula ou vírgula, com as colunas <strong>nome</strong>, <strong>whatsapp</strong>, <strong>email</strong>, <strong>empresa</strong> e <strong>cargo</strong>. Opcionais: equipe_gpm, convidado_por, perfil_ia, fralda, acompanhante_nome, acompanhante_whatsapp e acompanhante_fralda. Mesma regra de repetidos do site (junta pelo WhatsApp) e as mesmas vagas e cotas.</p>
+          <div class="ac-campo"><label for="in-im-arquivo">Arquivo CSV</label><input class="ac-input" id="in-im-arquivo" type="file" accept=".csv,text/csv"></div>
+          <div id="in-im-previa" aria-live="polite"></div>
+          <div class="ac-linha-acoes">
+            <button class="ac-btn" type="submit" id="btn-in-importar" disabled>Importar</button>
+            <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-in-importar">Cancelar</button>
+          </div>
+        </form>
+
+        <form class="ac-secao ac-formulario" id="form-inscricao" novalidate hidden>
+          <h2 id="t-form-inscricao">Editar inscrição</h2>
+          <p class="ac-meta" id="fi-meta"></p>
+          <input type="hidden" id="fi-id">
+          <div class="ac-grade-2">
+            <div class="ac-campo"><label for="fi-nome">Nome completo</label><input class="ac-input" id="fi-nome" maxlength="120" required aria-describedby="erro-fi-nome"><p class="ac-erro-campo" id="erro-fi-nome" hidden></p></div>
+            <div class="ac-campo"><label for="fi-whatsapp">WhatsApp</label><input class="ac-input" id="fi-whatsapp" type="tel" maxlength="16" required aria-describedby="erro-fi-whatsapp"><p class="ac-erro-campo" id="erro-fi-whatsapp" hidden></p></div>
+            <div class="ac-campo"><label for="fi-email">E-mail</label><input class="ac-input" id="fi-email" type="email" maxlength="254" required aria-describedby="erro-fi-email"><p class="ac-erro-campo" id="erro-fi-email" hidden></p></div>
+            <div class="ac-campo"><label for="fi-empresa">Empresa</label><input class="ac-input" id="fi-empresa" maxlength="120" required></div>
+            <div class="ac-campo"><label for="fi-cargo">Cargo</label><input class="ac-input" id="fi-cargo" maxlength="120" required></div>
+            <div class="ac-campo"><label for="fi-convidado">Quem convidou</label><input class="ac-input" id="fi-convidado" maxlength="120"></div>
+            <div class="ac-campo"><label for="fi-perfil">Perfil diante da IA</label>
+              <select class="ac-select" id="fi-perfil"><option value="">Não informado</option><option>Reativo</option><option>Usuário Google</option><option>Especialista</option><option>Nexialista</option><option>Ainda não sei</option></select></div>
+            <div class="ac-campo"><label for="fi-participou">Encontros de que participou</label><input class="ac-input" id="fi-participou" maxlength="120" placeholder="encontro-1, encontro-2" aria-describedby="ajuda-fi-participou"><p class="ac-opcional" id="ajuda-fi-participou">Separe por vírgula. Vazio = primeira vez.</p></div>
+            <div class="ac-campo"><label for="fi-status">Status</label>
+              <select class="ac-select" id="fi-status"><option value="inscrito">Inscrito</option><option value="lista_espera">Lista de espera</option><option value="cancelado">Cancelado</option></select></div>
+            <div class="ac-campo"><label for="fi-confirmacao">Confirmação de presença</label>
+              <select class="ac-select" id="fi-confirmacao"><option value="aguardando">Aguardando</option><option value="sim">Sim</option><option value="nao_vai">Não vai</option></select></div>
+            <div class="ac-campo"><label for="fi-fralda">Fralda (titular)</label>
+              <select class="ac-select" id="fi-fralda"><option value="">Sem tamanho</option><option value="P">P</option><option value="M">M</option><option value="G">G</option></select></div>
+          </div>
+          <label class="ac-check" for="fi-equipe"><input type="checkbox" id="fi-equipe"><span>Faz parte da equipe do Grupo GPM</span></label>
+          <label class="ac-check in-check-espaco" for="fi-comunic"><input type="checkbox" id="fi-comunic"><span>Aceita receber comunicações do Grupo GPM</span></label>
+          <label class="ac-check in-check-espaco" for="fi-acomp"><input type="checkbox" id="fi-acomp"><span>Leva acompanhante (ocupa 2 lugares)</span></label>
+          <div class="ac-grade-2" id="fi-acomp-dados" hidden>
+            <div class="ac-campo"><label for="fi-acomp-nome">Nome do acompanhante</label><input class="ac-input" id="fi-acomp-nome" maxlength="120"></div>
+            <div class="ac-campo"><label for="fi-acomp-whatsapp">WhatsApp do acompanhante</label><input class="ac-input" id="fi-acomp-whatsapp" type="tel" maxlength="16"></div>
+            <div class="ac-campo"><label for="fi-acomp-fralda">Fralda (acompanhante)</label>
+              <select class="ac-select" id="fi-acomp-fralda"><option value="">Sem tamanho</option><option value="P">P</option><option value="M">M</option><option value="G">G</option></select></div>
+          </div>
+          <div class="ac-campo in-check-espaco"><label for="fi-obs">Observações (só a equipe vê)</label><textarea class="ac-input ac-textarea" id="fi-obs" maxlength="2000" rows="3"></textarea></div>
+          <p class="ac-msg" id="fi-msg" role="alert" hidden></p>
+          <div class="ac-linha-acoes">
+            <button class="ac-btn" type="submit" id="btn-fi-salvar">Salvar</button>
+            <button class="ac-btn ac-btn--contorno" type="button" id="btn-fi-mover" hidden>Mover para inscritos</button>
+            <button class="ac-btn ac-btn--contorno" type="button" id="btn-fi-cancelar">Cancelar inscrição</button>
+            <button class="ac-btn ac-btn--perigo" type="button" id="btn-fi-excluir">Excluir</button>
+            <button class="ac-btn ac-btn--contorno" type="button" data-fechar="form-inscricao">Fechar</button>
+          </div>
+        </form>
+
+        <p class="ac-contagem" id="in-contagem" aria-live="polite"></p>
+        <div class="ac-tabela-caixa"><table class="ac-tabela in-tabela" id="in-tabela">
+          <caption class="ac-sr-only">Inscrições do evento</caption>
+          <thead><tr><th scope="col">Pessoa</th><th scope="col">Situação</th><th scope="col">Acompanhante</th><th scope="col">Fralda (titular)</th><th scope="col">Fralda (acompanhante)</th><th scope="col">Envios</th><th scope="col">E-mail</th><th scope="col">Ações</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+
+      <div class="in-checkin" id="in-modo-checkin" hidden>
+        <div class="in-checkin__topo">
+          <p class="in-checkin__contagem" id="in-ck-contagem" aria-live="polite"></p>
+          <button class="ac-btn ac-btn--contorno ac-btn--mini" type="button" id="in-fechar-checkin">Voltar para a lista</button>
+        </div>
+        <div class="ac-campo">
+          <label for="in-ck-busca">Buscar pelo nome</label>
+          <input class="ac-input in-checkin__busca" id="in-ck-busca" type="search" autocomplete="off" placeholder="Digite parte do nome">
+        </div>
+        <ul class="in-checkin__lista" id="in-ck-lista"></ul>
+      </div>
+    </div>
   </section>
 
   <!-- ===================== Relatórios ===================== -->

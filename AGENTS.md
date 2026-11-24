@@ -45,7 +45,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 - `/academiadevirtudes/`: página pública da Academia. Inscrições do Encontro 2 encerradas em 18/11/2026, reabertas em 19/11/2026 e encerradas de novo em 19/11/2026 ("Próximo encontro: 11 de dezembro · Em breve, mais informações"; Encontro 3 em 11/12/2026); o formulário continua no HTML com `hidden`, para reabrir se for preciso.
 - `/academiadevirtudes/` v2 (branch `academia-v2`, em revisão, 24/11/2026): página no estilo G4, sem CSS/JS inline (CSP numa `<meta>` da própria página, para não afetar as subpastas). Visual e comportamento em `academiadevirtudes/_publico/`; datas, local, formulário (`xoedlyqp`), depoimentos e galeria só em `_publico/academia-config.js`. Imagens em `assets/academia/` (pinturas de domínio público do Wikimedia Commons). A v1 fica em `academiadevirtudes/_academia-v1.html` (noindex, sem link). Na v2 (24/11/2026), a Área do Aluno não é mais divulgada (passa a ser só para colaboradores do Grupo GPM): o botão para `/academiadevirtudes/entrar/` se chama "Sou colaborador". Galeria: fotos em `assets/academia/galeria/` (`.jpg`, `-800.webp`, `-1600.webp`), listadas em `GALERIA` com `base`, `w`, `h`, `legenda` e `alt`.
 - `/npsencontro1/`: avaliação (NPS) do Encontro 1, que termina na inscrição do Encontro 2.
-- `/academiadevirtudes/presenca/?c=CÓDIGO&n=Nome`: confirmação de presença do Encontro 2. Cada inscrito recebe pelo WhatsApp um link com um código sorteado e responde com um toque ("Confirmo minha presença" ou "Não irei comparecer"). A página é noindex e fica fora do menu. A lista com os telefones e as ferramentas (`gerar-links.js`, `enviar.html` e `conciliar.js`) ficam só em `_notas/presenca/`.
+- `/academiadevirtudes/presenca/?t=TOKEN`: confirmação de presença (desde o Encontro 3, branch `inscricoes-supabase`). Link individual gerado na aba Inscrições do painel e enviado pelo WhatsApp; a resposta passa pela Edge Function `confirmar-presenca` (com CAPTCHA). O token sai da barra de endereços ao ser lido. Sem CSS/JS inline (`presenca.css`, `presenca.js`, `.htaccess` próprio com CSP). Links antigos do Encontro 2 (`?c=…&n=…`) mostram "link não está mais ativo". `?teste` simula.
 - `/academiadevirtudes/encontro2/`: QR code do slide final do Encontro 2. A página é noindex e fica fora do menu. A pessoa avalia (NPS), indica 1 pessoa (ou marca "Não tenho ninguém para indicar", desde 20/11/2026; antes eram 5) e baixa o e-book *O Tempo da Vida*. O link do PDF só aparece depois que as indicações chegam.
   - O aparelho guarda só a etapa e a nota, nunca nome ou telefone.
   - `?teste` simula os envios; `?zerar` recomeça o fluxo naquele aparelho.
@@ -59,10 +59,10 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
 | Página | Destino | Uso |
 |---|---|---|
 | `playbook.html` | Formspree `xwvdapgq` | download do playbook |
-| `academiadevirtudes/index.html` | Formspree `xoedlyqp` (desde 19/11/2026; antes `xoeernrz`) | inscrição no Encontro 2 |
+| `academiadevirtudes/index.html` | Na v2 (branch `inscricoes-supabase`): Edge Function `inscricao` (Supabase), com Formspree `xoedlyqp` como plano B (`FORM_BACKEND` em `_publico/academia-config.js`). Na v1 no ar: Formspree `xoedlyqp` (desde 19/11/2026; antes `xoeernrz`) | inscrição nos encontros |
 | `npsencontro1/index.html` | Formspree `mljjeqwp` | NPS anônimo do Encontro 1 |
 | `academiadevirtudes/encontro2/index.html` | Formspree `mwlooqgn` | NPS anônimo do Encontro 2 |
-| `academiadevirtudes/presenca/index.html` | Formspree `mbgoyzga` (outra conta do Formspree, desde 18/11/2026; antes `meaggrbr`, que passou do limite do plano gratuito) | confirmação de presença do Encontro 2 (link individual `?c=código&n=Nome`) |
+| `academiadevirtudes/presenca/index.html` | Edge Function `confirmar-presenca` (branch `inscricoes-supabase`). Antes: Formspree `mbgoyzga` (Encontro 2) | confirmação de presença (link individual `?t=token`) |
 | `academiadevirtudes/encontro2/index.html` | Formspree `xbgooknp` | indicação (identificado: 1 pessoa ou "não tenho ninguém para indicar"). É separado do NPS para a nota continuar anônima. |
 | `mentoria.html` e `mentoria-formulario.html` | Google Forms `forms.gle/UFvUrSbM4izxHkzA7` | questionário da Mentoria Nexialista (`mentoria-formulario.html` só redireciona) |
 | `academiadevirtudes/_inscricao-encontro-1.html` | Formspree `xoejvbdd` | inscrição do Encontro 1 (página antiga, formulário inativo) |
@@ -106,6 +106,18 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - Regras dos campos: `_app/campos.js` no navegador e a migration 0006 no banco (as duas precisam bater). WhatsApp e CPF ficam só com dígitos; o CPF é validado, só é preenchido pelo aluno se estiver vazio e sai dos metadados da conta (não vai no token de sessão).
 - Consentimento de comunicações é separado e opcional: só muda pela função `definir_comunicacoes()`, que grava a data e registra na auditoria.
 - Nenhuma tela pode revelar se um e-mail já tem conta (cadastro, reenvio, login e "esqueci minha senha" respondem igual).
+
+## Inscrições nos encontros (Supabase, branch `inscricoes-supabase`, 24/11/2026)
+
+- Tabelas `eventos`, `cotas_doacao` e `inscricoes` (migrations 0009 e 0010): RLS sem nenhuma política para anon ou aluno; só admin com MFA. O site lê só `evento_publico(evento)` (situação e tamanhos de fralda livres, nunca números).
+- Inscrição e presença só pelas Edge Functions `inscricao` e `confirmar-presenca` (CAPTCHA no servidor, limite por IP com hash e sal `IP_SALT`, logs mascarados). Vagas e cotas conferidas num gatilho com trava no evento.
+- **Inscrição ≠ portal**: `inscricoes` não cria nem altera `auth.users`/`profiles`, não tem FK para a Área do Aluno, e nenhuma tela ou e-mail da inscrição tem link para cadastro, login ou "Sou colaborador". O painel só mostra, como informação, que o e-mail também tem conta no portal.
+- Repetido: junta só por WhatsApp. E-mail ou nome iguais com outro WhatsApp viram linha nova com "Possível repetido".
+- 50 lugares no Encontro 3 (1 reservado); acompanhante ocupa 2. Fraldas Pampers ou Huggies, 1 pacote por pessoa, cotas P 17 · M 17 · G 16; lista de espera não reserva cota; cancelado ou "não vai" devolve lugar e cota.
+- E-mail de confirmação pelo Resend (secret `RESEND_API_KEY`), remetente `Academia de Virtudes <marketing@gpmintegracao.com.br>`. Textos em `supabase/functions/_shared/modelos-email.mjs`. Sem a chave, fica "não enviado" e o painel reenvia depois. Máximo 1 e-mail a cada 10 min por inscrição (o painel pode forçar).
+- Painel: aba Inscrições (`admin/inscricoes.js`). Passo a passo, segredos, DNS e testes: `supabase/PAINEL.md`, item 13.
+- O DNS do domínio fica na Hostinger (`dns-parking.com`) e o e-mail do domínio (MX/SPF) também está na Hostinger.
+- Testes do banco num Postgres local: binários portáteis do PostgreSQL 17 em `C:\Users\Gabi\ferramentas\pgsql` (fora do repositório; dados em `ferramentas\pgdata`, porta 54329, só localhost) com `ferramentas\supabase-shim.sql` imitando o mínimo do Supabase. Para ligar: `pgsql\bin\pg_ctl -D pgdata -o "-p 54329" start`.
 
 ## Supabase
 

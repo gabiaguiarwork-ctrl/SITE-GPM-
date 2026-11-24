@@ -1,7 +1,7 @@
 /*
   Academia de Virtudes · página pública v2 · comportamento
   Menu do celular, abas da Jornada, galeria em tiras, depoimentos (vídeo só no clique),
-  animação de entrada e formulário em etapas (Formspree, sem redirecionar).
+  animação de entrada e formulário em etapas (Supabase; Formspree como plano B).
   Nada de innerHTML com dados: tudo por textContent / createElement.
 */
 (function () {
@@ -22,11 +22,6 @@
   var P = CFG.PROXIMO || {};
   $$('[data-cfg]').forEach(function (d) { var v = P[d.getAttribute('data-cfg')]; if (v) d.textContent = v; });
   if (P.data) $$('[data-proximo-data]').forEach(function (d) { d.textContent = P.data; });
-  if (Array.isArray(CFG.DOACOES) && CFG.DOACOES.length) {
-    var ul = $('#doacao-itens');
-    while (ul.firstChild) ul.removeChild(ul.firstChild);
-    CFG.DOACOES.forEach(function (i) { ul.appendChild(el('li', null, String(i))); });
-  }
 
   /* ---------- Menu do celular ---------- */
   var botaoMenu = $('#av-menu-botao'), menuCel = $('#av-menu-celular');
@@ -132,14 +127,96 @@
   }
 
   /* ================= Formulário em etapas ================= */
+  // Envio: FORM_BACKEND = "supabase" (padrão: Edge Function "inscricao") ou "formspree" (plano B).
+  // ?teste simula tudo sem enviar. Situações simuladas: ?teste=espera | encerradas | esgotado | umlugar
+  var APP = window.ACADEMIA_CONFIG || {};
+  var BACKEND = CFG.FORM_BACKEND === 'formspree' ? 'formspree' : 'supabase';
+  var SLUG = CFG.EVENTO || 'encontro-3';
+  // Só no computador (localhost): ?evento=slug testa num evento de teste criado no painel, sem tocar no encontro real.
+  var LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  var EVENTO_TESTE = (location.search.match(/[?&]evento=([a-z0-9-]{1,60})/) || [])[1];
+  if (LOCAL && EVENTO_TESTE) SLUG = EVENTO_TESTE;
+  var CENARIO = (location.search.match(/[?&]teste=(\w+)/) || [])[1] || '';
   var modal = $('#inscricao'), form = $('#form-insc');
-  var etapas = $$('.av-etapa', form).filter(function (e) { return e.getAttribute('data-etapa') !== 'fim'; });
-  var fim = $('[data-etapa="fim"]', form);
+  var etapas = $$('.av-etapa', form).filter(function (e) { return !e.classList.contains('av-fim'); });
+  var fim = $('[data-etapa="fim"]', form), encerradas = $('[data-etapa="encerradas"]', form);
   var progresso = $('#form-progresso'), erro = $('#form-erro'), falha = $('#form-falha');
   var voltar = $('#form-voltar'), continuar = $('#form-continuar'), dica = $('#form-dica'), proximas = $('#form-proximas');
-  var passo = 0, origemFoco = null, enviado = false;
+  var passo = 0, origemFoco = null, enviado = false, resultado = null;
+  // Situação pública do evento (sem números). Sem resposta, o formulário funciona com os 3 tamanhos.
+  var SIT = { situacao: 'abertas', tamanhos: ['P', 'M', 'G'], acompanhante: true, doacao_marca: 'Pampers ou Huggies' };
   if (TESTE) $('#av-teste').hidden = false;
   etapas.forEach(function () { progresso.appendChild(el('span')); });
+
+  function aplicarSituacao(s) {
+    if (!s) return;
+    SIT = {
+      situacao: s.situacao || 'abertas',
+      tamanhos: Array.isArray(s.tamanhos) ? s.tamanhos : [],
+      acompanhante: s.acompanhante !== false,
+      doacao_marca: s.doacao_marca || SIT.doacao_marca,
+      titulo: s.titulo
+    };
+    var espera = SIT.situacao === 'lista_espera';
+    // Na lista de espera a cota não é reservada: mostra os 3 tamanhos, com o aviso.
+    var tams = espera ? ['P', 'M', 'G'] : SIT.tamanhos;
+    $$('[data-tamanho]', form).forEach(function (l) {
+      var ok = tams.indexOf(l.getAttribute('data-tamanho')) >= 0;
+      l.hidden = !ok;
+      var i = $('input', l); if (!ok && i.checked) i.checked = false;
+    });
+    $('#f-aviso-espera').hidden = !espera;
+    $('#f-doacao-espera').hidden = !espera;
+    var umLugar = !espera && !SIT.acompanhante;
+    $('#f-um-lugar').hidden = !umLugar;
+    $('#f-acomp-sim').textContent = umLugar ? 'Sim, e entro com o acompanhante na lista de espera' : 'Sim';
+    $('#f-acomp-nao').textContent = umLugar ? 'Não, vou sozinho(a)' : 'Não';
+    $$('[data-doacao-marca]').forEach(function (m) { m.textContent = SIT.doacao_marca; });
+    if (SIT.titulo) $$('[data-evento-titulo]').forEach(function (t) { t.textContent = SIT.titulo.split(' · ')[0]; });
+    // "Últimas vagas": só o texto do botão muda, sem contagem (tom da marca).
+    if (SIT.situacao === 'ultimas_vagas') $$('[data-abrir-form]').forEach(function (b) { b.textContent = 'Inscrever-se'; });
+  }
+  function buscarSituacao() {
+    if (TESTE) {
+      var simulado = {
+        espera: { situacao: 'lista_espera', tamanhos: [], acompanhante: true },
+        encerradas: { situacao: 'encerradas', tamanhos: [], acompanhante: false },
+        esgotado: { situacao: 'abertas', tamanhos: ['M', 'G'], acompanhante: true },
+        umlugar: { situacao: 'ultimas_vagas', tamanhos: ['P', 'M', 'G'], acompanhante: false }
+      }[CENARIO];
+      return Promise.resolve(simulado || { situacao: 'abertas', tamanhos: ['P', 'M', 'G'], acompanhante: true });
+    }
+    if (BACKEND !== 'supabase' || !APP.supabaseUrl) return Promise.resolve(null);
+    return fetch(APP.supabaseUrl + '/rest/v1/rpc/evento_publico', {
+      method: 'POST',
+      headers: { apikey: APP.supabaseKey, 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ evento: SLUG })
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (l) { return Array.isArray(l) && l[0] ? l[0] : null; })
+      .catch(function () { return null; });
+  }
+  var situacaoPronta = buscarSituacao().then(function (s) { aplicarSituacao(s); return s; });
+
+  /* ----- CAPTCHA (Cloudflare Turnstile), carregado só quando o formulário abre ----- */
+  var captcha = { id: null, carregando: null };
+  function carregarCaptcha() {
+    if (TESTE || BACKEND !== 'supabase' || !APP.turnstileSiteKey) return Promise.resolve();
+    if (captcha.carregando) return captcha.carregando;
+    captcha.carregando = new Promise(function (ok, nok) {
+      var s = document.createElement('script');
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      s.async = true; s.onload = ok; s.onerror = nok;
+      document.head.appendChild(s);
+    }).then(function () {
+      captcha.id = window.turnstile.render('#f-captcha', { sitekey: APP.turnstileSiteKey, action: 'inscricao', language: 'pt-br', size: 'flexible' });
+    }).catch(function () { captcha.carregando = null; });
+    return captcha.carregando;
+  }
+  function tokenCaptcha() {
+    if (TESTE || BACKEND !== 'supabase') return 'teste';
+    return captcha.id !== null && window.turnstile ? window.turnstile.getResponse(captcha.id) : '';
+  }
+  function reiniciarCaptcha() { if (captcha.id !== null && window.turnstile) window.turnstile.reset(captcha.id); }
 
   function digitos(v) { return String(v || '').replace(/\D/g, '').slice(0, 11); }
   function mascara(v) {
@@ -175,31 +252,44 @@
       case 'whatsapp': return telValido(digitos($('#f-whatsapp').value)) ? '' : 'Escreva seu WhatsApp com DDD, por exemplo (21) 99999-9999.';
       case 'empresa': return $('#f-empresa').value.trim().length >= 2 ? '' : 'Escreva o nome da sua empresa.';
       case 'cargo': return valor('cargo') ? '' : 'Escolha uma opção.';
+      case 'equipe': return valor('equipe_gpm') ? '' : 'Escolha Sim ou Não.';
+      case 'convidado': return '';
       case 'participou': return marcados('participou').length ? '' : 'Escolha ao menos uma opção.';
       case 'perfil': return '';
+      case 'doacao': return valor('doacao_tamanho') ? '' : 'Escolha o tamanho da fralda que você vai levar.';
       case 'acompanhante':
-        if (!valor('acompanhante')) return 'Escolha Sim ou Não.';
+        if (!valor('acompanhante')) return 'Escolha uma das opções.';
         if (valor('acompanhante') === 'Sim') {
           if ($('#f-acomp-nome').value.trim().length < 3) return 'Escreva o nome do acompanhante.';
           var d = digitos($('#f-acomp-whatsapp').value);
           if (!telValido(d)) return 'Escreva o WhatsApp do acompanhante com DDD.';
           if (d === digitos($('#f-whatsapp').value)) return 'O WhatsApp do acompanhante precisa ser diferente do seu.';
+          if (!valor('acompanhante_doacao_tamanho')) return 'Escolha o tamanho da fralda do acompanhante.';
         }
         return '';
-      case 'consentimento': return $('#f-consent').checked ? '' : 'Marque a concordância para enviar a inscrição.';
+      case 'consentimento':
+        if (!$('#f-consent').checked) return 'Marque a concordância para enviar a inscrição.';
+        if (!tokenCaptcha()) return 'Aguarde a verificação de segurança terminar (logo acima do botão) e tente de novo.';
+        return '';
     }
     return '';
   }
   function primeiroCampo(etapa) { return $('input:not([type="hidden"]):not([tabindex="-1"])', etapa); }
+  function esconderTudo() {
+    etapas.forEach(function (e) { e.hidden = true; });
+    fim.hidden = true; encerradas.hidden = true;
+  }
   function mostrar(i, focar) {
     passo = i;
-    etapas.forEach(function (e, j) { e.hidden = j !== i; });
-    fim.hidden = true;
+    esconderTudo();
+    etapas[i].hidden = false;
+    $('#form-acoes').hidden = false;
     $$('span', progresso).forEach(function (s, j) { s.className = j < i ? 'feito' : j === i ? 'atual' : ''; });
     voltar.hidden = i === 0;
     continuar.textContent = i === etapas.length - 1 ? 'Enviar inscrição' : 'Continuar';
     dica.hidden = i === etapas.length - 1;
     erro.textContent = '';
+    if (etapas[i].getAttribute('data-etapa') === 'consentimento') carregarCaptcha();
     // Próximas perguntas, apagadas, embaixo (como no G4).
     while (proximas.firstChild) proximas.removeChild(proximas.firstChild);
     etapas.slice(i + 1, i + 3).forEach(function (e) {
@@ -210,6 +300,13 @@
     if (focar !== false) { var c = primeiroCampo(etapas[i]); if (c) c.focus({ preventScroll: true }); }
     modal.scrollTop = 0;
   }
+  function mostrarEncerradas() {
+    esconderTudo();
+    encerradas.hidden = false;
+    $('#form-acoes').hidden = true;
+    while (proximas.firstChild) proximas.removeChild(proximas.firstChild);
+    encerradas.focus();
+  }
   function abrir(e) {
     if (e) e.preventDefault();
     origemFoco = document.activeElement;
@@ -217,6 +314,7 @@
     document.body.classList.add('av-travado');
     if (location.hash !== '#inscricao') history.pushState(null, '', '#inscricao');
     if (enviado) { mostrarFim(); return; }
+    if (SIT.situacao === 'encerradas') { mostrarEncerradas(); return; }
     mostrar(passo);
   }
   function fechar(semHistorico) {
@@ -230,12 +328,12 @@
   $('#form-fechar').addEventListener('click', function () { fechar(); });
   $$('[data-fechar-form]').forEach(function (b) { b.addEventListener('click', function () { fechar(); }); });
   window.addEventListener('hashchange', function () { if (location.hash === '#inscricao') abrir(); else fechar(true); });
-  if (location.hash === '#inscricao') abrir();
+  if (location.hash === '#inscricao') situacaoPronta.then(function () { abrir(); });
   // ESC fecha; Tab fica preso dentro do formulário.
   modal.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { e.preventDefault(); fechar(); return; }
     if (e.key !== 'Tab') return;
-    var foco = $$('a[href], button:not([disabled]), input:not([tabindex="-1"]), [tabindex="0"]', modal).filter(function (x) { return x.offsetParent !== null; });
+    var foco = $$('a[href], button:not([disabled]), input:not([tabindex="-1"]), iframe, [tabindex="0"]', modal).filter(function (x) { return x.offsetParent !== null; });
     if (!foco.length) return;
     var pri = foco[0], ult = foco[foco.length - 1];
     if (e.shiftKey && document.activeElement === pri) { e.preventDefault(); ult.focus(); }
@@ -243,40 +341,109 @@
   });
   voltar.addEventListener('click', function () { if (passo > 0) mostrar(passo - 1); });
 
-  function dados() {
-    var nome = $('#f-nome').value.trim().replace(/\s+/g, ' ');
-    var d = {
-      _subject: (CFG.ASSUNTO || 'Inscrição · Academia de Virtudes') + ' · ' + nome,
-      origem: CFG.ORIGEM || 'site-academia-v2',
-      encontro: P.titulo || '',
+  function nomeLimpo() { return $('#f-nome').value.trim().replace(/\s+/g, ' '); }
+  // Campos para a Edge Function (colunas da tabela inscricoes).
+  function dadosSupabase() {
+    var acomp = valor('acompanhante') === 'Sim';
+    return {
+      evento: SLUG,
       email: $('#f-email').value.trim(),
-      nome: nome,
-      whatsapp: mascara($('#f-whatsapp').value),
+      nome: nomeLimpo(),
+      whatsapp: digitos($('#f-whatsapp').value),
       empresa: $('#f-empresa').value.trim(),
       cargo: valor('cargo'),
-      ja_participou: marcados('participou').join(', '),
-      perfil_ia: valor('perfil_ia') || '(não informado)',
-      acompanhante: valor('acompanhante'),
-      consentimento: 'Concordo com o uso dos meus dados para a organização do encontro e estou ciente de que ele poderá ser fotografado e gravado.',
-      comunicacoes: $('#f-comunic').checked ? 'Sim' : 'Não'
+      equipe_gpm: valor('equipe_gpm') === 'Sim',
+      convidado_por: $('#f-convidado').value.trim(),
+      participou: marcados('participou').filter(function (p) { return p !== 'ainda-nao'; }),
+      perfil_ia: valor('perfil_ia'),
+      doacao_tamanho: valor('doacao_tamanho'),
+      acompanhante: acomp,
+      acompanhante_nome: acomp ? $('#f-acomp-nome').value.trim() : '',
+      acompanhante_whatsapp: acomp ? digitos($('#f-acomp-whatsapp').value) : '',
+      acompanhante_doacao_tamanho: acomp ? valor('acompanhante_doacao_tamanho') : '',
+      consentimento: $('#f-consent').checked,
+      aceite_comunicacoes: $('#f-comunic').checked,
+      captchaToken: tokenCaptcha(),
+      website: $('#form-hp').value
     };
-    if (d.acompanhante === 'Sim') { d.acompanhante_nome = $('#f-acomp-nome').value.trim(); d.acompanhante_whatsapp = mascara($('#f-acomp-whatsapp').value); }
-    if ($('#form-hp').value) d._gotcha = $('#form-hp').value;
+  }
+  // Plano B: o mesmo conteúdo, em texto, para o Formspree.
+  function dadosFormspree() {
+    var s = dadosSupabase();
+    var d = {
+      _subject: (CFG.ASSUNTO || 'Inscrição · Academia de Virtudes') + ' · ' + s.nome,
+      origem: CFG.ORIGEM || 'site-academia-v2',
+      encontro: P.titulo || '',
+      email: s.email, nome: s.nome, whatsapp: mascara(s.whatsapp), empresa: s.empresa, cargo: s.cargo,
+      equipe_gpm: s.equipe_gpm ? 'Sim' : 'Não',
+      convidado_por: s.convidado_por || '(não informado)',
+      ja_participou: marcados('participou').join(', ').replace(/encontro-(\d+)/g, 'Encontro $1').replace('ainda-nao', 'Ainda não'),
+      perfil_ia: s.perfil_ia || '(não informado)',
+      fralda: s.doacao_tamanho,
+      acompanhante: s.acompanhante ? 'Sim' : 'Não',
+      consentimento: 'Concordo com o uso dos meus dados para a organização do encontro e estou ciente de que ele poderá ser fotografado e gravado.',
+      comunicacoes: s.aceite_comunicacoes ? 'Sim' : 'Não'
+    };
+    if (s.acompanhante) { d.acompanhante_nome = s.acompanhante_nome; d.acompanhante_whatsapp = mascara(s.acompanhante_whatsapp); d.acompanhante_fralda = s.acompanhante_doacao_tamanho; }
+    if (s.website) d._gotcha = s.website;
     return d;
   }
-  function enviar(corpo) {
-    if (TESTE) { console.info('[teste] envio simulado', corpo); return new Promise(function (r) { setTimeout(r, 600); }); }
-    return fetch(CFG.FORMULARIO, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(corpo) })
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); });
+  // Resolve com { situacao } ou rejeita com { erro, mensagem, tamanhos, rede }.
+  function enviar() {
+    if (TESTE) {
+      console.info('[teste] envio simulado', dadosSupabase());
+      return new Promise(function (ok, nok) {
+        setTimeout(function () {
+          if (CENARIO === 'esgotado' && valor('doacao_tamanho') === 'M') nok({ erro: 'tamanho_esgotado', tamanhos: ['G'] });
+          else ok({ situacao: SIT.situacao === 'lista_espera' || (valor('acompanhante') === 'Sim' && !SIT.acompanhante) ? 'lista_espera' : 'inscrito' });
+        }, 600);
+      });
+    }
+    if (BACKEND === 'formspree') {
+      return fetch(CFG.FORMULARIO, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(dadosFormspree()) })
+        .then(function (r) { if (!r.ok) throw { rede: true }; return { situacao: 'inscrito' }; }, function () { throw { rede: true }; });
+    }
+    return fetch(APP.supabaseUrl + '/functions/v1/inscricao', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(dadosSupabase())
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (r.ok && j.ok) return { situacao: j.situacao };
+        if (r.status >= 500 || !j.erro) throw { rede: true };
+        throw j;
+      });
+    }, function () { throw { rede: true }; });
+  }
+  function tamanhosTexto() {
+    var t = [valor('doacao_tamanho')];
+    if (valor('acompanhante') === 'Sim') t.push(valor('acompanhante_doacao_tamanho'));
+    var marca = SIT.doacao_marca;
+    if (t.length === 1) return 'Não esqueça: 1 pacote de fraldas ' + marca + ', tamanho ' + t[0] + '.';
+    return 'Não esqueça: 2 pacotes de fraldas ' + marca + ', ' + (t[0] === t[1] ? 'tamanho ' + t[0] : 'tamanhos ' + t[0] + ' e ' + t[1]) + '.';
   }
   function mostrarFim() {
-    etapas.forEach(function (e) { e.hidden = true; });
+    esconderTudo();
     fim.hidden = false;
     $('#form-acoes').hidden = true;
     while (proximas.firstChild) proximas.removeChild(proximas.firstChild);
     $$('span', progresso).forEach(function (s) { s.className = 'feito'; });
-    $('#fim-nome').textContent = ($('#f-nome').value.trim().split(/\s+/)[0]) || 'participante';
+    var nome = (nomeLimpo().split(' ')[0]) || 'participante';
+    var espera = resultado && resultado.situacao === 'lista_espera';
+    $('#fim-titulo').textContent = espera ? 'Você está na lista de espera.' : 'Inscrição recebida.';
+    var texto = $('#fim-texto');
+    while (texto.firstChild) texto.removeChild(texto.firstChild);
+    if (espera) {
+      texto.appendChild(document.createTextNode('Obrigado, ' + nome + '. Recebemos sua inscrição na '));
+      texto.appendChild(el('strong', null, 'lista de espera'));
+      texto.appendChild(document.createTextNode('. Se abrir uma vaga, avisamos pelo WhatsApp.'));
+    } else {
+      texto.appendChild(document.createTextNode('Obrigado, ' + nome + '. Assim que a data do Encontro 3 for confirmada, você recebe o convite pelo WhatsApp.'));
+    }
+    $('#fim-doacao').hidden = !!espera;
+    $('#fim-doacao').textContent = tamanhosTexto();
     fim.focus();
+  }
+  function irPara(nomeEtapa) {
+    for (var i = 0; i < etapas.length; i++) if (etapas[i].getAttribute('data-etapa') === nomeEtapa) return mostrar(i);
   }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -286,12 +453,26 @@
     if (passo < etapas.length - 1) { mostrar(passo + 1); return; }
     falha.hidden = true;
     continuar.disabled = true; continuar.textContent = 'Enviando…';
-    enviar(dados()).then(function () {
-      enviado = true;
+    enviar().then(function (r) {
+      resultado = r; enviado = true;
+      continuar.disabled = false;
       mostrarFim();
-    }).catch(function () {
-      continuar.disabled = false; continuar.textContent = 'Tentar de novo';
-      falha.hidden = false;
+    }).catch(function (x) {
+      continuar.disabled = false;
+      reiniciarCaptcha();
+      x = x || {};
+      if (x.erro === 'tamanho_esgotado') {
+        aplicarSituacao({ situacao: SIT.situacao, tamanhos: x.tamanhos || [], acompanhante: SIT.acompanhante, doacao_marca: SIT.doacao_marca });
+        irPara('doacao');
+        erro.textContent = (x.tamanhos && x.tamanhos.length)
+          ? 'O tamanho escolhido acabou de esgotar. Ainda temos: ' + x.tamanhos.join(', ') + '. Escolha outro e envie de novo.'
+          : 'Os tamanhos de fralda esgotaram. Atualize a página para ver a situação do encontro.';
+        return;
+      }
+      if (x.erro === 'encerradas') { SIT.situacao = 'encerradas'; mostrarEncerradas(); return; }
+      continuar.textContent = 'Tentar de novo';
+      if (x.rede) { falha.hidden = false; return; }
+      erro.textContent = x.mensagem || 'Não conseguimos enviar agora. Confira os dados e tente de novo.';
     });
   });
 })();

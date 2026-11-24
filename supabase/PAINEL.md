@@ -19,8 +19,9 @@ No painel: **SQL Editor → New query**, cole o arquivo inteiro e clique em **Ru
 7. `supabase/migrations/0006_cadastro_aberto.sql` (cadastro aberto, CPF, cadastro completo, consentimento de comunicações)
 8. `supabase/migrations/0007_aulas.sql` (aulas com YouTube ou PDF, trilhas opcionais, PDFs de apoio; adapta os encontros que já existem, sem apagar nada)
 9. Testes, depois de todas as migrations: `supabase/tests/0002_conteudo_test.sql`, `supabase/tests/0003_cadastro_test.sql` e `supabase/tests/0004_aulas_test.sql` (todas as linhas `ok = true`). O 0002 agora testa as regras da 0007 (publicação e liberação por aula), então só roda depois dela.
-10. Opcional, só para ver a vitrine cheia: `supabase/seed/exemplo.sql` (2 trilhas, 4 videoaulas de exemplo e 2 PDFs fictícios; o fim do arquivo explica como apagar).
-11. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
+10. Depois: `0008_mais_assistidas.sql`, `0009_inscricoes.sql` e `0010_inscricoes_email.sql`, com os testes `0005_inscricoes_test.sql` e `0006_inscricoes_email_test.sql` (ver item 13).
+11. Opcional, só para ver a vitrine cheia: `supabase/seed/exemplo.sql` (2 trilhas, 4 videoaulas de exemplo e 2 PDFs fictícios; o fim do arquivo explica como apagar).
+12. **Advisors → Security Advisor**: precisa ficar sem alertas. Se aparecer "Leaked password protection disabled", é a opção do item 2 abaixo (depende do plano).
 
 ## 2. Senha
 
@@ -149,3 +150,113 @@ Para tirar o MFA de um admin que perdeu o celular (SQL Editor):
 ```sql
 delete from auth.mfa_factors where user_id = (select id from auth.users where email = 'email-do-admin');
 ```
+
+## 13. Inscrições nos encontros e confirmação de presença (desde 24/11/2026)
+
+Substitui o Formspree nas inscrições da página `/academiadevirtudes/` e na confirmação de presença (`/academiadevirtudes/presenca/?t=…`). O Formspree continua como plano B: em `academiadevirtudes/_publico/academia-config.js`, troque `FORM_BACKEND: "supabase"` por `"formspree"` e publique.
+
+**Inscrição ≠ portal.** A inscrição num encontro não cria conta, não envia convite e não libera nada na Área do Aluno (o teste `0006_inscricoes_email_test.sql` confere isso).
+
+### 13.1 SQL (nesta ordem, no SQL Editor)
+
+1. `supabase/migrations/0008_mais_assistidas.sql` (se ainda não rodou)
+2. `supabase/migrations/0009_inscricoes.sql`: eventos, cotas de fralda, inscrições, presença. Cria o **Encontro 3** com 50 lugares, 1 reservado, fraldas P 17 · M 17 · G 16, **inscrições fechadas**.
+3. `supabase/migrations/0010_inscricoes_email.sql`: e-mail de confirmação, travas das cotas, aviso "tem conta no portal".
+4. Testes: `supabase/tests/0005_inscricoes_test.sql` e `supabase/tests/0006_inscricoes_email_test.sql` (todas as linhas `ok = true`; os testes apagam o que criam).
+5. **Advisors → Security Advisor**: sem alertas.
+
+### 13.2 Edge Functions
+
+```bash
+supabase functions deploy inscricao            --no-verify-jwt
+supabase functions deploy confirmar-presenca   --no-verify-jwt
+supabase functions deploy reenviar-confirmacao --no-verify-jwt
+# o código comum (CORS) mudou: publique de novo as que já existem
+supabase functions deploy convidar-aluno alterar-status-aluno alterar-papel-aluno importar-alunos dados-aluno --no-verify-jwt
+```
+
+### 13.3 Segredos (secrets) das funções
+
+Gere o sal do limite por IP (64 caracteres aleatórios), no terminal, na raiz do repositório:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Depois (troque os valores entre < >; nada disso vai para o repositório):
+
+```bash
+supabase secrets set IP_SALT=<o valor gerado acima>
+supabase secrets set TURNSTILE_SECRET=<secret key NOVA do Turnstile, ver 13.4>
+supabase secrets set RESEND_API_KEY=<chave do Resend, começa com re_, ver 13.5>
+# opcionais (os padrões já são estes):
+supabase secrets set EMAIL_REMETENTE="Academia de Virtudes <marketing@gpmintegracao.com.br>"
+supabase secrets set EMAIL_RESPONDER_PARA=marketing@gpmintegracao.com.br
+```
+
+Sem `RESEND_API_KEY`, as inscrições funcionam normalmente e ficam com o e-mail "não enviado"; depois é só usar **Reenviar** no painel.
+
+### 13.4 Troca da secret key do Turnstile (nos DOIS lugares, no mesmo momento)
+
+A secret atual apareceu num print e precisa ser trocada. Faça num horário sem uso da plataforma:
+
+1. Cloudflare → **Turnstile** → widget do site → **Settings** → **Rotate secret key**. Copie a nova secret.
+2. Na hora, nos dois lugares:
+   - `supabase secrets set TURNSTILE_SECRET=<nova>`
+   - Supabase → **Authentication → Attack Protection → CAPTCHA protection** → cole a nova secret → **Save**.
+3. Teste logo em seguida, numa janela anônima:
+   - entrar na Área do Aluno (`/academiadevirtudes/entrar/`) com uma conta de teste;
+   - "Esqueci minha senha" com essa conta (o e-mail precisa chegar);
+   - uma inscrição de teste (13.7).
+4. Se o login falhar com erro de CAPTCHA, confira se a secret colada no Supabase é a nova (sem espaços no fim).
+
+A site key (pública, em `_app/config.js`) não muda. Confira em **Hostname Management** que o widget tem `gpmintegracao.com.br`, `www.gpmintegracao.com.br` e `localhost`.
+
+### 13.5 Resend (e-mail de confirmação da inscrição)
+
+**Atenção:** o DNS público de `gpmintegracao.com.br` (consultado em 24/11/2026) mostra o e-mail na **Hostinger**, não no Microsoft 365:
+- MX: `mx1.hostinger.com` (5) e `mx2.hostinger.com` (10)
+- SPF (TXT na raiz): `v=spf1 include:_spf.mail.hostinger.com ~all`
+- DMARC (`_dmarc`): `v=DMARC1; p=none`
+- Servidores de DNS: `ns1/ns2.dns-parking.com` (os registros são editados no **hPanel da Hostinger → Domínios → DNS**).
+
+Os registros do Resend **não mexem** em nada disso: o envio usa o subdomínio `send.` para o retorno e a assinatura DKIM no próprio domínio.
+
+1. Crie a conta em resend.com (de preferência com um e-mail da equipe) → **Domains → Add Domain** → `gpmintegracao.com.br`, região **São Paulo (sa-east-1)**.
+2. Crie no DNS **exatamente** os registros que o Resend mostrar. Para a região São Paulo, são estes (o valor do DKIM é único da conta; copie do Resend):
+
+| Tipo | Nome (host) | Valor | Prioridade |
+|---|---|---|---|
+| TXT | `resend._domainkey` | `p=MIGfMA0…` (copiar do Resend) | — |
+| MX | `send` | `feedback-smtp.sa-east-1.amazonses.com` | 10 |
+| TXT | `send` | `v=spf1 include:amazonses.com ~all` | — |
+
+   - **Não** altere o MX da raiz (`@`) nem o SPF da raiz. **Não** crie um segundo SPF na raiz: o SPF novo fica só em `send`.
+   - **Não** crie outro `_dmarc`: o domínio já tem um (`p=none`). Mais tarde, com os envios estáveis, vale subir para `p=quarantine`.
+   - Se um dia o e-mail do domínio for mesmo para o Microsoft 365, o SPF da raiz muda para `v=spf1 include:spf.protection.outlook.com ~all` (um registro só) — sem relação com o Resend.
+3. Clique em **Verify** no Resend (pode levar de minutos a algumas horas). Quando o domínio ficar **Verified**, crie a chave: **API Keys → Create** → permissão **Sending access**, domínio `gpmintegracao.com.br`. Cadastre com `supabase secrets set RESEND_API_KEY=re_…`.
+4. Teste de entrega: faça uma inscrição de teste com um e-mail do **Gmail** e outra com um do **Outlook/Hotmail**.
+   - Gmail: abra o e-mail → ⋮ → **Mostrar original**. Precisa aparecer **SPF: PASS**, **DKIM: PASS** e **DMARC: PASS**.
+   - Outlook.com: abra o e-mail → ⋯ → **Exibir → Exibir origem da mensagem** e procure `Authentication-Results`: `spf=pass`, `dkim=pass` (`header.d=gpmintegracao.com.br`), `dmarc=pass`.
+   - Se cair no spam, confira os três registros no Resend (**Domains**) e espere a propagação.
+
+### 13.6 Painel → Inscrições
+
+- **Antes de abrir:** confira o horário (9h) e o local do Encontro 3 em **Editar evento**. Depois marque **Inscrições abertas** e salve.
+- Cotas de fralda e marca ficam na tela do evento. A soma das cotas pode ser maior que os lugares; o painel avisa se for menor. Não dá para baixar uma cota abaixo do que já está reservado.
+- Confirmação pelo WhatsApp: o texto fica em **Editar evento → Mensagem do WhatsApp** (`{nome}`, `{evento}` e `{link}` são trocados por linha).
+- **Modo check-in** no celular, no dia: busca pelo nome e "Chegou" separado para o acompanhante.
+
+### 13.7 Como testar antes de abrir para o público
+
+Tudo isto numa janela anônima, com o site rodando no Live Server (`http://localhost:5500`):
+
+1. Sem enviar nada: `/academiadevirtudes/?teste` (e `?teste=espera`, `?teste=encerradas`, `?teste=esgotado`, `?teste=umlugar`) e `/academiadevirtudes/presenca/?teste`.
+2. De verdade, sem tocar no Encontro 3: no painel, crie um evento de teste (slug `teste`, data futura, capacidade 3, cotas P 1 · M 1 · G 1, inscrições abertas). Abra `http://localhost:5500/academiadevirtudes/?evento=teste#inscricao` (o `?evento=` só vale no localhost) e faça:
+   - inscrição completa sem acompanhante; depois a mesma de novo (mesmo WhatsApp): continua 1 linha, "Envios" = 2;
+   - uma com acompanhante; com o evento cheio, a próxima entra na lista de espera;
+   - peça um tamanho que acabou: o formulário volta para a etapa da fralda e mostra os que restam;
+   - feche as inscrições no painel: o formulário mostra "Inscrições encerradas";
+   - no painel, use o botão de WhatsApp de uma linha "Aguardando", abra o link de presença e responda "sim" e depois "não vou";
+   - modo check-in no celular; exporte os dois CSV e abra no Excel.
+3. No fim, exclua o evento de teste (exclua as inscrições dele antes).

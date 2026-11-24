@@ -16,14 +16,18 @@ window.AV_CONFIG = {
     entrada: "Gratuita, mediante doação"
   },
 
-  // Formspree do formulário em etapas. [CONFIRMAR] Hoje usa o mesmo das inscrições do Encontro 2
-  // (conta nova). Se criar um formulário só para o Encontro 3, troque o código aqui.
+  // Envio do formulário em etapas:
+  //   "supabase"  = padrão: Edge Function "inscricao" (vagas, lista de espera, cotas de fralda e e-mail de confirmação)
+  //   "formspree" = plano B, se algo der errado no dia: troque aqui e publique.
+  FORM_BACKEND: "supabase",
+  // Evento no banco (tabela eventos, aba Inscrições do painel).
+  EVENTO: "encontro-3",
+  // Plano B (Formspree). Só é usado com FORM_BACKEND = "formspree".
   FORMULARIO: "https://formspree.io/f/xoedlyqp",
   ASSUNTO: "Inscrição · Academia de Virtudes · Encontro 3",
   ORIGEM: "site-academia-v2",
 
-  // Itens da doação (Rede Colaborativa Pró-Vida). [CONFIRMAR para o Encontro 3]
-  DOACOES: ["Fraldas", "Lenços umedecidos", "Roupas de bebê"],
+  // A doação (fraldas, marca e tamanhos) agora fica no evento, no painel (aba Inscrições).
 
   // Depoimentos em vídeo (YouTube "não listado"). Enquanto estiver vazio, a seção fica escondida.
   // Exemplo de item: { youtube: "ID_DE_11_CARACTERES", nome: "Nome da pessoa", cargo: "Cargo · Empresa" }

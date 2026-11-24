@@ -777,3 +777,78 @@ h1[tabindex="-1"]:focus { outline: none; }
 .ac-envio { display: grid; gap: 8px; margin: 16px 0 0; }
 .ac-envio[hidden] { display: none; }
 .ac-envio__texto { margin: 0; font-size: 14px; color: var(--mist); }
+
+/* =====================================================================
+   Painel · aba Inscrições (encontros presenciais) · 24/11/2026
+   ===================================================================== */
+p.in-evento-info { margin: -6px 0 16px; line-height: 1.5; }
+.in-check-espaco { margin-top: 12px; }
+.in-cotas { margin: 20px 0 8px; padding: 16px 16px 4px; border: 1px solid var(--line); border-radius: var(--raio); }
+.in-cotas legend { padding: 0 6px; font: 600 13px var(--sans); letter-spacing: .04em; color: var(--gold-2); }
+.in-cotas__grade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 12px; }
+.in-aviso { margin: 10px 0; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(240, 190, 110, .5); background: rgba(240, 190, 110, .08); color: #F3CF8E; font-size: 14px; }
+.in-numeros { margin-bottom: 14px; }
+#in-emails { margin-bottom: 22px; }
+@media (min-width: 1000px) { .in-numeros { grid-template-columns: repeat(8, 1fr); } .in-numeros .ac-numero strong { font-size: 34px; } }
+.in-linha-info { margin: 4px 0; font-size: 14.5px; color: var(--mist); font-variant-numeric: lining-nums; }
+.in-linha-info strong { color: var(--ivory); font-weight: 600; }
+.in-cota { color: var(--ivory); font-weight: 600; }
+.in-cota--cheia { color: var(--erro); }
+.in-acoes { margin-top: 4px; }
+.in-acoes .ac-btn { min-height: 42px; font-size: 13.5px; }
+
+.in-tabela td { font-size: 14px; }
+.in-pessoa { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+.in-pessoa strong { color: var(--ivory); font-weight: 600; }
+.in-selos { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.in-selos .ac-selo--mini { margin-left: 0; }
+.in-obs { font-style: italic; }
+.in-fralda { font: 600 16px var(--sans); color: var(--gold-2); }
+.in-email { display: grid; gap: 6px; justify-items: start; }
+.in-linha--cancelada { opacity: .6; }
+.in-btn-whats { background: #1F7A4D; border-color: #1F7A4D; color: #fff; }
+.in-btn-whats:hover { background: #239058; color: #fff; }
+.ac-erro-texto { color: var(--erro); font-size: 13px; }
+
+/* Selos de situação: Sim verde · Aguardando amarelo · Não vai cinza · Lista de espera laranja */
+.in-selo--sim { color: #8FD3A8; border-color: rgba(143, 211, 168, .55); background: rgba(143, 211, 168, .08); }
+.in-selo--aguardando { color: #F2D27A; border-color: rgba(242, 210, 122, .55); background: rgba(242, 210, 122, .08); }
+.in-selo--naovai { color: #B9C0CF; border-color: rgba(185, 192, 207, .4); background: rgba(185, 192, 207, .06); }
+.in-selo--espera { color: #F5A962; border-color: rgba(245, 169, 98, .6); background: rgba(245, 169, 98, .1); }
+.in-selo--cancelado { color: var(--erro); border-color: rgba(240, 165, 149, .45); }
+.in-selo--info { color: var(--mist); border-color: var(--line-2); }
+.in-selo--email-enviado { color: #8FD3A8; border-color: rgba(143, 211, 168, .55); }
+.in-selo--email-falhou { color: var(--erro); border-color: rgba(240, 165, 149, .55); }
+.in-selo--email-naoenviado { color: #F2D27A; border-color: rgba(242, 210, 122, .45); }
+
+@media (min-width: 761px) {
+  .in-tabela th:nth-child(4), .in-tabela th:nth-child(5), .in-tabela th:nth-child(6),
+  .in-tabela td:nth-child(4), .in-tabela td:nth-child(5), .in-tabela td:nth-child(6) { text-align: center; }
+  .in-tabela th { white-space: normal; }
+}
+@media (max-width: 760px) {
+  .in-tabela td:nth-child(4), .in-tabela td:nth-child(5), .in-tabela td:nth-child(6) { display: inline-block; width: auto; min-width: 30%; vertical-align: top; }
+  .in-cotas__grade { gap: 0 8px; }
+  .in-acoes .ac-btn { flex: 1 1 100%; }
+}
+
+/* Modo check-in: grande, para usar no celular na porta */
+.in-checkin { margin-top: 8px; }
+.in-checkin__topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.in-checkin__contagem { margin: 0; font: 500 24px/1.2 var(--serif); color: var(--gold-2); font-variant-numeric: lining-nums; }
+.in-checkin__busca { min-height: 56px; font-size: 18px; }
+.in-checkin__lista { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.in-ck { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: var(--raio); background: rgba(14, 31, 69, .55); border: 1px solid var(--line-2); }
+.in-ck--acomp { margin-left: 22px; margin-top: -4px; border-style: dashed; }
+.in-ck--chegou { border-color: rgba(143, 211, 168, .55); background: rgba(31, 122, 77, .18); }
+.in-ck__info { display: grid; gap: 2px; min-width: 0; }
+.in-ck__nome { font-size: 18px; font-weight: 600; color: var(--ivory); overflow-wrap: anywhere; }
+.in-ck__meta { font-size: 14px; color: var(--gold-2); font-weight: 600; }
+.in-ck__rotulo { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+.in-chegou { flex-shrink: 0; min-width: 116px; min-height: 52px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--gold); background: transparent; color: var(--gold-2); font: 600 16px var(--sans); cursor: pointer; }
+.in-chegou:hover { background: rgba(201, 164, 92, .12); }
+.in-chegou:focus-visible { outline: 3px solid var(--gold-2); outline-offset: 2px; }
+.in-chegou--sim { background: #1F7A4D; border-color: #1F7A4D; color: #fff; }
+.in-chegou--sim:hover { background: #239058; }
+.in-chegou:disabled { opacity: .6; cursor: progress; }
+@media (max-width: 420px) { .in-ck { padding: 12px; } .in-chegou { min-width: 96px; } .in-ck--acomp { margin-left: 12px; } }

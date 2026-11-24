@@ -97,7 +97,7 @@ insert into _r (teste, esperado, obtido)
 select 'A: inscrição nova', 'true/inscrito', (r ->> 'ok') || '/' || (r ->> 'situacao')
   from (select public.inscricao_registrar(pg_temp.ficha('{"nome":"Ana  Teste","whatsapp":"21999990001","email":"ANA@Exemplo.invalid","doacao_tamanho":"P"}')) r) x;
 insert into _r (teste, esperado, obtido)
-select 'A: resposta não traz dados de inscritos', 'ok,situacao', string_agg(k, ',' order by k)
+select 'A: resposta não traz dados de inscritos (depois da 0010 vem também o id, que a Edge Function não repassa)', 'ok,situacao', string_agg(k, ',' order by k) filter (where k <> 'id')
   from jsonb_object_keys(public.inscricao_registrar(pg_temp.ficha('{"nome":"Ana Teste","whatsapp":"(21) 99999-0001","email":"ana@exemplo.invalid","doacao_tamanho":"P"}'))) k;
 -- (a linha acima é o 2º envio da Ana, com máscara no WhatsApp)
 

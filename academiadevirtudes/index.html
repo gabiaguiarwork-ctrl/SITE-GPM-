@@ -11,7 +11,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://i.ytimg.com; font-src 'self'; connect-src 'self' https://formspree.io; frame-src https://www.youtube-nocookie.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; img-src 'self' data: https://i.ytimg.com; font-src 'self'; connect-src 'self' https://qfghgtrvwklzlsuawndm.supabase.co https://formspree.io; frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#08142E">
@@ -28,9 +28,10 @@
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
 <link rel="preload" href="/academiadevirtudes/_app/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/academiadevirtudes/_app/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=2">
-<script src="/academiadevirtudes/_publico/academia-config.js?v=2" defer></script>
-<script src="/academiadevirtudes/_publico/academia.js?v=2" defer></script>
+<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=3">
+<script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
+<script src="/academiadevirtudes/_publico/academia-config.js?v=3" defer></script>
+<script src="/academiadevirtudes/_publico/academia.js?v=3" defer></script>
 </head>
 <body>
 
@@ -331,7 +332,7 @@
         <p class="av-texto">Os encontros são gratuitos. Cada participante leva itens para bebês e mães, destinados ao <strong>Instituto Pró-Vida</strong>, que apoia mulheres em situação de vulnerabilidade durante a gestação e o pós-parto.</p>
       </div>
       <div class="av-entra">
-        <ul class="av-chips" id="doacao-itens"><li>Fraldas</li><li>Lenços umedecidos</li><li>Roupas de bebê</li></ul>
+        <ul class="av-chips" id="doacao-itens"><li>1 pacote de fraldas por pessoa</li><li data-doacao-marca>Pampers ou Huggies</li><li>Tamanho P, M ou G</li></ul>
         <p class="av-doacao__aviso">Não recebemos doações em dinheiro.</p>
         <a class="av-link av-doacao__link" href="https://redeprovida.com" target="_blank" rel="noopener noreferrer">Conheça o Instituto Pró-Vida</a>
       </div>
@@ -401,6 +402,7 @@
 
     <fieldset class="av-etapa" data-etapa="email">
       <p class="av-etapa__ola">Olá. Precisamos de algumas informações para enviar o seu convite.</p>
+      <p class="av-etapa__aviso" id="f-aviso-espera" hidden>As vagas deste encontro estão preenchidas. Sua inscrição entra na <strong>lista de espera</strong> e, se abrir uma vaga, avisamos pelo WhatsApp.</p>
       <legend><span class="av-etapa__n">1 →</span><label for="f-email">Qual é o seu e-mail?</label></legend>
       <input class="av-campo" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" placeholder="nome@empresa.com.br">
       <p class="av-form__termos">Ao continuar, você concorda com os nossos <a href="/termos-de-uso.html" target="_blank" rel="noopener noreferrer">termos de uso</a> e a <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">política de privacidade</a>.</p>
@@ -434,17 +436,30 @@
       </div>
     </fieldset>
 
-    <fieldset class="av-etapa" data-etapa="participou" hidden>
-      <legend><span class="av-etapa__n">6 →</span>Você já participou da Academia de Virtudes?</legend>
+    <fieldset class="av-etapa" data-etapa="equipe" hidden>
+      <legend><span class="av-etapa__n">6 →</span>Você faz parte da equipe do Grupo GPM?</legend>
       <div class="av-opcoes">
-        <label class="av-opcao"><input type="checkbox" name="participou" value="Encontro 1">Encontro 1</label>
-        <label class="av-opcao"><input type="checkbox" name="participou" value="Encontro 2">Encontro 2</label>
-        <label class="av-opcao"><input type="checkbox" name="participou" value="Ainda não" data-exclusivo>Ainda não</label>
+        <label class="av-opcao"><input type="radio" name="equipe_gpm" value="Sim">Sim</label>
+        <label class="av-opcao"><input type="radio" name="equipe_gpm" value="Não">Não</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="av-etapa" data-etapa="convidado" hidden>
+      <legend><span class="av-etapa__n">7 →</span><label for="f-convidado">Quem te convidou?</label> <span class="av-form__dica">(opcional)</span></legend>
+      <input class="av-campo" id="f-convidado" name="convidado_por" type="text" autocomplete="off" maxlength="120" placeholder="Nome de quem te convidou">
+    </fieldset>
+
+    <fieldset class="av-etapa" data-etapa="participou" hidden>
+      <legend><span class="av-etapa__n">8 →</span>Você já participou da Academia de Virtudes?</legend>
+      <div class="av-opcoes">
+        <label class="av-opcao"><input type="checkbox" name="participou" value="encontro-1">Encontro 1</label>
+        <label class="av-opcao"><input type="checkbox" name="participou" value="encontro-2">Encontro 2</label>
+        <label class="av-opcao"><input type="checkbox" name="participou" value="ainda-nao" data-exclusivo>Ainda não</label>
       </div>
     </fieldset>
 
     <fieldset class="av-etapa" data-etapa="perfil" hidden>
-      <legend><span class="av-etapa__n">7 →</span>Hoje, qual perfil mais representa sua relação com a IA? <span class="av-form__dica">(opcional)</span></legend>
+      <legend><span class="av-etapa__n">9 →</span>Hoje, qual perfil mais representa sua relação com a IA? <span class="av-form__dica">(opcional)</span></legend>
       <div class="av-opcoes">
         <label class="av-opcao"><input type="radio" name="perfil_ia" value="Reativo">Reativo</label>
         <label class="av-opcao"><input type="radio" name="perfil_ia" value="Usuário Google">Usuário Google</label>
@@ -454,31 +469,61 @@
       </div>
     </fieldset>
 
+    <fieldset class="av-etapa" data-etapa="doacao" hidden>
+      <legend><span class="av-etapa__n">10 →</span>Sua doação para o Instituto Pró-Vida</legend>
+      <p class="av-etapa__texto">Neste encontro, a entrada é um pacote de fraldas <strong data-doacao-marca>Pampers ou Huggies</strong>. Escolha o tamanho que você vai levar:</p>
+      <p class="av-etapa__aviso" id="f-doacao-espera" hidden>Na lista de espera, o tamanho só fica reservado se abrir uma vaga.</p>
+      <div class="av-opcoes av-opcoes--linha" id="f-tamanhos">
+        <label class="av-opcao" data-tamanho="P"><input type="radio" name="doacao_tamanho" value="P">Tamanho P</label>
+        <label class="av-opcao" data-tamanho="M"><input type="radio" name="doacao_tamanho" value="M">Tamanho M</label>
+        <label class="av-opcao" data-tamanho="G"><input type="radio" name="doacao_tamanho" value="G">Tamanho G</label>
+      </div>
+    </fieldset>
+
     <fieldset class="av-etapa" data-etapa="acompanhante" hidden>
-      <legend><span class="av-etapa__n">8 →</span>Vai levar acompanhante?</legend>
+      <legend><span class="av-etapa__n">11 →</span>Vai levar acompanhante?</legend>
+      <p class="av-etapa__aviso" id="f-um-lugar" hidden>No momento só temos lugar para você. Se quiser, entre com o acompanhante na lista de espera.</p>
       <div class="av-opcoes">
-        <label class="av-opcao"><input type="radio" name="acompanhante" value="Sim">Sim</label>
-        <label class="av-opcao"><input type="radio" name="acompanhante" value="Não">Não</label>
+        <label class="av-opcao"><input type="radio" name="acompanhante" value="Sim"><span id="f-acomp-sim">Sim</span></label>
+        <label class="av-opcao"><input type="radio" name="acompanhante" value="Não"><span id="f-acomp-nao">Não</span></label>
       </div>
       <div id="f-acomp-dados" hidden>
         <label class="av-campo-rotulo" for="f-acomp-nome">Nome do acompanhante</label>
         <input class="av-campo" id="f-acomp-nome" name="acompanhante_nome" type="text" autocomplete="off" maxlength="120">
         <label class="av-campo-rotulo" for="f-acomp-whatsapp">WhatsApp do acompanhante</label>
         <input class="av-campo" id="f-acomp-whatsapp" name="acompanhante_whatsapp" type="tel" inputmode="tel" autocomplete="off" maxlength="16" placeholder="(21) 99999-9999">
+        <p class="av-campo-rotulo" id="f-acomp-tam-rotulo">Tamanho da fralda do acompanhante</p>
+        <div class="av-opcoes av-opcoes--linha" id="f-tamanhos-acomp" role="radiogroup" aria-labelledby="f-acomp-tam-rotulo">
+          <label class="av-opcao" data-tamanho="P"><input type="radio" name="acompanhante_doacao_tamanho" value="P">Tamanho P</label>
+          <label class="av-opcao" data-tamanho="M"><input type="radio" name="acompanhante_doacao_tamanho" value="M">Tamanho M</label>
+          <label class="av-opcao" data-tamanho="G"><input type="radio" name="acompanhante_doacao_tamanho" value="G">Tamanho G</label>
+        </div>
       </div>
     </fieldset>
 
     <fieldset class="av-etapa" data-etapa="consentimento" hidden>
-      <legend><span class="av-etapa__n">9 →</span>Para terminar</legend>
+      <legend><span class="av-etapa__n">12 →</span>Para terminar</legend>
       <label class="av-check" for="f-consent"><input type="checkbox" id="f-consent" name="consentimento"><span>Concordo com o uso dos meus dados para a organização do encontro e estou ciente de que ele poderá ser fotografado e gravado. <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de privacidade</a>.</span></label>
       <label class="av-check" for="f-comunic"><input type="checkbox" id="f-comunic" name="comunicacoes"><span>Quero receber comunicações do Grupo GPM. <span class="av-form__dica">(opcional)</span></span></label>
+      <div class="av-captcha" id="f-captcha"></div>
     </fieldset>
 
+    <!-- [CONFIRMAR texto] Inscrições encerradas -->
+    <div class="av-etapa av-fim" data-etapa="encerradas" hidden tabindex="-1">
+      <p class="av-olho" data-evento-titulo>Encontro 3</p>
+      <h2>Inscrições encerradas.</h2>
+      <p>As inscrições para este encontro estão encerradas. Deixe seu contato para o próximo.</p>
+      <div class="av-hero__acoes">
+        <a class="av-btn" href="/#contato">Falar com a GPM</a>
+        <button class="av-btn av-btn--vazado" type="button" data-fechar-form>Voltar</button>
+      </div>
+    </div>
+
     <div class="av-etapa av-fim" data-etapa="fim" hidden tabindex="-1">
-      <p class="av-olho">Encontro 3</p>
-      <h2>Inscrição recebida.</h2>
-      <p>Obrigado, <span id="fim-nome">participante</span>. Assim que a data do Encontro 3 for confirmada, você recebe o convite pelo WhatsApp.</p>
-      <p>Não esqueça a sua doação no dia.</p>
+      <p class="av-olho" data-evento-titulo>Encontro 3</p>
+      <h2 id="fim-titulo">Inscrição recebida.</h2>
+      <p id="fim-texto">Obrigado, <span id="fim-nome">participante</span>. Assim que a data do Encontro 3 for confirmada, você recebe o convite pelo WhatsApp.</p>
+      <p id="fim-doacao">Não esqueça a sua doação no dia.</p>
       <div class="av-hero__acoes">
         <a class="av-btn" href="/">Conhecer o Grupo GPM</a>
         <button class="av-btn av-btn--vazado" type="button" data-fechar-form>Voltar</button>
