@@ -125,7 +125,7 @@
   function infoEvento() {
     var e = evento();
     if (!e) return;
-    var partes = [dataHora(e.data_inicio)];
+    var partes = [dataHora(e.data_inicio) + (e.data_fim ? ' até ' + dataHora(e.data_fim).split(', ').pop() : '')];
     if (e.local) partes.push(e.local);
     partes.push(e.inscricoes_abertas ? 'Inscrições abertas' : 'Inscrições fechadas');
     partes.push(e.lista_espera ? 'lista de espera ligada' : 'sem lista de espera');
@@ -288,12 +288,13 @@
     var e = novo ? null : evento();
     var f = $('#form-evento');
     f.reset();
-    ['ev-titulo', 'ev-slug', 'ev-data', 'ev-capacidade'].forEach(function (id) { AC.erroCampo($('#' + id), ''); });
+    ['ev-titulo', 'ev-slug', 'ev-data', 'ev-fim', 'ev-capacidade'].forEach(function (id) { AC.erroCampo($('#' + id), ''); });
     AC.texto($('#t-form-evento'), e ? 'Editar evento' : 'Novo evento');
     $('#ev-id').value = e ? e.id : '';
     $('#ev-titulo').value = e ? e.titulo : '';
     $('#ev-slug').value = e ? e.slug : '';
     $('#ev-data').value = e ? ADM.paraInputData(e.data_inicio) : '';
+    $('#ev-fim').value = e && e.data_fim ? ADM.paraInputData(e.data_fim) : '';
     $('#ev-local').value = e ? e.local || '' : '';
     $('#ev-capacidade').value = e ? e.capacidade : 50;
     $('#ev-reservados').value = e ? e.reservados : 0;
@@ -323,6 +324,7 @@
     var titulo = $('#ev-titulo').value.trim().replace(/\s+/g, ' ');
     var slug = $('#ev-slug').value.trim().toLowerCase();
     var data = ADM.deInputData($('#ev-data').value);
+    var fim = $('#ev-fim').value ? ADM.deInputData($('#ev-fim').value) : null;
     var cap = parseInt($('#ev-capacidade').value, 10);
     var res = parseInt($('#ev-reservados').value, 10) || 0;
     var erros = 0;
@@ -330,11 +332,12 @@
     marcar('ev-titulo', titulo.length >= 3 ? '' : 'Escreva o título (3 letras ou mais).');
     marcar('ev-slug', /^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) ? '' : 'Use só letras minúsculas, números e hífen (ex.: encontro-4).');
     marcar('ev-data', data ? '' : 'Informe a data e o horário.');
+    marcar('ev-fim', !fim || !data || new Date(fim) > new Date(data) ? '' : 'O término precisa ser depois do início.');
     marcar('ev-capacidade', cap >= 0 && cap <= 5000 && res <= cap ? '' : 'Informe os lugares (0 a 5000), maior ou igual aos lugares da organização.');
     if (erros) { var inv = $('#form-evento [aria-invalid="true"]'); if (inv) inv.focus(); return; }
 
     var dados = {
-      titulo: titulo, slug: slug, data_inicio: data, local: $('#ev-local').value.trim() || null,
+      titulo: titulo, slug: slug, data_inicio: data, data_fim: fim, local: $('#ev-local').value.trim() || null,
       capacidade: cap, reservados: res, inscricoes_abertas: $('#ev-abertas').checked, lista_espera: $('#ev-espera').checked,
       doacao_marca: $('#ev-marca').value.trim() || 'Pampers ou Huggies', mensagem_whatsapp: $('#ev-mensagem').value.trim() || null
     };

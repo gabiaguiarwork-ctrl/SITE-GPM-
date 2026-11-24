@@ -33,8 +33,8 @@
       return new Promise(function (ok) {
         setTimeout(function () {
           if (CENARIO === 'invalido') return ok({ ok: false });
-          var r = { ok: true, primeiro_nome: 'Gabriela', titulo: 'Encontro 3 · Potencial Artificial', data_inicio: '2026-12-11T12:00:00Z',
-                    local: 'Rio de Janeiro · local em breve', resposta: 'aguardando', doacao_marca: 'Pampers ou Huggies', tamanhos: ['M', 'G'] };
+          var r = { ok: true, primeiro_nome: 'Gabriela', titulo: 'Encontro 3 · Potencial Artificial', data_inicio: '2026-12-11T12:00:00Z', data_fim: '2026-12-11T20:00:00Z',
+                    local: 'Centro Empresarial Office Tower · Av. Evandro Lins e Silva, 840 · Rio de Janeiro', resposta: 'aguardando', doacao_marca: 'Pampers ou Huggies', tamanhos: ['M', 'G'] };
           if (corpo.resposta) r.resposta = corpo.resposta;
           ok(r);
         }, 400);
@@ -59,8 +59,10 @@
     $$('[data-nome]').forEach(function (x) { x.textContent = e.primeiro_nome || ''; });
     $$('[data-titulo]').forEach(function (x) { x.textContent = e.titulo || ''; });
     $$('[data-data]').forEach(function (x) { x.textContent = dataLonga(e.data_inicio); });
-    $$('[data-hora]').forEach(function (x) { x.textContent = hora(e.data_inicio); });
-    $$('[data-data-curta]').forEach(function (x) { x.textContent = fmt(e.data_inicio, { day: 'numeric', month: 'long' }) + ', às ' + hora(e.data_inicio); });
+    // Com término: "das 9h às 17h"; sem término: "9h".
+    var horario = e.data_fim ? 'das ' + hora(e.data_inicio) + ' às ' + hora(e.data_fim) : hora(e.data_inicio);
+    $$('[data-hora]').forEach(function (x) { x.textContent = e.data_fim ? horario.charAt(0).toUpperCase() + horario.slice(1) : horario; });
+    $$('[data-data-curta]').forEach(function (x) { x.textContent = fmt(e.data_inicio, { day: 'numeric', month: 'long' }) + ', ' + (e.data_fim ? horario : 'às ' + horario); });
     $$('[data-local]').forEach(function (x) { x.textContent = e.local || 'A confirmar'; });
     // Lembrete da doação: "Não esqueça: 2 pacotes de fraldas Pampers ou Huggies, tamanhos M e G."
     var t = Array.isArray(e.tamanhos) ? e.tamanhos : [], lembrete = $('#lembrete-doacao');
@@ -119,7 +121,7 @@
   // Arquivo de agenda (.ics) gerado no próprio aparelho.
   function baixarAgenda() {
     if (!evento) return;
-    var ini = new Date(evento.data_inicio), fim = new Date(ini.getTime() + 4 * 3600 * 1000);
+    var ini = new Date(evento.data_inicio), fim = evento.data_fim ? new Date(evento.data_fim) : new Date(ini.getTime() + 4 * 3600 * 1000);
     var z = function (d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
     var e = function (s) { return String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); };
     var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Grupo GPM//Academia de Virtudes//PT', 'BEGIN:VEVENT',

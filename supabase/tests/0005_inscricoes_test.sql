@@ -285,7 +285,7 @@ set role authenticated;
 insert into _r (teste, esperado, obtido)
 select 'admin: vê as inscrições do evento', '5', count(*)::text from public.inscricoes where evento_id = '00000000-0000-4000-8000-0000000000e0';
 insert into _r (teste, esperado, obtido)
-select 'painel: "Possível repetido" por e-mail (Ana e Bruno), sem juntar', 'Ana Teste,Bruno Teste', string_agg(nome, ',' order by nome)
+select 'painel: "Possível repetido" por e-mail (Ana e Bruno), sem juntar', 'Ana Teste,Bruno Teste', string_agg(nome, ',' order by nome collate "C")
   from public.inscricoes_painel where evento_id = '00000000-0000-4000-8000-0000000000e0' and possivel_repetido;
 insert into _r (teste, esperado, obtido)
 select 'resumo: inscritos, pessoas, vagas, espera, não vão',  '4/3/1/1/1',
@@ -357,7 +357,7 @@ set role authenticated;
 insert into public.inscricoes (evento_id, nome, whatsapp, email, empresa, cargo, status, doacao_tamanho)
 values ('00000000-0000-4000-8000-0000000000e0', 'DAVI  teste', '21999990010', 'outro@exemplo.invalid', 'E', 'C', 'lista_espera', 'G');
 insert into _r (teste, esperado, obtido)
-select 'painel: "Possível repetido" também por nome igual', 'DAVI teste,Davi Teste', string_agg(nome, ',' order by nome)
+select 'painel: "Possível repetido" também por nome igual', 'DAVI teste,Davi Teste', string_agg(nome, ',' order by nome collate "C")
   from public.inscricoes_painel where evento_id = '00000000-0000-4000-8000-0000000000e0' and possivel_repetido;
 reset role;
 

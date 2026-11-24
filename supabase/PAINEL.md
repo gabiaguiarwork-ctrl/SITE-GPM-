@@ -162,7 +162,8 @@ Substitui o Formspree nas inscrições da página `/academiadevirtudes/` e na co
 1. `supabase/migrations/0008_mais_assistidas.sql` (se ainda não rodou)
 2. `supabase/migrations/0009_inscricoes.sql`: eventos, cotas de fralda, inscrições, presença. Cria o **Encontro 3** com 50 lugares, 1 reservado, fraldas P 17 · M 17 · G 16, **inscrições fechadas**.
 3. `supabase/migrations/0010_inscricoes_email.sql`: e-mail de confirmação, travas das cotas, aviso "tem conta no portal".
-4. Testes: `supabase/tests/0005_inscricoes_test.sql` e `supabase/tests/0006_inscricoes_email_test.sql` (todas as linhas `ok = true`; os testes apagam o que criam).
+3b. `supabase/migrations/0011_eventos_termino.sql`: término do evento (`data_fim`); Encontro 3 das 9h às 17h.
+4. Testes: `supabase/tests/0005_inscricoes_test.sql`, `supabase/tests/0006_inscricoes_email_test.sql` e `supabase/tests/0007_eventos_termino_test.sql` (todas as linhas `ok = true`; os testes apagam o que criam).
 5. **Advisors → Security Advisor**: sem alertas.
 
 ### 13.2 Edge Functions
@@ -242,7 +243,7 @@ Os registros do Resend **não mexem** em nada disso: o envio usa o subdomínio `
 
 ### 13.6 Painel → Inscrições
 
-- **Antes de abrir:** confira o horário (9h) e o local do Encontro 3 em **Editar evento**. Depois marque **Inscrições abertas** e salve.
+- **Antes de abrir:** confira início, término e local do Encontro 3 em **Editar evento**. Depois marque **Inscrições abertas** e salve.
 - Cotas de fralda e marca ficam na tela do evento. A soma das cotas pode ser maior que os lugares; o painel avisa se for menor. Não dá para baixar uma cota abaixo do que já está reservado.
 - Confirmação pelo WhatsApp: o texto fica em **Editar evento → Mensagem do WhatsApp** (`{nome}`, `{evento}` e `{link}` são trocados por linha).
 - **Modo check-in** no celular, no dia: busca pelo nome e "Chegou" separado para o acompanhante.

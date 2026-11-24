@@ -10,8 +10,8 @@ window.AV_CONFIG = {
   // Card-resumo e formulário do próximo encontro.
   PROXIMO: {
     titulo: "Encontro 3 · Potencial Artificial",
-    data: "Sexta-feira, 11 de dezembro de 2026",
-    local: "Rio de Janeiro · local em breve",          // [CONFIRMAR]
+    data: "Sexta-feira, 11 de dezembro de 2026, das 9h às 17h",
+    local: "Centro Empresarial Office Tower · Av. Evandro Lins e Silva, 840 · Rio de Janeiro",
     formato: "Presencial",
     entrada: "Gratuita, mediante doação"
   },

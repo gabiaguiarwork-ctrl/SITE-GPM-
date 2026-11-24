@@ -18,7 +18,7 @@ export const TEXTOS = {
   espera: 'Recebemos sua inscrição na lista de espera do {titulo}. Se abrir uma vaga, avisamos pelo WhatsApp.',
   despedida: 'Até lá,',
   assinatura: 'Equipe do Grupo GPM',
-  duracao_horas: 4, // para o arquivo de agenda (.ics)
+  duracao_horas: 4, // .ics: só quando o evento não tem término (data_fim) no painel
 };
 
 // Textos próprios por encontro (opcional). Ex.: { 'encontro-3': { duracao_horas: 3 } }
@@ -40,14 +40,23 @@ function trocar(t, mapa) {
   return String(t).replace(/\{(\w+)\}/g, (m, k) => (k in mapa ? mapa[k] : m));
 }
 
-// "sexta-feira, 11 de dezembro de 2026, às 9h"
-export function dataPorExtenso(iso) {
-  const d = new Date(iso);
-  const dia = new Intl.DateTimeFormat('pt-BR', { timeZone: FUSO, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(d);
-  const p = new Intl.DateTimeFormat('pt-BR', { timeZone: FUSO, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(d);
+// "9h" · "9h30" (horário de Brasília)
+export function hora(iso) {
+  const p = new Intl.DateTimeFormat('pt-BR', { timeZone: FUSO, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(iso));
   const h = Number(p.find((x) => x.type === 'hour').value);
   const m = p.find((x) => x.type === 'minute').value;
-  return dia + ', às ' + h + 'h' + (m !== '00' ? m : '');
+  return h + 'h' + (m !== '00' ? m : '');
+}
+function diaDe(iso) {
+  return new Intl.DateTimeFormat('pt-BR', { timeZone: FUSO, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
+}
+
+// "sexta-feira, 11 de dezembro de 2026, das 9h às 17h" (sem término: "…, às 9h")
+export function dataPorExtenso(inicio, fim) {
+  const dia = diaDe(inicio);
+  if (!fim) return dia + ', às ' + hora(inicio);
+  if (diaDe(fim) === dia) return dia + ', das ' + hora(inicio) + ' às ' + hora(fim);
+  return dia + ', às ' + hora(inicio) + ', até ' + diaDe(fim) + ', às ' + hora(fim);
 }
 
 // "1 pacote de fraldas Pampers ou Huggies, tamanho M" · "2 pacotes ..., tamanhos M e G"
@@ -66,7 +75,7 @@ export function doacaoTexto(tamanhos, marca) {
 export function ics(d) {
   const t = textosDo(d.evento.slug);
   const ini = new Date(d.evento.data_inicio);
-  const fim = new Date(ini.getTime() + t.duracao_horas * 3600_000);
+  const fim = d.evento.data_fim ? new Date(d.evento.data_fim) : new Date(ini.getTime() + t.duracao_horas * 3600_000);
   const z = (x) => x.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
   const e = (s) => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
   const linhas = [
@@ -95,7 +104,7 @@ export function montarEmail(d) {
   const espera = d.situacao === 'lista_espera';
   const titulo = d.evento.titulo;
   const assunto = trocar(espera ? t.assunto_espera : t.assunto_inscrito, { titulo });
-  const quando = dataPorExtenso(d.evento.data_inicio);
+  const quando = dataPorExtenso(d.evento.data_inicio, d.evento.data_fim);
   const local = d.evento.local || 'a confirmar';
   const doacao = !espera && d.tamanhos && d.tamanhos.length ? doacaoTexto(d.tamanhos, d.evento.doacao_marca) : null;
 

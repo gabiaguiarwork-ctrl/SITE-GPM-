@@ -21,7 +21,7 @@
 <script src="/academiadevirtudes/admin/aulas.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/avisos.js?v=1" defer></script>
 <script src="/academiadevirtudes/admin/relatorios.js?v=3" defer></script>
-<script src="/academiadevirtudes/admin/inscricoes.js?v=1" defer></script>
+<script src="/academiadevirtudes/admin/inscricoes.js?v=2" defer></script>
 <script src="/academiadevirtudes/admin/iniciar.js?v=1" defer></script>
 </head>
 <body>
@@ -304,7 +304,8 @@
       <div class="ac-grade-2">
         <div class="ac-campo"><label for="ev-titulo">Título</label><input class="ac-input" id="ev-titulo" maxlength="120" required aria-describedby="erro-ev-titulo"><p class="ac-erro-campo" id="erro-ev-titulo" hidden></p></div>
         <div class="ac-campo"><label for="ev-slug">Endereço curto (slug)</label><input class="ac-input" id="ev-slug" maxlength="60" required placeholder="encontro-4" aria-describedby="ajuda-ev-slug erro-ev-slug"><p class="ac-opcional" id="ajuda-ev-slug">Letras minúsculas, números e hífen. É o que o site usa para achar o evento.</p><p class="ac-erro-campo" id="erro-ev-slug" hidden></p></div>
-        <div class="ac-campo"><label for="ev-data">Data e horário (Brasília)</label><input class="ac-input" id="ev-data" type="datetime-local" required aria-describedby="erro-ev-data"><p class="ac-erro-campo" id="erro-ev-data" hidden></p></div>
+        <div class="ac-campo"><label for="ev-data">Início: data e horário (Brasília)</label><input class="ac-input" id="ev-data" type="datetime-local" required aria-describedby="erro-ev-data"><p class="ac-erro-campo" id="erro-ev-data" hidden></p></div>
+        <div class="ac-campo"><label for="ev-fim">Término: data e horário (Brasília)</label><input class="ac-input" id="ev-fim" type="datetime-local" aria-describedby="ajuda-ev-fim erro-ev-fim"><p class="ac-opcional" id="ajuda-ev-fim">Opcional. Aparece no e-mail, na agenda e na página de presença ("das 9h às 17h").</p><p class="ac-erro-campo" id="erro-ev-fim" hidden></p></div>
         <div class="ac-campo"><label for="ev-local">Local e endereço</label><input class="ac-input" id="ev-local" maxlength="200"></div>
         <div class="ac-campo"><label for="ev-capacidade">Lugares no total (com acompanhantes)</label><input class="ac-input" id="ev-capacidade" type="number" min="0" max="5000" step="1" inputmode="numeric" required aria-describedby="erro-ev-capacidade"><p class="ac-erro-campo" id="erro-ev-capacidade" hidden></p></div>
         <div class="ac-campo"><label for="ev-reservados">Lugares da organização</label><input class="ac-input" id="ev-reservados" type="number" min="0" max="5000" step="1" inputmode="numeric" aria-describedby="ajuda-ev-reservados"><p class="ac-opcional" id="ajuda-ev-reservados">Ex.: o palestrante. São descontados das vagas.</p></div>
