@@ -4,7 +4,7 @@
   Depois de editar, aumente o ?v= deste arquivo em academiadevirtudes/index.html.
 */
 window.AV_CONFIG = {
-  // Encontro que aparece aberto na Jornada e no formulário (1, 2 ou 3).
+  // Encontro atual (referência). A Jornada agora é uma linha do tempo no index.html, com as capas em assets/academia/capa-encontro-N-*.
   ENCONTRO_ATUAL: 3,
 
   // Card-resumo e formulário do próximo encontro.
@@ -19,7 +19,7 @@ window.AV_CONFIG = {
   // Envio do formulário em etapas:
   //   "supabase"  = padrão: Edge Function "inscricao" (vagas, lista de espera, cotas de fralda e e-mail de confirmação)
   //   "formspree" = plano B, se algo der errado no dia: troque aqui e publique.
-  FORM_BACKEND: "supabase",
+  FORM_BACKEND: "formspree", // 25/11/2026: plano B até o deploy das Edge Functions; depois volte para "supabase"
   // Evento no banco (tabela eventos, aba Inscrições do painel).
   EVENTO: "encontro-3",
   // Plano B (Formspree). Só é usado com FORM_BACKEND = "formspree".
@@ -43,10 +43,6 @@ window.AV_CONFIG = {
     { base: "encontro2-04", w: 960,  h: 1280, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Apresentação do Instituto Pró-Vida no palco, com câmera registrando o encontro" },
     { base: "encontro2-05", w: 1600, h: 900,  legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Eduardo com representantes do Instituto Pró-Vida no palco" },
     { base: "encontro2-06", w: 1066, h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Participantes posam juntas no Encontro 2" },
-    { base: "encontro2-07", w: 1200, h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Participantes posam juntos no Encontro 2" },
-    { base: "/assets/academia-encontro1-1", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo Pitombo Mesquita diante do slide “O problema é a sua percepção.”" },
-    { base: "/assets/academia-encontro1-2", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo apresenta o slide “As cinco zonas” para os participantes no auditório" },
-    { base: "/assets/academia-encontro1-3", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo aponta o mapa das cinco zonas na tela" },
-    { base: "/assets/academia-encontro1-4", w: 1600, h: 900, legenda: "Encontro 1 · Os 4 perfis diante da IA · 23/10/2026", alt: "Eduardo no palco do auditório durante o Encontro 1" }
+    { base: "encontro2-07", w: 1200, h: 1600, legenda: "Encontro 2 · Essência Humana · 20/11/2026", alt: "Participantes posam juntos no Encontro 2" }
   ]
 };

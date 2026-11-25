@@ -1,6 +1,6 @@
 /*
   Academia de Virtudes · página pública v2 · comportamento
-  Menu do celular, abas da Jornada, galeria em tiras, depoimentos (vídeo só no clique),
+  Menu do celular, linha do tempo da Jornada, galeria em tiras, depoimentos (vídeo só no clique),
   animação de entrada e formulário em etapas (Supabase; Formspree como plano B).
   Nada de innerHTML com dados: tudo por textContent / createElement.
 */
@@ -33,30 +33,43 @@
   });
   menuCel.addEventListener('click', function (e) { if (e.target.closest('a')) { menuCel.hidden = true; botaoMenu.setAttribute('aria-expanded', 'false'); } });
 
-  /* ---------- Abas da Jornada ---------- */
-  var abas = $$('.av-aba');
-  function abrirAba(aba, focar) {
-    abas.forEach(function (a) {
-      var sim = a === aba;
-      a.setAttribute('aria-selected', String(sim));
-      a.tabIndex = sim ? 0 : -1;
-      document.getElementById(a.getAttribute('aria-controls')).hidden = !sim;
+  /* ---------- Jornada: linha do tempo que desliza ---------- */
+  var trilha = $('#linha-trilha');
+  if (trilha) {
+    var ant = $('#linha-ant'), prox = $('#linha-prox');
+    var passoLinha = function () {
+      var itens = $$('li', trilha);
+      return itens.length > 1 ? itens[1].offsetLeft - itens[0].offsetLeft : trilha.clientWidth;
+    };
+    var setas = function () {
+      ant.disabled = trilha.scrollLeft <= 4;
+      prox.disabled = trilha.scrollLeft + trilha.clientWidth >= trilha.scrollWidth - 4;
+    };
+    ant.addEventListener('click', function () { trilha.scrollBy({ left: -passoLinha(), behavior: MOVIMENTO ? 'smooth' : 'auto' }); });
+    prox.addEventListener('click', function () { trilha.scrollBy({ left: passoLinha(), behavior: MOVIMENTO ? 'smooth' : 'auto' }); });
+    trilha.addEventListener('scroll', setas, { passive: true });
+    window.addEventListener('resize', setas);
+    setas();
+    // Arrastar com o mouse (no celular e no trackpad a rolagem já é natural).
+    var arraste = null;
+    trilha.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a, button')) return;
+      arraste = { x: e.clientX, inicio: trilha.scrollLeft, moveu: false };
+      trilha.classList.add('av-linha__trilha--arrastando');
     });
-    if (focar) aba.focus();
+    window.addEventListener('pointermove', function (e) {
+      if (!arraste) return;
+      var dx = e.clientX - arraste.x;
+      if (Math.abs(dx) > 4) arraste.moveu = true;
+      trilha.scrollLeft = arraste.inicio - dx;
+    });
+    window.addEventListener('pointerup', function () {
+      if (!arraste) return;
+      arraste = null;
+      trilha.classList.remove('av-linha__trilha--arrastando');
+    });
+    trilha.addEventListener('dragstart', function (e) { e.preventDefault(); });
   }
-  abas.forEach(function (a, i) {
-    a.addEventListener('click', function () { abrirAba(a); });
-    a.addEventListener('keydown', function (e) {
-      var n = null;
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') n = (i + 1) % abas.length;
-      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') n = (i - 1 + abas.length) % abas.length;
-      if (e.key === 'Home') n = 0;
-      if (e.key === 'End') n = abas.length - 1;
-      if (n !== null) { e.preventDefault(); abrirAba(abas[n], true); }
-    });
-  });
-  var atual = abas[Math.min(abas.length, Math.max(1, Number(CFG.ENCONTRO_ATUAL) || abas.length)) - 1];
-  if (atual) abrirAba(atual);
 
   /* ---------- Galeria em tiras ---------- */
   var fotos = Array.isArray(CFG.GALERIA) ? CFG.GALERIA.filter(function (f) { return f && /^[A-Za-z0-9_/.-]+$/.test(f.base || ''); }) : [];

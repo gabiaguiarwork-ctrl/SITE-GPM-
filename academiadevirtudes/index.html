@@ -28,10 +28,10 @@
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
 <link rel="preload" href="/academiadevirtudes/_app/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/academiadevirtudes/_app/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=4">
+<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=6">
 <script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
-<script src="/academiadevirtudes/_publico/academia-config.js?v=4" defer></script>
-<script src="/academiadevirtudes/_publico/academia.js?v=3" defer></script>
+<script src="/academiadevirtudes/_publico/academia-config.js?v=6" defer></script>
+<script src="/academiadevirtudes/_publico/academia.js?v=4" defer></script>
 </head>
 <body>
 
@@ -174,36 +174,40 @@
         <div class="av-medalhao"><img src="/assets/academia/av-simbolo-dourado-3d.webp" alt="" width="486" height="724" loading="lazy"></div>
       </div>
 
-      <div class="av-abas av-entra">
-        <div class="av-abas__lista" role="tablist" aria-label="Encontros da Academia">
-          <button class="av-aba" role="tab" id="aba-1" aria-controls="painel-1" aria-selected="false" tabindex="-1" type="button"><span>01</span>Os 4 perfis diante da IA</button>
-          <button class="av-aba" role="tab" id="aba-2" aria-controls="painel-2" aria-selected="false" tabindex="-1" type="button"><span>02</span>Essência Humana</button>
-          <button class="av-aba" role="tab" id="aba-3" aria-controls="painel-3" aria-selected="true" tabindex="0" type="button"><span>03</span>Potencial Artificial</button>
+      <!-- Linha do tempo: desliza para o lado (dedo, trackpad, setas ou arrastando com o mouse) -->
+      <div class="av-linha av-entra">
+        <div class="av-linha__controles">
+          <button class="av-linha__seta" type="button" id="linha-ant" aria-label="Encontro anterior" aria-controls="linha-trilha">←</button>
+          <button class="av-linha__seta" type="button" id="linha-prox" aria-label="Próximo encontro" aria-controls="linha-trilha">→</button>
         </div>
-        <div class="av-painel" role="tabpanel" id="painel-1" aria-labelledby="aba-1" tabindex="0" hidden>
-          <span class="av-painel__marca" aria-hidden="true">01</span>
-          <p class="av-olho">Encontro 1 · Aula inaugural</p>
-          <h3>Os quatro perfis diante da inteligência artificial</h3>
-          <p>A IA não corrige comportamento: ela amplifica quem você já é. Eduardo apresenta os quatro perfis com que nos relacionamos com a IA e convida cada participante a reconhecer onde está hoje e para onde quer ir.</p>
-          <div class="av-temas"><strong>Principais temas</strong><ul class="av-chips"><li>Percepção</li><li>Os 4 perfis</li><li>Fortaleza</li><li>Prudência</li></ul></div>
-          <span class="av-selo av-selo--feito">Realizado · 23/10/2026 · Barra Space Center</span>
-        </div>
-        <div class="av-painel" role="tabpanel" id="painel-2" aria-labelledby="aba-2" tabindex="0" hidden>
-          <span class="av-painel__marca" aria-hidden="true">02</span>
-          <p class="av-olho">Encontro 2</p>
-          <h3>O comportamento é o seu maior ativo</h3>
-          <p>O lado da tese que nenhuma máquina entrega por nós. O comportamento é o seu maior ativo, mas raramente alguém revisa o próprio balanço: temperamento, família, cultura, história, vieses, relações, formação e competências.</p>
-          <div class="av-temas"><strong>Principais temas</strong><ul class="av-chips"><li>O balanço comportamental</li><li>Temperamento</li><li>Virtudes e vícios</li><li>O que a máquina não alcança</li></ul></div>
-          <span class="av-selo av-selo--feito">Realizado · 20/11/2026 · Office Tower</span>
-        </div>
-        <div class="av-painel" role="tabpanel" id="painel-3" aria-labelledby="aba-3" tabindex="0">
-          <span class="av-painel__marca" aria-hidden="true">03</span>
-          <p class="av-olho">Encontro 3</p>
-          <h3>A alavanca e a ferramenta</h3>
-          <!-- [CONFIRMAR descrição e temas com o Eduardo] -->
-          <p>O terceiro encontro fecha o ciclo com o outro lado da tese: como usar a inteligência artificial como alavanca, com o julgamento humano no comando.</p>
-          <span class="av-selo" data-proximo-data>11 de dezembro de 2026</span>
-        </div>
+        <ol class="av-linha__trilha" id="linha-trilha" tabindex="0" aria-label="Linha do tempo dos encontros">
+          <li class="av-marco av-marco--feito">
+            <p class="av-marco__ponto"><span class="av-marco__n">01</span>Outubro de 2026</p>
+            <figure class="av-marco__capa"><picture><source srcset="/assets/academia/capa-encontro-1-640.webp 640w, /assets/academia/capa-encontro-1-1200.webp 1200w" sizes="(max-width: 760px) 84vw, 540px" type="image/webp"><img src="/assets/academia/capa-encontro-1-800.jpg" alt="Capa da aula inaugural: Os quatro perfis diante da inteligência artificial" width="800" height="450" loading="lazy" decoding="async"></picture></figure>
+            <p class="av-olho">Encontro 1 · Aula inaugural</p>
+            <h3>Os quatro perfis diante da inteligência artificial</h3>
+            <p>A IA não corrige comportamento: ela amplifica quem você já é.</p>
+            <span class="av-selo av-selo--feito">Realizado · 23/10/2026 · Barra Space Center</span>
+          </li>
+          <li class="av-marco av-marco--feito">
+            <p class="av-marco__ponto"><span class="av-marco__n">02</span>Novembro de 2026</p>
+            <figure class="av-marco__capa"><picture><source srcset="/assets/academia/capa-encontro-2-640.webp 640w, /assets/academia/capa-encontro-2-1200.webp 1200w" sizes="(max-width: 760px) 84vw, 540px" type="image/webp"><img src="/assets/academia/capa-encontro-2-800.jpg" alt="Capa do Encontro 2: Essência Humana, com Narciso, de Caravaggio" width="800" height="450" loading="lazy" decoding="async"></picture></figure>
+            <p class="av-olho">Encontro 2</p>
+            <h3>Essência humana</h3>
+            <p>O comportamento é o seu maior ativo, mas raramente alguém revisa o próprio balanço.</p>
+            <span class="av-selo av-selo--feito">Realizado · 20/11/2026 · Office Tower</span>
+          </li>
+          <li class="av-marco av-marco--proximo">
+            <p class="av-marco__ponto"><span class="av-marco__n">03</span>Dezembro de 2026 · próximo</p>
+            <figure class="av-marco__capa"><picture><source srcset="/assets/academia/capa-encontro-3-640.webp 640w, /assets/academia/capa-encontro-3-1200.webp 1200w" sizes="(max-width: 760px) 84vw, 540px" type="image/webp"><img src="/assets/academia/capa-encontro-3-800.jpg" alt="Capa do Encontro 3: Potencial Artificial, com o Homem Vitruviano, de Leonardo da Vinci" width="800" height="450" loading="lazy" decoding="async"></picture></figure>
+            <p class="av-olho">Encontro 3</p>
+            <h3>Potencial artificial</h3>
+            <!-- [CONFIRMAR descrição com o Eduardo] -->
+            <p>Como usar a inteligência artificial como alavanca, com o julgamento humano no comando.</p>
+            <span class="av-selo">11/12/2026 · das 9h às 17h · Office Tower</span>
+            <a class="av-btn av-marco__cta" href="#inscricao" data-abrir-form>Quero participar</a>
+          </li>
+        </ol>
       </div>
     </div>
   </section>
@@ -216,23 +220,39 @@
         <h2 class="av-titulo" id="perfis-titulo">Os quatro perfis diante da IA</h2>
         <p class="av-texto">Não é uma escada. É um espectro: você é os quatro ao mesmo tempo, em camadas diferentes da sua vida.</p>
       </div>
-      <ul class="av-perfis">
-        <li class="av-entra"><article class="av-perfil">
-          <div class="av-perfil__img"><picture><source srcset="/assets/academia/perfil-reativo.webp" type="image/webp"><img src="/assets/academia/perfil-reativo.jpg" alt="A parábola dos cegos, de Bruegel: cegos em fila, um guiando o outro até cair" width="960" height="720" loading="lazy" decoding="async"></picture><span class="av-perfil__credito">Pieter Bruegel, <em>A parábola dos cegos</em>, 1568</span></div>
-          <div class="av-perfil__corpo"><span class="av-perfil__n">01</span><h3>O Reativo</h3><p>Aversão, desconhecimento ou negação. A resistência raramente é falta de inteligência: é medo.</p><p class="av-risco"><span>O maior risco do reativo é a alienação completa.</span></p></div>
-        </article></li>
-        <li class="av-entra"><article class="av-perfil">
-          <div class="av-perfil__img"><picture><source srcset="/assets/academia/perfil-usuario-google.webp" type="image/webp"><img src="/assets/academia/perfil-usuario-google.jpg" alt="Narciso, de Caravaggio: jovem debruçado sobre a água, olhando o próprio reflexo" width="960" height="720" loading="lazy" decoding="async"></picture><span class="av-perfil__credito">Caravaggio, <em>Narciso</em>, c. 1597</span></div>
-          <div class="av-perfil__corpo"><span class="av-perfil__n">02</span><h3>O Usuário Google</h3><p>A maioria. Usa a IA como um buscador 2.0: input pequeno, output decente, e aceita.</p><p class="av-risco"><span>O maior risco do usuário Google é o ego.</span></p></div>
-        </article></li>
-        <li class="av-entra"><article class="av-perfil">
-          <div class="av-perfil__img"><picture><source srcset="/assets/academia/perfil-especialista.webp" type="image/webp"><img src="/assets/academia/perfil-especialista.jpg" alt="O astrônomo, de Vermeer: um estudioso toca um globo celeste junto à janela" width="960" height="720" loading="lazy" decoding="async"></picture><span class="av-perfil__credito">Johannes Vermeer, <em>O astrônomo</em>, 1668</span></div>
-          <div class="av-perfil__corpo"><span class="av-perfil__n">03</span><h3>O Especialista</h3><p>Profundidade real dentro do próprio silo. Aprofunda na vertical e perde o contexto externo.</p><p class="av-risco"><span>O maior risco do especialista é a competência.</span></p></div>
-        </article></li>
-        <li class="av-entra"><article class="av-perfil av-perfil--nexialista">
-          <div class="av-perfil__img"><picture><source srcset="/assets/academia/perfil-nexialista.webp" type="image/webp"><img src="/assets/academia/perfil-nexialista.jpg" alt="Detalhe de A Escola de Atenas, de Rafael: Platão e Aristóteles conversam ao centro" width="960" height="720" loading="lazy" decoding="async"></picture><span class="av-perfil__credito">Rafael, <em>A Escola de Atenas</em>, c. 1511</span></div>
-          <div class="av-perfil__corpo"><span class="av-perfil__n">04</span><h3>O Nexialista</h3><p>A ciência de ligar ordenadamente um campo ao outro. Entende o suficiente de cada campo para resolver o que nenhum silo resolve sozinho.</p><p class="av-risco"><span>A kriptonita do nexialista é ver conexão onde não existe.</span></p></div>
-        </article></li>
+      <ul class="av-perfis2">
+        <li class="av-perfil2 av-entra">
+          <picture class="av-perfil2__img av-perfil2__img--centro"><source srcset="/assets/academia/perfil-reativo.webp" type="image/webp"><img src="/assets/academia/perfil-reativo.jpg" alt="A parábola dos cegos, de Bruegel: cegos em fila, um guiando o outro até cair" width="960" height="720" loading="lazy" decoding="async"></picture>
+          <p class="av-perfil2__n">01</p>
+          <h3>O Reativo</h3>
+          <p class="av-perfil2__txt">Aversão, desconhecimento ou negação. A resistência raramente é falta de inteligência: é medo.</p>
+          <p class="av-perfil2__risco">O maior risco: a alienação completa.</p>
+          <p class="av-perfil2__credito">Bruegel, <em>A parábola dos cegos</em></p>
+        </li>
+        <li class="av-perfil2 av-entra">
+          <picture class="av-perfil2__img av-perfil2__img--esquerda"><source srcset="/assets/academia/perfil-usuario-google.webp" type="image/webp"><img src="/assets/academia/perfil-usuario-google.jpg" alt="Narciso, de Caravaggio: jovem debruçado sobre a água, olhando o próprio reflexo" width="960" height="720" loading="lazy" decoding="async"></picture>
+          <p class="av-perfil2__n">02</p>
+          <h3>O Usuário Google</h3>
+          <p class="av-perfil2__txt">A maioria. Usa a IA como um buscador 2.0: input pequeno, output decente, e aceita.</p>
+          <p class="av-perfil2__risco">O maior risco: o ego.</p>
+          <p class="av-perfil2__credito">Caravaggio, <em>Narciso</em></p>
+        </li>
+        <li class="av-perfil2 av-entra">
+          <picture class="av-perfil2__img av-perfil2__img--esquerda"><source srcset="/assets/academia/perfil-especialista.webp" type="image/webp"><img src="/assets/academia/perfil-especialista.jpg" alt="O astrônomo, de Vermeer: um estudioso toca um globo celeste junto à janela" width="960" height="720" loading="lazy" decoding="async"></picture>
+          <p class="av-perfil2__n">03</p>
+          <h3>O Especialista</h3>
+          <p class="av-perfil2__txt">Profundidade real dentro do próprio silo. Aprofunda na vertical e perde o contexto externo.</p>
+          <p class="av-perfil2__risco">O maior risco: a competência.</p>
+          <p class="av-perfil2__credito">Vermeer, <em>O astrônomo</em></p>
+        </li>
+        <li class="av-perfil2 av-perfil2--destaque av-entra">
+          <picture class="av-perfil2__img av-perfil2__img--centro"><source srcset="/assets/academia/perfil-nexialista.webp" type="image/webp"><img src="/assets/academia/perfil-nexialista.jpg" alt="Detalhe de A Escola de Atenas, de Rafael: Platão e Aristóteles conversam ao centro" width="960" height="720" loading="lazy" decoding="async"></picture>
+          <p class="av-perfil2__n">04</p>
+          <h3>O Nexialista</h3>
+          <p class="av-perfil2__txt">Liga um campo ao outro e resolve o que nenhum silo resolve sozinho.</p>
+          <p class="av-perfil2__risco">A kriptonita: ver conexão onde não existe.</p>
+          <p class="av-perfil2__credito">Rafael, <em>A Escola de Atenas</em></p>
+        </li>
       </ul>
       <p class="av-perfis__pergunta av-entra">Qual deles é você hoje? Você responde na inscrição, e a resposta faz parte do encontro.</p>
     </div>
@@ -242,6 +262,7 @@
   <section class="av-secao av-escuro" id="grupo-gpm" aria-labelledby="gpm-titulo">
     <div class="av-container">
       <div class="av-entra">
+        <img class="av-gpm-logo" src="/assets/logo-gpm.png" alt="Grupo GPM · Essência humana, potencial artificial" width="789" height="287" loading="lazy" decoding="async">
         <p class="av-olho">Grupo GPM</p>
         <h2 class="av-titulo" id="gpm-titulo">A Academia nasce de quem constrói na economia real</h2>
         <p class="av-texto">O Grupo GPM desenvolve empresas familiares da economia real: obra, operação, máquina, gente. Lugar onde o erro tem custo e aparece no mês seguinte. A potência humana é inegociável; a tecnologia vem para ampliar o que as pessoas já são capazes de fazer.</p>
