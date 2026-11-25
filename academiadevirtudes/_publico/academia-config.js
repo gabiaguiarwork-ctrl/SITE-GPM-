@@ -19,7 +19,7 @@ window.AV_CONFIG = {
   // Envio do formulário em etapas:
   //   "supabase"  = padrão: Edge Function "inscricao" (vagas, lista de espera, cotas de fralda e e-mail de confirmação)
   //   "formspree" = plano B, se algo der errado no dia: troque aqui e publique.
-  FORM_BACKEND: "formspree", // 25/11/2026: plano B até o deploy das Edge Functions; depois volte para "supabase"
+  FORM_BACKEND: "supabase",
   // Evento no banco (tabela eventos, aba Inscrições do painel).
   EVENTO: "encontro-3",
   // Plano B (Formspree). Só é usado com FORM_BACKEND = "formspree".
