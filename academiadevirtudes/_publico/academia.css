@@ -502,3 +502,10 @@ section[id] { scroll-margin-top: 90px; }
 .av-menu { margin-left: auto; }
 .av-form__logo-link { display: inline-flex; border-radius: 4px; }
 .av-form__logo-link:focus-visible { outline: 2px solid var(--av-gold); outline-offset: 4px; }
+
+/* 25/11/2026 · Relógio mais elegante: tons originais suavizados, bordas que somem no fundo e um fio dourado fino */
+.av-ponto__relogio picture { background: var(--av-navy); border: 0; outline: 1px solid rgba(201, 164, 92, .38); outline-offset: 14px; box-shadow: 0 40px 90px rgba(0, 0, 0, .45); }
+.av-ponto__relogio img { mix-blend-mode: normal; opacity: 1; filter: saturate(.55) sepia(.2) brightness(.74) contrast(1.1); transition: filter .8s ease; }
+.av-ponto__relogio:hover img { filter: saturate(.7) sepia(.12) brightness(.82) contrast(1.08); }
+.av-ponto__relogio picture::after { background: radial-gradient(circle at 50% 50%, rgba(8, 20, 46, 0) 42%, rgba(8, 20, 46, .35) 66%, rgba(8, 20, 46, .92) 100%); }
+.av-ponto__relogio figcaption { margin-top: 34px; font-style: italic; font-family: var(--serif); font-size: 15px; letter-spacing: .02em; }
