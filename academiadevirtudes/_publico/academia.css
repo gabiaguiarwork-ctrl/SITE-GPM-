@@ -509,3 +509,12 @@ section[id] { scroll-margin-top: 90px; }
 .av-ponto__relogio:hover img { filter: saturate(.7) sepia(.12) brightness(.82) contrast(1.08); }
 .av-ponto__relogio picture::after { background: radial-gradient(circle at 50% 50%, rgba(8, 20, 46, 0) 42%, rgba(8, 20, 46, .35) 66%, rgba(8, 20, 46, .92) 100%); }
 .av-ponto__relogio figcaption { margin-top: 34px; font-style: italic; font-family: var(--serif); font-size: 15px; letter-spacing: .02em; }
+
+/* 25/11/2026 · Jornada: no computador, as três aulas aparecem juntas (sem deslizar) */
+@media (min-width: 960px) {
+  .av-linha__controles { display: none; }
+  .av-linha__trilha { overflow: visible; scroll-snap-type: none; cursor: default; padding-bottom: 0; }
+  .av-marco { flex: 1 1 0; min-width: 0; }
+  .av-marco h3 { font-size: clamp(24px, 2.1vw, 29px); }
+}
+.av-marco__n { font-variant-numeric: lining-nums; }
