@@ -28,20 +28,12 @@
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
 <link rel="preload" href="/academiadevirtudes/_app/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/academiadevirtudes/_app/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=6">
+<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=7">
 <script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_publico/academia-config.js?v=6" defer></script>
 <script src="/academiadevirtudes/_publico/academia.js?v=4" defer></script>
 </head>
 <body>
-
-<!-- 5.0 Faixa superior -->
-<div class="av-faixa">
-  <div class="av-container">
-    <span>O playbook <em>O Humano que Move a Máquina</em> está disponível.</span>
-    <a class="av-btn av-btn--vazado av-btn--mini" href="/playbook.html">Baixar o playbook</a>
-  </div>
-</div>
 
 <!-- 5.1 Header (o mesmo do site GPM) -->
 <header class="av-header">
@@ -63,16 +55,16 @@
       <a href="/#metodologia">Metodologia</a>
       <a href="/#contato">Contato</a>
       <div class="av-menu__item">
-        <a class="av-menu__academia" href="/academiadevirtudes/" aria-current="page"><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="20" height="20">Academia de Virtudes <span class="av-seta" aria-hidden="true">▾</span></a>
+        <a class="av-menu__academia" href="/academiadevirtudes/" aria-current="page">Academia de Virtudes <span class="av-seta" aria-hidden="true">▾</span></a>
         <div class="av-submenu">
           <a href="/academiadevirtudes/">A Academia</a>
-          <a href="/academiadevirtudes/entrar/">Sou colaborador</a>
+          <a href="/academiadevirtudes/colaborador/">Sou colaborador</a>
         </div>
       </div>
     </nav>
     <div class="av-acoes">
       <a class="av-btn" href="/#contato">Falar com a GPM</a>
-      <a class="av-btn av-btn--vazado" href="/academiadevirtudes/entrar/">Sou colaborador</a>
+      <a class="av-btn av-btn--vazado" href="/academiadevirtudes/colaborador/">Sou colaborador</a>
     </div>
     <button class="av-hamburguer" id="av-menu-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="av-menu-celular"><span></span></button>
     <nav class="av-menu-celular" id="av-menu-celular" aria-label="Menu principal (celular)" hidden>
@@ -82,9 +74,9 @@
       <a href="/#unidades">Unidades</a>
       <a href="/#metodologia">Metodologia</a>
       <a href="/#contato">Contato</a>
-      <a class="av-menu__academia" href="/academiadevirtudes/" aria-current="page"><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="20" height="20">Academia de Virtudes</a>
+      <a class="av-menu__academia" href="/academiadevirtudes/" aria-current="page">Academia de Virtudes</a>
       <a class="av-btn" href="/#contato">Falar com a GPM</a>
-      <a class="av-btn av-btn--vazado" href="/academiadevirtudes/entrar/">Sou colaborador</a>
+      <a class="av-btn av-btn--vazado" href="/academiadevirtudes/colaborador/">Sou colaborador</a>
     </nav>
   </div>
 </header>
@@ -415,7 +407,7 @@
 <div class="av-form" id="inscricao" role="dialog" aria-modal="true" aria-labelledby="form-rotulo" hidden>
   <div class="av-form__topo">
     <div class="av-form__barra-topo">
-      <img class="av-form__logo" src="/assets/academia/av-horizontal-dourado.svg" alt="Academia de Virtudes" width="96" height="38">
+      <a class="av-form__logo-link" href="/academiadevirtudes/" aria-label="Voltar para a página da Academia de Virtudes"><img class="av-form__logo" src="/assets/academia/av-horizontal-dourado.svg" alt="Academia de Virtudes" width="96" height="38"></a>
       <span class="av-form__rotulo" id="form-rotulo">Inscrição · Encontro 3</span>
       <button class="av-form__fechar" type="button" id="form-fechar" aria-label="Fechar inscrição">×</button>
     </div>

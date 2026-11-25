@@ -1,0 +1,148 @@
+<!doctype html>
+<!--
+  ACADEMIA DE VIRTUDES · SOU COLABORADOR (25/11/2026)
+  A plataforma é só para colaboradores do Grupo GPM e pessoas aprovadas. Aqui a pessoa pede acesso (mini cadastro)
+  ou, se já é aluna, vai para o login. O pedido não cria conta: a equipe aprova e convida pelo painel.
+  Sem CSS/JS inline: colaborador.css e colaborador.js. Cabeçalhos de segurança no .htaccess desta pasta.
+  ?teste simula o envio.
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#08142E">
+<title>Sou colaborador · Academia de Virtudes</title>
+<link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=7">
+<link rel="stylesheet" href="/academiadevirtudes/colaborador/colaborador.css?v=3">
+<script src="/academiadevirtudes/colaborador/colaborador.js?v=1" defer></script>
+</head>
+<body>
+
+<!-- 5.1 Header (o mesmo do site GPM) -->
+<header class="av-header">
+  <div class="av-topo">
+    <a class="av-marca" href="/">
+      <img src="/assets/logo-gpm.png" alt="Logo Grupo GPM" width="44" height="44">
+      <span class="av-marca__texto">GRUPO GPM<small>ESSÊNCIA HUMANA. POTENCIAL ARTIFICIAL</small></span>
+    </a>
+    <nav class="av-menu" aria-label="Menu principal">
+      <a href="/#inicio">Início</a>
+      <div class="av-menu__item">
+        <a href="/#sobre">Sobre <span class="av-seta" aria-hidden="true">▾</span></a>
+        <div class="av-submenu">
+          <a href="/#sobre">Nossa Tese</a>
+          <a href="/mentoria.html">Mentoria Nexialista</a>
+        </div>
+      </div>
+      <a href="/#unidades">Unidades</a>
+      <a href="/#metodologia">Metodologia</a>
+      <a href="/#contato">Contato</a>
+      <div class="av-menu__item">
+        <a class="av-menu__academia" href="/academiadevirtudes/">Academia de Virtudes <span class="av-seta" aria-hidden="true">▾</span></a>
+        <div class="av-submenu">
+          <a href="/academiadevirtudes/">A Academia</a>
+          <a href="/academiadevirtudes/colaborador/">Sou colaborador</a>
+        </div>
+      </div>
+    </nav>
+    <div class="av-acoes">
+      <a class="av-btn" href="/#contato">Falar com a GPM</a>
+      <a class="av-btn av-btn--vazado" href="/academiadevirtudes/colaborador/">Sou colaborador</a>
+    </div>
+    <button class="av-hamburguer" id="av-menu-botao" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="av-menu-celular"><span></span></button>
+    <nav class="av-menu-celular" id="av-menu-celular" aria-label="Menu principal (celular)" hidden>
+      <a href="/#inicio">Início</a>
+      <a href="/#sobre">Sobre</a>
+      <a href="/mentoria.html">Mentoria Nexialista</a>
+      <a href="/#unidades">Unidades</a>
+      <a href="/#metodologia">Metodologia</a>
+      <a href="/#contato">Contato</a>
+      <a class="av-menu__academia" href="/academiadevirtudes/">Academia de Virtudes</a>
+      <a class="av-btn" href="/#contato">Falar com a GPM</a>
+      <a class="av-btn av-btn--vazado" href="/academiadevirtudes/colaborador/">Sou colaborador</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+  <section class="av-secao av-escuro co-topo" aria-labelledby="co-titulo">
+    <div class="av-container co-grade">
+      <div class="co-intro">
+        <p class="av-olho">Sou colaborador</p>
+        <h1 class="av-titulo co-titulo" id="co-titulo">Um espaço reservado aos colaboradores do Grupo GPM</h1>
+        <p class="av-texto">A plataforma da Academia de Virtudes reúne as aulas e os materiais dos encontros. O acesso é exclusivo para colaboradores do Grupo GPM e para pessoas aprovadas pela nossa equipe.</p>
+        <p class="av-texto">Quer fazer parte? Conte um pouco sobre você no formulário. A equipe analisa cada pedido e responde pelo e-mail ou pelo WhatsApp.</p>
+      </div>
+
+      <div class="co-cartao">
+        <form id="co-form" novalidate>
+          <h2 class="co-cartao__titulo">Quero fazer parte</h2>
+          <p class="co-cartao__sub">Leva menos de um minuto.</p>
+          <input class="av-sr" type="text" name="_gotcha" id="co-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <label class="co-rotulo" for="co-nome">Nome completo</label>
+          <input class="co-campo" id="co-nome" name="nome" type="text" autocomplete="name" maxlength="120" required>
+
+          <label class="co-rotulo" for="co-whatsapp">WhatsApp</label>
+          <input class="co-campo" id="co-whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="16" placeholder="(21) 99999-9999" required>
+
+          <label class="co-rotulo" for="co-email">E-mail</label>
+          <input class="co-campo" id="co-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="160" placeholder="nome@empresa.com.br" required>
+
+          <label class="co-rotulo" for="co-empresa">Empresa em que você trabalha</label>
+          <input class="co-campo" id="co-empresa" name="empresa" type="text" autocomplete="organization" maxlength="120" required>
+
+          <label class="co-rotulo" for="co-motivo">Por que você quer fazer parte da Academia de Virtudes?</label>
+          <textarea class="co-campo co-campo--texto" id="co-motivo" name="motivo" rows="4" maxlength="600" required></textarea>
+
+          <label class="co-check" for="co-consent"><input type="checkbox" id="co-consent" name="consentimento"><span>Concordo com o uso dos meus dados para a análise deste pedido. <a href="/politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de privacidade</a>.</span></label>
+
+          <p class="co-erro" id="co-erro" role="alert"></p>
+          <button class="av-btn co-enviar" type="submit" id="co-enviar">Enviar pedido</button>
+        </form>
+
+        <div class="co-ok" id="co-ok" hidden tabindex="-1">
+          <p class="av-olho">Pedido recebido</p>
+          <h2 class="co-cartao__titulo">Obrigado, <span id="co-ok-nome">tudo certo</span>.</h2>
+          <p class="co-cartao__sub">A equipe do Grupo GPM vai analisar o seu pedido e responder pelo e-mail ou pelo WhatsApp que você informou.</p>
+          <a class="av-btn av-btn--vazado" href="/academiadevirtudes/">Conhecer a Academia</a>
+        </div>
+      </div>
+
+      <div class="co-aluno">
+        <p class="co-aluno__titulo">Já é aluno da plataforma?</p>
+        <p class="co-aluno__texto">Entre com o seu e-mail e a sua senha.</p>
+        <a class="av-btn" href="/academiadevirtudes/entrar/">Entrar na plataforma</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- 5.14 Footer (o mesmo do site) -->
+<footer class="av-rodape">
+  <div class="av-container av-rodape__topo">
+    <div>
+      <div class="av-rodape__marca"><img src="/assets/logo-gpm.png" alt="Logo Grupo GPM" width="36" height="36" loading="lazy">GRUPO GPM</div>
+      <p>Essência humana, potencial artificial.</p>
+    </div>
+    <div class="av-rodape__links">
+      <a href="/#sobre">Sobre</a>
+      <a href="/#unidades">Unidades</a>
+      <a href="/#metodologia">Metodologia</a>
+    </div>
+    <div class="av-rodape__links">
+      <a href="/mentoria.html">Mentoria Nexialista</a>
+      <a href="/#contato">Contato</a>
+      <a href="https://www.linkedin.com/in/eduardo-pitombo-mesquita-737b3132/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+  <div class="av-container av-rodape__base">
+    <span>© 2026 Grupo GPM</span>
+    <span>Negócios reais. Gestão com método. Resultado medido no dia a dia.</span>
+  </div>
+</footer>
+</body>
+</html>

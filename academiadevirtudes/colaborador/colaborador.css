@@ -1,0 +1,34 @@
+/* /academiadevirtudes/colaborador/ · complementa _publico/academia.css (sem CSS inline) */
+.co-topo { min-height: calc(100vh - 72px); display: flex; align-items: center; }
+.co-grade { display: grid; gap: 48px; align-items: start; width: 100%; }
+@media (min-width: 960px) { .co-grade { grid-template-columns: 1fr 1fr; gap: 72px; } }
+.co-titulo { font-size: clamp(36px, 4.6vw, 58px); line-height: 1.06; max-width: 16ch; }
+.co-intro .av-texto { max-width: 34rem; }
+.co-aluno { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--av-line-dark); max-width: 34rem; }
+.co-aluno__titulo { margin: 0; font: 500 26px/1.2 var(--serif); color: var(--av-gold-light); }
+.co-aluno__texto { margin: 6px 0 18px; color: var(--av-mist); }
+
+.co-cartao { padding: 30px 26px; border: 1px solid var(--av-line-dark); border-radius: 10px; background: rgba(244, 238, 226, .04); }
+@media (min-width: 560px) { .co-cartao { padding: 36px 34px; } }
+.co-cartao__titulo { margin: 0; font: 500 30px/1.15 var(--serif); color: var(--av-ivory); }
+.co-cartao__sub { margin: 8px 0 8px; color: var(--av-mist); }
+.co-rotulo { display: block; margin: 18px 0 6px; font-size: 14px; color: var(--av-mist); }
+.co-campo { display: block; width: 100%; padding: 12px 14px; border: 1px solid rgba(244, 238, 226, .25); border-radius: 6px; background: rgba(8, 20, 46, .6); color: var(--av-ivory); font: 400 16px/1.4 var(--sans); }
+.co-campo::placeholder { color: rgba(185, 192, 207, .6); }
+.co-campo:focus { outline: 2px solid var(--av-gold); outline-offset: 1px; border-color: transparent; }
+.co-campo--texto { resize: vertical; min-height: 110px; }
+.co-check { display: flex; gap: 12px; align-items: flex-start; margin-top: 20px; font-size: 14.5px; color: var(--av-ivory); cursor: pointer; }
+.co-check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--av-gold); flex-shrink: 0; }
+.co-check a { color: var(--av-gold-light); }
+.co-erro { min-height: 1.4em; margin: 14px 0 0; color: var(--av-erro-escuro, #F0A595); font-size: 14.5px; }
+.co-enviar { width: 100%; margin-top: 8px; justify-content: center; }
+.co-ok:focus { outline: none; }
+.co-ok .av-btn { margin-top: 22px; }
+/* Celular: explicação → formulário → login. Computador: explicação e login à esquerda, formulário à direita. */
+@media (min-width: 960px) {
+  .co-intro { grid-column: 1; grid-row: 1; }
+  .co-cartao { grid-column: 2; grid-row: 1 / span 2; }
+  .co-aluno { grid-column: 1; grid-row: 2; margin-top: 0; align-self: start; }
+}
+@media (max-width: 959px) { .co-aluno { margin-top: 8px; } }
+@media (min-width: 960px) { .co-grade { row-gap: 8px; } }

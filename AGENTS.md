@@ -36,8 +36,9 @@ Leia antes de alterar qualquer arquivo deste repositório.
 ## Menu
 
 Início · Sobre ▾ (Nossa Tese, Mentoria Nexialista) · Unidades · Metodologia · Contato · Academia de Virtudes (com o símbolo dourado; o texto tem a mesma cor dos outros itens).
-À direita do menu: o botão dourado (pequeno, cantos de 8 px) e, ao lado, o botão vazado branco "Sou aluno", que leva ao login (`/academiadevirtudes/entrar/`). No celular, o botão dourado some e o "Sou aluno" fica ao lado do hambúrguer.
-Só em `academiadevirtudes/index.html`, "Academia de Virtudes ▾" abre "A Academia" e "Área do Aluno" (o menu do celular e o hero também têm o link). As outras páginas continuam com o link simples.
+"Academia de Virtudes" no menu é só o nome, sem o símbolo, na mesma cor dos outros itens (desde 25/11/2026).
+À direita do menu: o botão dourado (pequeno, cantos de 8 px) e, ao lado, o botão vazado branco "Sou colaborador", que leva a `/academiadevirtudes/colaborador/` (página que explica que a plataforma é só para colaboradores do Grupo GPM e pessoas aprovadas, com o pedido de acesso e o link para o login). No celular, o botão dourado some e o "Sou colaborador" fica ao lado do hambúrguer.
+Só nas páginas da Academia (`academiadevirtudes/index.html` e `colaborador/`), "Academia de Virtudes ▾" abre "A Academia" e "Sou colaborador". As outras páginas continuam com o link simples. A página da Academia não tem mais a faixa do playbook no topo.
 O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo de 1200 px e o botão "Como se tornar um Nexialista" continua até 768 px).
 
 ## Endereços
@@ -97,7 +98,12 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
   - Capa ideal: 1280 × 720 px. Sem capa, usa a do YouTube (`hq720`, ou `hqdefault` se não houver).
 - PDFs: bucket privado `materiais`, link assinado de 60 s gerado no clique (Abrir e Baixar). O envio no painel usa XHR com o token da sessão para mostrar a barra de progresso; a política do bucket continua decidindo quem grava.
 
-### Cadastro aberto (decisão da GPM, 11/2026)
+### Acesso só por aprovação (decisão da GPM, 25/11/2026)
+
+- O cadastro aberto acabou: `/academiadevirtudes/cadastro/` só leva para `/academiadevirtudes/colaborador/`, onde a pessoa pede acesso (nome, WhatsApp, e-mail, empresa e motivo; vai para o Formspree `xoedlyqp` com o assunto "Pedido de acesso"). O pedido não cria conta. A equipe aprova e convida pelo painel (aba Alunos).
+- No Supabase, "Allow new users to sign up" precisa ficar **desligado** (só o convite cria conta).
+
+### Cadastro aberto (histórico, 11/2026 a 25/11/2026)
 
 - Plataforma gratuita, com cadastro aberto em `/academiadevirtudes/cadastro/`. O convite pelo painel continua existindo, e o admin pode desativar qualquer pessoa.
 - Cadastro aberto no Supabase desde 13/11/2026 ("Allow new users to sign up" ligado), testado do cadastro à confirmação. Os e-mails saem por SMTP próprio: caixa `academiadevirtudes@gpmintegracao.com.br` da Hostinger (`smtp.hostinger.com`, porta 465), remetente "Academia de Virtudes", limite de 100 e-mails por hora. Se a senha dessa caixa mudar, atualize em Authentication → Emails → SMTP Settings, senão os e-mails de cadastro param.
