@@ -10,7 +10,8 @@ import type { SupabaseClient } from 'npm:@supabase/supabase-js@2.119.0';
 import { montarEmail } from './modelos-email.mjs';
 import { mascarar } from './publico.ts';
 
-const REMETENTE_PADRAO = 'Academia de Virtudes <marketing@gpmintegracao.com.br>';
+// O domínio raiz está em outra conta do Resend: o remetente usa o subdomínio verificado.
+const REMETENTE_PADRAO = 'Academia de Virtudes <inscricoes@academia.gpmintegracao.com.br>';
 const RESPONDER_PADRAO = 'marketing@gpmintegracao.com.br';
 
 export type ResultadoEmail = 'enviado' | 'falhou' | 'nao_enviado' | 'limitado';

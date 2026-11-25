@@ -190,8 +190,9 @@ Depois (troque os valores entre < >; nada disso vai para o repositório):
 supabase secrets set IP_SALT=<o valor gerado acima>
 supabase secrets set TURNSTILE_SECRET=<secret key NOVA do Turnstile, ver 13.4>
 supabase secrets set RESEND_API_KEY=<chave do Resend, começa com re_, ver 13.5>
-# opcionais (os padrões já são estes):
-supabase secrets set EMAIL_REMETENTE="Academia de Virtudes <marketing@gpmintegracao.com.br>"
+# opcionais (os padrões já são estes). O remetente usa o subdomínio academia.gpmintegracao.com.br,
+# verificado no Resend (o domínio raiz está em outra conta do Resend e não pode ser usado):
+supabase secrets set EMAIL_REMETENTE="Academia de Virtudes <inscricoes@academia.gpmintegracao.com.br>"
 supabase secrets set EMAIL_RESPONDER_PARA=marketing@gpmintegracao.com.br
 ```
 
