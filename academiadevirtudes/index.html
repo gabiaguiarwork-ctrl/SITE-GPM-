@@ -28,7 +28,7 @@
 <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
 <link rel="preload" href="/academiadevirtudes/_app/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/academiadevirtudes/_app/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=3">
+<link rel="stylesheet" href="/academiadevirtudes/_publico/academia.css?v=4">
 <script src="/academiadevirtudes/_app/config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_publico/academia-config.js?v=4" defer></script>
 <script src="/academiadevirtudes/_publico/academia.js?v=3" defer></script>
@@ -108,30 +108,35 @@
           <a class="av-btn" href="#inscricao" data-abrir-form>Quero participar do próximo encontro</a>
         </div>
       </div>
-      <ul class="av-destaques">
-        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Encontros presenciais</li>
-        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Para poucas pessoas</li>
-        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Entrada mediante doação</li>
+      <ul class="av-destaques av-destaques--virtudes" aria-label="As quatro virtudes">
+        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Prudência</li>
+        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Justiça</li>
+        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Fortaleza</li>
+        <li><img src="/assets/academia-de-virtudes-simbolo.webp" alt="" width="26" height="26">Temperança</li>
       </ul>
     </div>
     <p class="av-credito">Rafael, <em>A Escola de Atenas</em>, c. 1511</p>
   </section>
 
-  <!-- 5.3 O ponto de partida -->
-  <section class="av-secao av-claro" id="tese" aria-labelledby="tese-titulo">
-    <div class="av-container">
+  <!-- 5.3 O ponto de partida (frase e imagem do slide do Encontro 1) -->
+  <section class="av-secao av-escuro av-ponto" id="tese" aria-labelledby="tese-titulo">
+    <div class="av-container av-ponto__grade">
       <div class="av-entra">
         <p class="av-olho">O ponto de partida</p>
-        <h2 class="av-titulo" id="tese-titulo">A tecnologia corre. A adoção se arrasta.</h2>
-        <p class="av-texto">Capacidade deixou de ser o problema. Site, aplicativo, software: em poucos anos, quase tudo vai existir, muito barato. O gargalo nunca esteve na ferramenta. Está em quanto dela a gente consegue ocupar, e em quem decide o que fazer com ela.</p>
+        <h2 class="av-titulo av-ponto__titulo" id="tese-titulo">O problema é a sua percepção.</h2>
+        <p class="av-ponto__lead">A inteligência artificial amplifica quem você já é.</p>
+        <ul class="av-ponto__contraste">
+          <li><span>Com base sólida</span>acelera o resultado.</li>
+          <li><span>Com base rasa</span>acelera o erro.</li>
+        </ul>
       </div>
-      <ul class="av-grade av-entra">
-        <li><span class="av-grade__n">01</span><h3>A IA amplifica quem você já é.</h3><p>Com base sólida, acelera o resultado. Com base rasa, acelera o erro.</p></li>
-        <li><span class="av-grade__n">02</span><h3>O que sobe é julgamento. O que cai é execução.</h3><p>Resolução de problemas e criatividade ganham peso; técnica sozinha perde.</p></li>
-        <li><span class="av-grade__n">03</span><h3>A ferramenta é quase de graça.</h3><p>O jogo é sobre quem sabe o que fazer com ela.</p></li>
-        <li><span class="av-grade__n">04</span><h3>Ninguém audita o próprio balanço.</h3><p>O comportamento é o seu maior ativo, mas raramente alguém revisa o que está ali.</p></li>
-      </ul>
-      <p class="av-fecho av-entra">Potencial artificial sem profundidade humana não gera resultado real.</p>
+      <figure class="av-ponto__relogio av-entra">
+        <picture>
+          <source srcset="/assets/academia/relogio-praga-mostrador-600.webp 600w, /assets/academia/relogio-praga-mostrador-1000.webp 1000w" sizes="(max-width: 899px) 80vw, 460px" type="image/webp">
+          <img src="/assets/academia/relogio-praga-mostrador-800.jpg" alt="Mostrador do relógio astronômico de Praga, com anéis dourados e signos do zodíaco" width="800" height="800" loading="lazy" decoding="async">
+        </picture>
+        <figcaption>Relógio astronômico de Praga, 1410</figcaption>
+      </figure>
     </div>
   </section>
 
