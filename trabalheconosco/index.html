@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalhe conosco | Grupo GPM</title>
+  <meta name="description" content="Quer fazer parte do Grupo GPM? Envie seu currículo para rh@gpmintegracao.com.br.">
+  <link rel="canonical" href="https://gpmintegracao.com.br/trabalheconosco/">
+  <link rel="icon" type="image/png" href="/assets/logo-alfa.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --azul-marinho: #0a1628;
+      --azul-medio: #0d1f3c;
+      --azul-claro: #112240;
+      --dourado: #c9a84c;
+      --dourado-brilho: #e2c46a;
+      --branco: #ffffff;
+      --branco-70: rgba(255,255,255,0.70);
+      --branco-40: rgba(255,255,255,0.40);
+      --borda-sutil: rgba(201,168,76,0.15);
+      --max-width: 1180px;
+    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    body { margin: 0; font-family: 'Inter', sans-serif; background: var(--azul-marinho); color: var(--branco); line-height: 1.8; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--dourado); outline-offset: 3px; }
+    img { max-width: 100%; display: block; }
+    .site-container { width: min(100%, calc(100% - 2rem)); max-width: var(--max-width); margin: 0 auto; }
+    header { position: sticky; top: 0; z-index: 30; background: rgba(10,22,40,0.92); border-bottom: 1px solid rgba(201,168,76,0.12); backdrop-filter: blur(16px); }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; position: relative; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 0 8px rgba(201,168,76,0.3)); }
+    .logo-text { font-size: 15px; font-weight: 600; letter-spacing: 0.1em; color: #fff; line-height: 1.2; }
+    .logo-text { white-space: nowrap; }
+    .logo-text small { display: block; font-size: 9px; letter-spacing: 0.2em; color: rgba(201,168,76,0.7); margin-top: 2px; font-weight: 400; }
+    @media (max-width: 1366px) { .logo-text small { display: none; } }
+    .menu { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 1.25rem; font-size: 0.95rem; color: var(--branco-70); white-space: nowrap; }
+    .menu a:hover, .menu a[aria-current="page"] { color: var(--dourado); }
+    .menu-item { position: relative; }
+    .menu-item > a { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .menu-arrow { font-size: 0.7em; }
+    .dropdown { position: absolute; top: calc(100% + 0.9rem); left: -1rem; z-index: 40; display: grid; min-width: 220px; padding: 0.6rem 0; background: rgba(10,22,40,0.98); border: 1px solid rgba(201,168,76,0.25); border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; }
+    .dropdown::before { content: ''; position: absolute; left: 0; right: 0; top: -1rem; height: 1rem; }
+    .menu-item:hover .dropdown, .menu-item:focus-within .dropdown { opacity: 1; visibility: visible; transform: none; }
+    .dropdown a { padding: 0.5rem 1.1rem; white-space: nowrap; color: var(--branco-70); }
+    .menu-academia { white-space: nowrap; }
+    .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+    .button { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; padding: 1rem 1.75rem; transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease; font-size: 0.95rem; }
+    .button-primary { background: linear-gradient(135deg, var(--dourado), var(--dourado-brilho)); color: var(--azul-marinho); box-shadow: 0 18px 40px rgba(201,168,76,0.16); }
+    .button-primary:hover { transform: translateY(-2px); background: var(--dourado-brilho); }
+    .btn-topo { padding: 6px 14px; font-size: 0.74rem; font-weight: 500; border-radius: 8px; box-shadow: none; white-space: nowrap; }
+    .btn-aluno { display: inline-flex; align-items: center; justify-content: center; padding: 5px 14px; font-size: 0.74rem; font-weight: 500; line-height: 1.5; color: #ffffff; border: 1px solid rgba(255,255,255,0.75); border-radius: 8px; white-space: nowrap; transition: color 0.2s ease, border-color 0.2s ease; }
+    .btn-aluno:hover { color: var(--dourado); border-color: var(--dourado); }
+    .hamburger { display: none; order: 2; background: none; border: 1px solid rgba(255,255,255,0.12); width: 44px; height: 44px; border-radius: 50%; color: var(--branco); cursor: pointer; align-items: center; justify-content: center; }
+    .hamburger span { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 1px; position: relative; }
+    .hamburger span::before, .hamburger span::after { content: ''; position: absolute; left: 0; width: 100%; height: 2px; background: currentColor; border-radius: 1px; }
+    .hamburger span::before { top: -6px; }
+    .hamburger span::after { top: 6px; }
+    .mobile-menu { display: none; position: absolute; top: 100%; right: 1rem; left: 1rem; background: rgba(10,22,40,0.98); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 1.5rem; backdrop-filter: blur(16px); z-index: 20; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a { display: block; margin-bottom: 1rem; color: var(--branco-70); font-size: 1rem; }
+    .mobile-menu a:last-child { margin-bottom: 0; }
+
+    /* ── Trabalhe conosco ── */
+    .tc { padding: 6rem 0 6.5rem; background: radial-gradient(circle at top, rgba(201,168,76,0.08), transparent 40%), var(--azul-marinho); }
+    .tc-caixa { max-width: 680px; margin: 0 auto; text-align: center; }
+    .tc-olho { display: inline-flex; padding: 0.55rem 1.1rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.75rem; background: rgba(255,255,255,0.03); margin: 0 0 1.5rem; }
+    .tc h1 { margin: 0 0 1.2rem; font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.02; letter-spacing: -0.02em; }
+    .tc-sub { margin: 0 auto 1.4rem; color: var(--dourado); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2.2vw, 1.6rem); line-height: 1.4; }
+    .tc-texto { margin: 0 auto 2.4rem; max-width: 56ch; color: var(--branco-70); font-size: 1rem; }
+    .tc-cartao { margin: 0 auto; max-width: 520px; padding: 2rem 1.5rem; background: var(--azul-claro); border: 1px solid var(--borda-sutil); border-radius: 24px; }
+    .tc-cartao p { margin: 0; color: var(--branco-70); font-size: 0.95rem; }
+    .tc-email { display: block; margin: 0.4rem 0 1.5rem; font-size: clamp(1.05rem, 4.4vw, 1.35rem); font-weight: 600; color: var(--branco); word-break: break-all; }
+    .tc-email:hover { color: var(--dourado); }
+    .tc-dica { margin-top: 1.4rem !important; font-size: 0.85rem !important; color: var(--branco-40) !important; }
+
+    footer { background: #081121; padding: 3rem 0 2rem; }
+    .footer-inner { display: grid; grid-template-columns: 1.2fr 0.9fr 0.9fr; gap: 2rem; align-items: start; }
+    .footer-logo { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-logo .brand img { width: 36px; }
+    .footer-logo span { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links { display: grid; gap: 0.8rem; }
+    .footer-links a { color: var(--branco-70); font-size: 0.95rem; }
+    .footer-links a:hover { color: var(--dourado); }
+    .footer-bottom { margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; color: var(--branco-40); font-size: 0.92rem; }
+    @media (max-width: 1200px) { .menu, .topbar-actions .btn-topo { display: none; } .topbar-actions { margin-left: auto; } .hamburger { display: inline-flex; } }
+    @media (max-width: 980px) { .footer-inner { grid-template-columns: 1fr; } }
+    @media (max-width: 680px) { .tc { padding: 4rem 0 4.5rem; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="site-container topbar">
+      <a class="brand" href="/">
+        <img src="/assets/logo-gpm.png" alt="Logo Grupo GPM" width="48" height="48">
+        <span class="logo-text">GRUPO GPM<small>ESSÊNCIA HUMANA. POTENCIAL ARTIFICIAL</small></span>
+      </a>
+      <button class="hamburger" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
+      <nav class="menu" aria-label="Menu principal">
+        <a href="/#inicio">Início</a>
+        <div class="menu-item">
+          <a href="/#sobre">Sobre <span class="menu-arrow" aria-hidden="true">▾</span></a>
+          <div class="dropdown">
+            <a href="/#sobre">Nossa Tese</a>
+            <a href="/mentoria.html">Mentoria Nexialista</a>
+          </div>
+        </div>
+        <a href="/#unidades">Unidades</a>
+        <a href="/#metodologia">Metodologia</a>
+        <a href="/#contato">Contato</a>
+        <a href="/trabalheconosco/" aria-current="page">Trabalhe conosco</a>
+        <a class="menu-academia" href="/academiadevirtudes/">Academia de Virtudes</a>
+      </nav>
+      <div class="topbar-actions">
+        <a class="button button-primary btn-topo" href="/mentoria.html">Mentoria Nexialista</a>
+        <a class="btn-aluno" href="/academiadevirtudes/colaborador/">Sou colaborador</a>
+      </div>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="/#inicio">Início</a>
+        <a href="/#sobre">Sobre</a>
+        <a href="/#unidades">Unidades</a>
+        <a href="/#metodologia">Metodologia</a>
+        <a href="/mentoria.html">Mentoria</a>
+        <a href="/#contato">Contato</a>
+        <a href="/trabalheconosco/" aria-current="page">Trabalhe conosco</a>
+        <a class="menu-academia" href="/academiadevirtudes/">Academia de Virtudes</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="tc" aria-labelledby="tc-titulo">
+      <div class="site-container tc-caixa">
+        <p class="tc-olho">Trabalhe conosco</p>
+        <h1 id="tc-titulo">Venha fazer parte do Grupo GPM</h1>
+        <p class="tc-sub">Gente que gosta de fazer bem feito, com método e propósito.</p>
+        <p class="tc-texto">Estamos sempre abertos a conhecer pessoas que queiram crescer com a gente. Se você se identifica com a nossa forma de trabalhar, envie o seu currículo para a nossa equipe de RH.</p>
+
+        <div class="tc-cartao">
+          <p>Envie o seu currículo para</p>
+          <a class="tc-email" href="mailto:rh@gpmintegracao.com.br?subject=Curr%C3%ADculo%20%C2%B7%20Trabalhe%20conosco">rh@gpmintegracao.com.br</a>
+          <a class="button button-primary" href="mailto:rh@gpmintegracao.com.br?subject=Curr%C3%ADculo%20%C2%B7%20Trabalhe%20conosco">Enviar meu currículo</a>
+          <p class="tc-dica">No e-mail, conte em poucas palavras a área em que você gostaria de atuar e anexe o currículo em PDF.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="site-container footer-inner">
+      <div class="footer-logo">
+        <div class="brand">
+          <img src="/assets/logo-gpm.png" alt="Logo Grupo GPM" width="36" height="36">
+          <span>GRUPO GPM</span>
+        </div>
+        <span>Essência humana, potencial artificial.</span>
+      </div>
+      <div class="footer-links">
+        <a href="/#sobre">Sobre</a>
+        <a href="/#unidades">Unidades</a>
+        <a href="/#metodologia">Metodologia</a>
+      </div>
+      <div class="footer-links">
+        <a href="/mentoria.html">Mentoria Nexialista</a>
+        <a href="/#contato">Contato</a>
+        <a href="/trabalheconosco/">Trabalhe conosco</a>
+      </div>
+    </div>
+    <div class="site-container footer-bottom">
+      <span>© 2026 Grupo GPM</span>
+      <span>
+        <a href="/politica-privacidade.html">Política de Privacidade</a> ·
+        <a href="/termos-de-uso.html">Termos de Uso</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector('#menuToggle');
+    const mobileMenu = document.querySelector('#mobileMenu');
+    menuToggle?.addEventListener('click', () => {
+      const aberto = mobileMenu.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(aberto));
+      menuToggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    });
+  </script>
+
+</body>
+</html>

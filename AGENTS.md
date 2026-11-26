@@ -35,7 +35,8 @@ Leia antes de alterar qualquer arquivo deste repositório.
 
 ## Menu
 
-Início · Sobre ▾ (Nossa Tese, Mentoria Nexialista) · Unidades · Metodologia · Contato · Academia de Virtudes (com o símbolo dourado; o texto tem a mesma cor dos outros itens).
+Início · Sobre ▾ (Nossa Tese, Mentoria Nexialista) · Unidades · Metodologia · Contato · Trabalhe conosco · Academia de Virtudes.
+"Trabalhe conosco" (desde 26/11/2026) leva a `/trabalheconosco/`: página simples que convida a enviar o currículo para `rh@gpmintegracao.com.br` (link `mailto:`). Também está no rodapé, logo depois de "Contato". Com esse item, o menu fica mais justo entre 1201 e 1366 px (espaços e letra menores; na Academia, só o logo sem o texto "GRUPO GPM" até 1320 px).
 "Academia de Virtudes" no menu é só o nome, sem o símbolo, na mesma cor dos outros itens (desde 25/11/2026).
 À direita do menu: o botão dourado (pequeno, cantos de 8 px) e, ao lado, o botão vazado branco "Sou colaborador", que leva a `/academiadevirtudes/colaborador/` (página que explica que a plataforma é só para colaboradores do Grupo GPM e pessoas aprovadas, com o pedido de acesso e o link para o login). No celular, o botão dourado some e o "Sou colaborador" fica ao lado do hambúrguer.
 Só nas páginas da Academia (`academiadevirtudes/index.html` e `colaborador/`), "Academia de Virtudes ▾" abre "A Academia" e "Sou colaborador". As outras páginas continuam com o link simples. A página da Academia não tem mais a faixa do playbook no topo.

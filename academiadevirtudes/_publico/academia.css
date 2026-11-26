@@ -518,3 +518,7 @@ section[id] { scroll-margin-top: 90px; }
   .av-marco h3 { font-size: clamp(24px, 2.1vw, 29px); }
 }
 .av-marco__n { font-variant-numeric: lining-nums; }
+/* "Trabalhe conosco" no menu: itens sem quebrar linha */
+.av-menu > a, .av-menu__item > a { white-space: nowrap; }
+@media (max-width: 1366px) { .av-menu { gap: 16px; } }
+@media (max-width: 1320px) { .av-marca__texto { display: none; } .av-menu { gap: 14px; font-size: 14.5px; } }
