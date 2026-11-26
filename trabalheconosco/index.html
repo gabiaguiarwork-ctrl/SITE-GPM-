@@ -80,9 +80,8 @@
     @media (min-width: 960px) { .vagas-grade { grid-template-columns: 1fr 1fr; } }
     .vaga { display: flex; flex-direction: column; padding: 2.2rem 1.5rem; background: linear-gradient(160deg, #0d1f3c, #0a1628 70%); border: 1px solid var(--borda-sutil); border-radius: 20px; }
     @media (min-width: 560px) { .vaga { padding: 2.6rem 2.4rem; } }
-    .vaga .vaga-olho { margin: 0 0 1rem; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; font-weight: 600; }
     .vaga h3 { margin: 0 0 1.4rem; font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-variant-numeric: lining-nums; font-weight: 600; font-size: clamp(30px, 3.4vw, 40px); line-height: 1.08; letter-spacing: 0.01em; }
-    .vaga h3 span { display: block; color: var(--dourado); font-weight: 700; }
+    .vaga h3 span { color: var(--dourado); font-weight: 700; }
     .vaga p { margin: 0 0 1rem; color: var(--branco-70); font-size: 1rem; line-height: 1.7; }
     .tc-texto strong { color: var(--branco); font-weight: 600; word-break: break-word; }
     .vaga p strong { color: var(--branco); font-weight: 600; }
@@ -167,9 +166,21 @@
         <h2 class="vagas-titulo" id="vagas-titulo">Vagas abertas</h2>
         <div class="vagas-grade">
 
+          <article class="vaga" aria-labelledby="vaga-2">
+            <h3 id="vaga-2">Oportunidade de trabalho em tecnologia <span>nas Forças Armadas</span></h3>
+            <p>Se você tem <strong>até 30 anos</strong>, tem disciplina, gosta de <strong>tecnologia</strong>, se identifica com o universo das <strong>Forças Armadas</strong> e tem disposição para assumir desafios, essa pode ser a sua chance.</p>
+            <p>Buscamos pessoas com atitude, comprometimento e vontade de crescer para um projeto com grande potencial.</p>
+            <ul class="vaga-itens">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>Tecnologia e inovação</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Projetos com as Forças Armadas</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21v-6M10 21v-9M14 21v-7M18 21V5M4 13l5-5 4 3 7-7"/></svg>Desenvolvimento profissional real</li>
+            </ul>
+            <p class="vaga-perfil"><b>Não é para qualquer perfil.</b>É para quem está disposto a aprender, executar e aproveitar uma grande oportunidade.</p>
+            <a class="vaga-botao" href="mailto:rh@gpmintegracao.com.br?subject=Candidatura%20%C2%B7%20Tecnologia%20nas%20For%C3%A7as%20Armadas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7.5z"/><path d="m10 13.5 4.5-4.5"/></svg>Quero me candidatar</a>
+          </article>
+
           <article class="vaga" aria-labelledby="vaga-1">
-            <p class="vaga-olho">Oportunidade de trabalho</p>
-            <h3 id="vaga-1">Criatividade que constrói. <span>Tecnologia que amplia.</span></h3>
+            <h3 id="vaga-1">Oportunidade de trabalho em <span>tecnologia e marketing</span></h3>
             <p>Se você tem <strong>até 30 anos</strong>, é disciplinado, curioso e gosta de <strong>criação</strong>, <strong>edição de vídeo</strong>, <strong>tecnologia</strong> e <strong>inteligência artificial</strong>, essa pode ser a sua chance.</p>
             <p>Buscamos pessoas interessadas, com atitude e vontade de crescer, para criar conteúdo em canais digitais com grande potencial.</p>
             <ul class="vaga-itens">
@@ -178,21 +189,7 @@
               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21v-6M10 21v-9M14 21v-7M18 21V5M4 13l5-5 4 3 7-7"/></svg>Desenvolvimento profissional real</li>
             </ul>
             <p class="vaga-perfil"><b>Não é para qualquer perfil.</b>É para quem está disposto a aprender, executar e aproveitar uma grande oportunidade.</p>
-            <a class="vaga-botao" href="mailto:rh@gpmintegracao.com.br?subject=Candidatura%20%C2%B7%20Cria%C3%A7%C3%A3o%2C%20v%C3%ADdeo%20e%20IA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7.5z"/><path d="m10 13.5 4.5-4.5"/></svg>Quero me candidatar</a>
-          </article>
-
-          <article class="vaga" aria-labelledby="vaga-2">
-            <p class="vaga-olho">Oportunidade de trabalho</p>
-            <h3 id="vaga-2">Disciplina que constrói. <span>Tecnologia que amplia.</span></h3>
-            <p>Se você tem <strong>até 30 anos</strong>, tem disciplina, gosta de <strong>tecnologia</strong>, se identifica com o universo das <strong>Forças Armadas</strong> e tem disposição para assumir desafios, essa pode ser a sua chance.</p>
-            <p>Buscamos pessoas com atitude, comprometimento e vontade de crescer em um projeto com grande potencial.</p>
-            <ul class="vaga-itens">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>Tecnologia e inovação</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Projetos com as Forças Armadas</li>
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21v-6M10 21v-9M14 21v-7M18 21V5M4 13l5-5 4 3 7-7"/></svg>Desenvolvimento profissional real</li>
-            </ul>
-            <p class="vaga-perfil"><b>Não é para qualquer perfil.</b>É para quem está disposto a aprender, executar e aproveitar uma grande oportunidade.</p>
-            <a class="vaga-botao" href="mailto:rh@gpmintegracao.com.br?subject=Candidatura%20%C2%B7%20Tecnologia%20e%20For%C3%A7as%20Armadas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7.5z"/><path d="m10 13.5 4.5-4.5"/></svg>Quero me candidatar</a>
+            <a class="vaga-botao" href="mailto:rh@gpmintegracao.com.br?subject=Candidatura%20%C2%B7%20Tecnologia%20e%20marketing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7.5z"/><path d="m10 13.5 4.5-4.5"/></svg>Quero me candidatar</a>
           </article>
 
         </div>
