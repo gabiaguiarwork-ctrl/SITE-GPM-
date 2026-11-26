@@ -237,35 +237,72 @@
       aviso);
   };
 
-  /* ---------- Card de aula (vitrine) ---------- */
-  // opcoes = { trilha, progresso (linha do aluno), mostrarBarra }
+  /* ---------- Cartão de aula (vitrine, trilha e busca) · tema claro, 26/11/2026 ---------- */
+  // Imagem 16:9 em cima e o texto embaixo, fora da imagem.
+  // opcoes = { trilha, progresso (linha do aluno), rotulo ("Aula 1"), continuar (selo na próxima aula) }
   C.cardAula = function (a, opcoes) {
     opcoes = opcoes || {};
     var p = opcoes.progresso;
     var feito = !!(p && p.concluido);
-    var pct = opcoes.mostrarBarra && !feito ? C.pctAssistido(a, p) : null;
-    // Cartão no estilo Netflix: imagem deitada (16:9) com o título por cima; ao passar o mouse,
-    // aparece o botão ▶ e quanto já foi visto ("12 de 25 min"). A barra de progresso fica embaixo da imagem.
-    var meta = C.metaAula(a);
-    var visto = p && !feito && p.posicao_seg && a.duracao_min && a.tipo === 'video'
-      ? Math.max(1, Math.round(p.posicao_seg / 60)) + ' de ' + a.duracao_min + ' min' : '';
-    var info = visto || meta;
-    var capa = h('div', { class: 'ac-tile__capa' },
-      C.imagem(C.capaAulaUrl(a, opcoes.trilha), 'ac-tile__img', a.tipo),
-      h('span', { class: 'ac-tile__sombra', 'aria-hidden': 'true' }),
-      opcoes.posicao ? h('span', { class: 'ac-tile__posicao' }, h('span', { class: 'ac-sr-only' }, 'Posição '), String(opcoes.posicao)) : null,
-      C.novo(a) && !feito && !opcoes.posicao ? h('span', { class: 'ac-tile__selo' }, 'Novo') : null,
-      feito ? h('span', { class: 'ac-tile__feito' }, h('span', { 'aria-hidden': 'true' }, '✓'), h('span', { class: 'ac-sr-only' }, 'Concluída')) : null,
-      h('span', { class: 'ac-tile__sobre' },
-        opcoes.trilha && opcoes.mostrarTrilha ? h('span', { class: 'ac-tile__trilha' }, opcoes.trilha.titulo) : null,
-        h('span', { class: 'ac-tile__titulo' }, a.titulo)),
-      h('span', { class: 'ac-tile__hover', 'aria-hidden': 'true' },
-        h('span', { class: 'ac-tile__play' }, a.tipo === 'pdf' ? '↗' : '▶'),
-        info ? h('span', { class: 'ac-tile__info' }, info) : null));
-    return h('a', { class: 'ac-tile', href: CFG.rotas.aula + '?id=' + encodeURIComponent(a.id) },
+    var pdf = a.tipo === 'pdf';
+    var pct = feito ? 100 : (a.tipo === 'video' ? C.pctAssistido(a, p) : null);
+    var tipo = pdf ? ['PDF', C.tamanho(a.arquivo_tamanho)].filter(Boolean).join(' · ') : C.duracao(a.duracao_min);
+    var selo = a.destaque ? 'Em destaque' : (C.novo(a) && !feito ? 'Novo' : '');
+    var meta;
+    if (pdf) meta = feito ? 'Material em PDF · ✓ Concluído' : 'Material em PDF · Baixar';
+    else if (a.tipo === 'video') meta = feito ? 'Videoaula · ✓ Concluída' : (pct ? 'Videoaula · ' + pct + '% assistido' : 'Videoaula');
+    else meta = (C.rotuloTipo(a.tipo) || 'Aula') + (feito ? ' · ✓ Concluída' : '');
+    var capa = h('span', { class: 'ac-cartao-aula__capa' },
+      C.imagem(C.capaAulaUrl(a, opcoes.trilha), 'ac-cartao-aula__img', a.tipo),
+      selo ? h('span', { class: 'ac-cartao-aula__selo' + (a.destaque ? ' ac-cartao-aula__selo--destaque' : '') }, selo) : null,
+      opcoes.continuar ? h('span', { class: 'ac-cartao-aula__continuar' }, 'Continuar') : null,
+      tipo ? h('span', { class: 'ac-cartao-aula__tipo' }, tipo) : null,
+      a.tipo === 'video' ? h('span', { class: 'ac-cartao-aula__play', 'aria-hidden': 'true' }, h('span', null, '▶')) : null);
+    return h('a', { class: 'ac-cartao-aula', href: CFG.rotas.aula + '?id=' + encodeURIComponent(a.id) },
       capa,
-      pct !== null ? h('span', { class: 'ac-tile__trilho', 'aria-hidden': 'true' }, h('span', { class: 'ac-tile__barra', 'data-pct': String(pct) })) : null,
-      info ? h('span', { class: 'ac-tile__corpo' }, h('span', { class: 'ac-tile__meta' }, info)) : null);
+      h('span', { class: 'ac-cartao-aula__corpo' },
+        opcoes.rotulo ? h('span', { class: 'ac-cartao-aula__rotulo' }, opcoes.rotulo) : null,
+        h('span', { class: 'ac-cartao-aula__titulo' }, a.titulo),
+        h('span', { class: 'ac-cartao-aula__meta' + (feito ? ' ac-cartao-aula__meta--feito' : '') }, meta),
+        pct ? C.barrinha(pct, 'Progresso em ' + a.titulo) : null));
+  };
+  // Barra fina de progresso (a largura vem da classe .ac-pct-N; chame C.ajustarBarras depois de montar)
+  C.barrinha = function (pct, rotulo) {
+    pct = Math.max(0, Math.min(100, Math.round(pct || 0)));
+    return h('span', { class: 'ac-barrinha', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': String(pct), 'aria-label': rotulo || 'Progresso' },
+      h('span', { class: 'ac-barrinha__valor', 'data-pct': String(pct) }));
+  };
+
+  /* ---------- Trilhas: aulas visíveis, progresso e próxima aula ---------- */
+  // Uma trilha só aparece para o aluno se tiver aula visível. Ordem: a do painel.
+  C.organizar = function (trilhas, aulas, progresso) {
+    var visiveis = (aulas || []).filter(C.visivelAluno);
+    var lista = (trilhas || []).map(function (t) {
+      var daTrilha = visiveis.filter(function (a) { return a.modulo_id === t.id; });
+      return { trilha: t, aulas: daTrilha };
+    }).filter(function (x) { return x.aulas.length > 0; });
+    lista.forEach(function (x, i) {
+      x.numero = i + 1;
+      x.feitas = x.aulas.filter(function (a) { return progresso[a.id] && progresso[a.id].concluido; }).length;
+      x.pct = Math.round(x.feitas / x.aulas.length * 100);
+      var i2 = x.aulas.findIndex(function (a) { return !(progresso[a.id] && progresso[a.id].concluido); });
+      x.proxima = i2 >= 0 ? x.aulas[i2] : null;
+      x.indiceProxima = i2;
+    });
+    var ids = C.porId(lista.map(function (x) { return x.trilha; }));
+    var soltas = visiveis.filter(function (a) { return !a.modulo_id || !ids[a.modulo_id]; });
+    return { trilhas: lista, soltas: soltas, aulas: visiveis };
+  };
+  C.rotuloTrilha = function (x) { return 'Trilha ' + x.numero; };
+  C.linkTrilha = function (t) { return CFG.rotas.trilha + '?id=' + encodeURIComponent(t.id); };
+  C.capaTrilhaUrl = function (x) {
+    return C.capaUrl(x.trilha.capa_path) || (x.aulas[0] ? C.capaAulaUrl(x.aulas[0], null) : '');
+  };
+  // Texto curto (a descrição pode ter markdown simples)
+  C.resumo = function (texto, max) {
+    var t = String(texto || '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_#>`]/g, '').replace(/\s+/g, ' ').trim();
+    if (t.length <= max) return t;
+    return t.slice(0, max).replace(/\s+\S*$/, '') + '…';
   };
 
   /* ---------- Markdown simples → elementos ---------- */

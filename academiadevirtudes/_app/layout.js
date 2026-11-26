@@ -19,6 +19,8 @@
       AC.$$('.ac-topo__nav a[href]').forEach(function (a) {
         var alvo = a.getAttribute('href');
         var atual = alvo === aqui || (alvo !== '/academiadevirtudes/aluno/' && aqui.indexOf(alvo) === 0);
+        var tambem = a.getAttribute('data-ativo-em'); // ex.: Trilhas também vale para /aluno/trilha/
+        if (tambem && aqui.indexOf(tambem) === 0) atual = true;
         if (atual) a.setAttribute('aria-current', 'page');
       });
 

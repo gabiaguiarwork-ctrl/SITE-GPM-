@@ -29,7 +29,8 @@ Leia antes de alterar qualquer arquivo deste repositório.
 
 - Fontes: Cormorant Garamond (títulos) + Inter (textos).
 - Site institucional: `--azul-marinho #0a1628`, `--dourado #c9a84c`, `--dourado-brilho #e2c46a`.
-- Academia de Virtudes: `--bg #08142E`, `--bg-2 #0E1F45`, `--gold #C9A45C`, `--gold-2 #E2C88E`, `--ivory #F4EEE2`, `--paper #FAF6EE`, `--ink #14203B`, `--error #B5483A`.
+- Academia de Virtudes (página pública): `--bg #08142E`, `--bg-2 #0E1F45`, `--gold #C9A45C`, `--gold-2 #E2C88E`, `--ivory #F4EEE2`, `--paper #FAF6EE`, `--ink #14203B`, `--error #B5483A`.
+- Área do Aluno, telas de acesso e painel: **tema claro** desde 26/11/2026 (`_app/academia.css`): fundo `--paper #FAF6EE`, superfícies `--sup #FFFDF8`, realces `--suave #F4EEE2`, bordas `--linha #E4DBC8`, texto `--ink #14203B` / `--navy #0B1A3A`, secundário `--texto-2 #4E586C`, rótulos dourados `--ouro-texto #85652A` (o `#A9843E` não passa no AA sobre o marfim), botões e barras `#C9A45C → #E2C88E`, erro `#B5483A`, ok `#2F7A4F`. O azul-noite fica só no banner e em detalhes (chip selecionado, selo de duração). Números em Inter. Contraste AA conferido em todos os pares. O CAPTCHA (Turnstile) usa o tema claro.
 - Contraste AA, mobile-first (360–430 px), foco visível, labels em todos os campos.
 - A fonte Cormorant usa algarismos "antigos" por padrão: em títulos com números, use `font-variant-numeric: lining-nums`.
 
@@ -54,7 +55,7 @@ O menu vira hambúrguer abaixo de 1200 px (na home, o menu completo some abaixo 
   - O PDF fica em `academiadevirtudes/materiais/`, pasta com `X-Robots-Tag: noindex` e um `index.html` que impede a listagem. O nome do arquivo não deve aparecer em outra página nem no sitemap.
 - `/academiadevirtudes/checkin/#chave=…`: check-in da equipe no dia do Encontro 2 (noindex, fora do menu). Os nomes dos inscritos ficam criptografados na página (AES-GCM) e só abrem com a chave do link; sem a chave, nenhum nome aparece. Presenças e pessoas adicionadas (nome, WhatsApp, quem convidou) ficam só no aparelho até baixar a planilha. Para gerar ou atualizar a lista: `node _notas/checkin/gerar.js` (a chave fica em `_notas/checkin/chave.txt`).
 - `/academiadevirtudes/_inscricao-encontro-1.html`: página antiga guardada, sem link (noindex).
-- Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `aula/?id=`, `materiais/`, `perfil/`, `completar/` (e `encontro/`, endereço antigo que leva para a vitrine); dentro de `admin/`: `mfa/` e as abas `#alunos`, `#aulas`, `#trilhas`, `#avisos`, `#relatorios` (`#encontros` e `#conteudos` abrem `#aulas`).
+- Área do Aluno: `/academiadevirtudes/{entrar,cadastro,confirmar,redefinir-senha,aluno,admin}/`; dentro de `aluno/`: `aula/?id=`, `trilhas/`, `trilha/?id=`, `materiais/`, `perfil/`, `completar/` (e `encontro/`, endereço antigo que leva para a vitrine); dentro de `admin/`: `mfa/` e as abas `#alunos`, `#aulas`, `#trilhas`, `#avisos`, `#relatorios` (`#encontros` e `#conteudos` abrem `#aulas`).
 
 ## Formulários
 
@@ -92,11 +93,15 @@ Não usados mais no site: `xaeeyrdb` (lista prioritária do Encontro 2) e `mnppz
 - Banco (nomes antigos mantidos para não perder dados): `public.conteudos` = aulas, `public.modulos` = trilhas, `public.anexos` = PDFs de apoio. Publicação e data de liberação valem por aula; a trilha só aparece para o aluno se tiver aula visível.
 - Vídeo: o admin cola o link; guarda-se só o ID (11 caracteres) e `provedor = 'youtube'`. Player `https://www.youtube-nocookie.com/embed/<id>` sem carregar o `iframe_api` (conversa por `postMessage`, em `_app/player.js`). Vimeo e Panda continuam aceitos.
 - CSP: `aluno/aula/.htaccess` libera `frame-src https://www.youtube-nocookie.com`; `aluno/`, `aluno/aula/` e `admin/` liberam `img-src https://i.ytimg.com` (capas); `admin/` libera também o `frame-src` do YouTube (prévia no formulário).
-- Vitrine do aluno (decisão da GPM, 18/11/2026, no estilo COR Academia; antes, 13/11, estilo Netflix):
-  - No topo, a aula em destaque: a marcada como "Destaque" no painel; senão a que o aluno está assistindo; senão a primeira não concluída. Mostra "Olá, Nome! Boas-vindas à Academia de Virtudes.", trilha, título, resumo da descrição e os botões "Começar agora"/"Continuar" e "Ver trilha completa". Imagem: capa da aula, senão a do YouTube (`maxresdefault`), senão a foto do auditório. Sem aula, fica o banner de boas-vindas do HTML.
-  - Depois: "Onde você está crescendo" (um cartão por trilha, com progresso), "Continue assistindo", uma fileira por trilha, "Outras aulas" (só se houver aula sem trilha), "Mais assistidas pelos alunos" (função `aulas_mais_vistas`, migration 0008; só aparece com 2 aulas ou mais e se a função existir) e "Seu aproveitamento" (aulas concluídas, tempo de estudo, trilhas concluídas).
-  - Cada cartão é uma aula, com imagem deitada (16:9) e o título por cima. Ao passar o mouse, aparecem o ▶ e "x de y min". A barra de progresso fica embaixo da imagem.
-  - Capa ideal: 1280 × 720 px. Sem capa, usa a do YouTube (`hq720`, ou `hqdefault` se não houver).
+- Vitrine do aluno (decisão da GPM, 26/11/2026: tema claro e organizada por trilhas; antes, 18/11, estilo COR Academia; 13/11, estilo Netflix):
+  - Menu: Início · Trilhas · Materiais · Perfil · Sair (e Admin para admin).
+  - Banner fixo da Academia (A Escola de Atenas, `academia-atenas-{1280,1920}.webp` e `-mobile-800.webp`) com degradê azul-noite: "Essência humana, *potencial artificial.*" e uma linha pessoal. Com aula em andamento: "Olá, Nome. Você parou na aula X." + "Continuar de onde parei"; sem: boas-vindas + "Começar pela primeira aula" (primeira aula da primeira trilha). "Ver todas as trilhas" rola até as trilhas. O degradê é escuro (≥ 0,72) até 680 px, para o texto ter contraste AA em qualquer largura.
+  - Depois: avisos, chips de trilha (filtram a página) + busca (aulas e PDFs), uma seção por trilha na ordem do painel ("Trilha N", nome, descrição, "X de Y aulas concluídas", barra e "Ver trilha completa →"; fileira de até 4 cartões no computador e rolagem lateral no celular, começando uma aula antes da próxima não concluída), "Outras aulas" (só se houver aula sem trilha) e, lado a lado, "Onde você está crescendo" e "Seu aproveitamento" (aulas concluídas, horas assistidas, materiais concluídos).
+  - Saíram da vitrine: "Continue assistindo" (virou o banner), "Mais assistidas" (a função `aulas_mais_vistas` continua no banco, sem uso) e "Novidades" (virou o selo "Novo").
+  - Cartão (`C.cardAula`): branco, imagem 16:9 em cima e texto embaixo, fora da imagem. Na imagem: selo "Em destaque" (campo Destaque do painel, que não controla mais o banner) ou "Novo" (7 dias), duração ou "PDF · tamanho", ▶ para vídeo. Embaixo: rótulo "Aula N" (posição na trilha), título (2 linhas), tipo e estado ("Videoaula · 40% assistido", "✓ Concluída", "Material em PDF · Baixar") e barra de progresso.
+  - Página da trilha `/aluno/trilha/?id=`: capa (a da trilha; senão a da primeira aula), nome, descrição, progresso, botão "Começar a trilha"/"Continuar: Aula N" e todas as aulas em cartões, com o selo "Continuar" na próxima. Página `/aluno/trilhas/`: um cartão por trilha. Na aula, o "voltar" e o nome da trilha levam à página da trilha.
+  - Capa ideal: 1280 × 720 px. Sem capa, usa a do YouTube (`hq720`, ou `hqdefault` se não houver); sem nenhuma, o símbolo sobre o marfim.
+  - Teste local sem login: `node _notas/ferramentas/aluno-mock/gerar.cjs` e abrir `/_notas/ferramentas/aluno-mock/p/aluno/` (dados falsos; o painel tem o mesmo em `_notas/ferramentas/admin-mock/`).
 - PDFs: bucket privado `materiais`, link assinado de 60 s gerado no clique (Abrir e Baixar). O envio no painel usa XHR com o token da sessão para mostrar a barra de progresso; a política do bucket continua decidindo quem grava.
 
 ### Acesso só por aprovação (decisão da GPM, 25/11/2026)

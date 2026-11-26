@@ -32,6 +32,8 @@
       adminMfa: BASE + '/admin/mfa/',
       encontro: BASE + '/aluno/encontro/', // endereço antigo: leva para a vitrine
       aula: BASE + '/aluno/aula/',
+      trilha: BASE + '/aluno/trilha/',
+      trilhas: BASE + '/aluno/trilhas/',
       materiais: BASE + '/aluno/materiais/'
     }),
 

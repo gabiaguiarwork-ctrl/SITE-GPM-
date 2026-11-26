@@ -54,7 +54,9 @@
 
     var principal = h('div', { class: 'ac-aula__principal' });
     var lateral = h('aside', { class: 'ac-aula__lateral', 'aria-labelledby': 't-lista' });
-    alvo.appendChild(h('a', { class: 'ac-voltar', href: CFG.rotas.aluno }, '← Início'));
+    alvo.appendChild(trilha
+      ? h('a', { class: 'ac-voltar', href: C.linkTrilha(trilha) }, '← ' + trilha.titulo)
+      : h('a', { class: 'ac-voltar', href: CFG.rotas.aluno }, '← Início'));
     alvo.appendChild(h('div', { class: 'ac-aula__grade' }, principal, lateral));
 
     if (previa) {
@@ -82,7 +84,7 @@
     }
 
     principal.appendChild(h('div', { class: 'ac-aula__cabeca' },
-      trilha ? h('p', { class: 'ac-aula__modulo' }, trilha.titulo) : null,
+      trilha ? h('a', { class: 'ac-aula__modulo', href: C.linkTrilha(trilha) }, trilha.titulo) : null,
       h('h1', null, a.titulo),
       h('p', { class: 'ac-sub' }, C.metaAula(a))));
 

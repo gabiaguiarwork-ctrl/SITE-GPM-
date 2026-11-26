@@ -128,7 +128,7 @@
     api.pronto = carregarTurnstile().then(function (ts) {
       widgetId = ts.render(elemento, {
         sitekey: CFG.turnstileSiteKey,
-        theme: 'dark',
+        theme: 'light',
         language: 'pt-br',
         size: 'flexible',
         callback: function (t) { atual = t; clearTimeout(vigia); if (ao) ao(t); },
