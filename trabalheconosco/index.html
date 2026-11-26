@@ -37,7 +37,7 @@
     .logo-text { font-size: 15px; font-weight: 600; letter-spacing: 0.1em; color: #fff; line-height: 1.2; }
     .logo-text { white-space: nowrap; }
     .logo-text small { display: block; font-size: 9px; letter-spacing: 0.2em; color: rgba(201,168,76,0.7); margin-top: 2px; font-weight: 400; }
-    @media (max-width: 1366px) { .logo-text small { display: none; } }
+    .topbar .logo-text small { display: none; }
     .menu { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 1.25rem; font-size: 0.95rem; color: var(--branco-70); white-space: nowrap; }
     .menu a:hover, .menu a[aria-current="page"] { color: var(--dourado); }
     .menu-item { position: relative; }
@@ -66,17 +66,36 @@
     .mobile-menu a:last-child { margin-bottom: 0; }
 
     /* ── Trabalhe conosco ── */
-    .tc { padding: 6rem 0 6.5rem; background: radial-gradient(circle at top, rgba(201,168,76,0.08), transparent 40%), var(--azul-marinho); }
+    .tc { padding: 6rem 0 3rem; background: radial-gradient(circle at top, rgba(201,168,76,0.08), transparent 40%), var(--azul-marinho); }
     .tc-caixa { max-width: 680px; margin: 0 auto; text-align: center; }
     .tc-olho { display: inline-flex; padding: 0.55rem 1.1rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.75rem; background: rgba(255,255,255,0.03); margin: 0 0 1.5rem; }
     .tc h1 { margin: 0 0 1.2rem; font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 6vw, 72px); line-height: 1.02; letter-spacing: -0.02em; }
     .tc-sub { margin: 0 auto 1.4rem; color: var(--dourado); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.2rem, 2.2vw, 1.6rem); line-height: 1.4; }
-    .tc-texto { margin: 0 auto 2.4rem; max-width: 56ch; color: var(--branco-70); font-size: 1rem; }
-    .tc-cartao { margin: 0 auto; max-width: 520px; padding: 2rem 1.5rem; background: var(--azul-claro); border: 1px solid var(--borda-sutil); border-radius: 24px; }
-    .tc-cartao p { margin: 0; color: var(--branco-70); font-size: 0.95rem; }
-    .tc-email { display: block; margin: 0.4rem 0 1.5rem; font-size: clamp(1.05rem, 4.4vw, 1.35rem); font-weight: 600; color: var(--branco); word-break: break-all; }
-    .tc-email:hover { color: var(--dourado); }
-    .tc-dica { margin-top: 1.4rem !important; font-size: 0.85rem !important; color: var(--branco-40) !important; }
+    .tc-texto { margin: 0 auto; max-width: 56ch; color: var(--branco-70); font-size: 1rem; }
+
+    /* Vagas abertas (mesmo visual dos anúncios) */
+    .vagas { padding: 0 0 5rem; }
+    .vagas-titulo { margin: 0 0 2rem; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 44px); line-height: 1.1; }
+    .vagas-grade { display: grid; gap: 1.5rem; }
+    @media (min-width: 960px) { .vagas-grade { grid-template-columns: 1fr 1fr; } }
+    .vaga { display: flex; flex-direction: column; padding: 2.2rem 1.5rem; background: linear-gradient(160deg, #0d1f3c, #0a1628 70%); border: 1px solid var(--borda-sutil); border-radius: 20px; }
+    @media (min-width: 560px) { .vaga { padding: 2.6rem 2.4rem; } }
+    .vaga .vaga-olho { margin: 0 0 1rem; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; font-weight: 600; }
+    .vaga h3 { margin: 0 0 1.4rem; font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-variant-numeric: lining-nums; font-weight: 600; font-size: clamp(30px, 3.4vw, 40px); line-height: 1.08; letter-spacing: 0.01em; }
+    .vaga h3 span { display: block; color: var(--dourado); font-weight: 700; }
+    .vaga p { margin: 0 0 1rem; color: var(--branco-70); font-size: 1rem; line-height: 1.7; }
+    .tc-texto strong { color: var(--branco); font-weight: 600; word-break: break-word; }
+    .vaga p strong { color: var(--branco); font-weight: 600; }
+    .vaga-itens { display: grid; grid-template-columns: repeat(3, 1fr); margin: 1rem 0 1.8rem; padding: 0; list-style: none; border-top: 1px solid rgba(201,168,76,0.22); border-bottom: 1px solid rgba(201,168,76,0.22); }
+    .vaga-itens li { padding: 1.1rem 0.8rem 1.1rem 0; font-size: 0.88rem; line-height: 1.35; color: var(--branco); }
+    .vaga-itens li + li { padding-left: 0.8rem; border-left: 1px solid rgba(201,168,76,0.22); }
+    .vaga-itens svg { display: block; width: 26px; height: 26px; margin-bottom: 0.7rem; color: var(--dourado); }
+    .vaga-perfil { margin-top: auto !important; }
+    .vaga-perfil b { display: block; margin-bottom: 0.2rem; color: var(--dourado); font-family: 'Cormorant Garamond', serif; font-variant: small-caps; font-size: 1.5rem; font-weight: 600; }
+    .vaga-botao { display: inline-flex; align-items: center; justify-content: center; gap: 0.7rem; margin-top: 0.6rem; padding: 0.95rem 1.4rem; border: 1px solid var(--dourado); border-radius: 4px; color: var(--branco); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; transition: background 0.2s ease, color 0.2s ease; }
+    .vaga-botao:hover { background: var(--dourado); color: var(--azul-marinho); }
+    .vaga-botao svg { width: 20px; height: 20px; flex-shrink: 0; }
+    @media (max-width: 400px) { .vaga-itens { grid-template-columns: 1fr; } .vaga-itens li + li { padding-left: 0; border-left: 0; border-top: 1px solid rgba(201,168,76,0.22); } }
 
     footer { background: #081121; padding: 3rem 0 2rem; }
     .footer-inner { display: grid; grid-template-columns: 1.2fr 0.9fr 0.9fr; gap: 2rem; align-items: start; }
@@ -89,7 +108,7 @@
     .footer-bottom { margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; color: var(--branco-40); font-size: 0.92rem; }
     @media (max-width: 1200px) { .menu, .topbar-actions .btn-topo { display: none; } .topbar-actions { margin-left: auto; } .hamburger { display: inline-flex; } }
     @media (max-width: 980px) { .footer-inner { grid-template-columns: 1fr; } }
-    @media (max-width: 680px) { .tc { padding: 4rem 0 4.5rem; } }
+    @media (max-width: 680px) { .tc { padding: 4rem 0 2rem; } }
   </style>
 </head>
 <body>
@@ -139,13 +158,43 @@
         <p class="tc-olho">Trabalhe conosco</p>
         <h1 id="tc-titulo">Venha fazer parte do Grupo GPM</h1>
         <p class="tc-sub">Gente que gosta de fazer bem feito, com método e propósito.</p>
-        <p class="tc-texto">Estamos sempre abertos a conhecer pessoas que queiram crescer com a gente. Se você se identifica com a nossa forma de trabalhar, envie o seu currículo para a nossa equipe de RH.</p>
+        <p class="tc-texto">Estamos com vagas abertas para quem quer crescer com a gente. Escolha a sua e envie o currículo em PDF para <strong>rh@gpmintegracao.com.br</strong>.</p>
+      </div>
+    </section>
 
-        <div class="tc-cartao">
-          <p>Envie o seu currículo para</p>
-          <a class="tc-email" href="mailto:rh@gpmintegracao.com.br?subject=Curr%C3%ADculo%20%C2%B7%20Trabalhe%20conosco">rh@gpmintegracao.com.br</a>
-          <a class="button button-primary" href="mailto:rh@gpmintegracao.com.br?subject=Curr%C3%ADculo%20%C2%B7%20Trabalhe%20conosco">Enviar meu currículo</a>
-          <p class="tc-dica">No e-mail, conte em poucas palavras a área em que você gostaria de atuar e anexe o currículo em PDF.</p>
+    <section class="vagas" aria-labelledby="vagas-titulo">
+      <div class="site-container">
+        <h2 class="vagas-titulo" id="vagas-titulo">Vagas abertas</h2>
+        <div class="vagas-grade">
+
+          <article class="vaga" aria-labelledby="vaga-1">
+            <p class="vaga-olho">Oportunidade de trabalho</p>
+            <h3 id="vaga-1">Criatividade que constrói. <span>Tecnologia que amplia.</span></h3>
+            <p>Se você tem <strong>até 30 anos</strong>, é disciplinado, curioso e gosta de <strong>criação</strong>, <strong>edição de vídeo</strong>, <strong>tecnologia</strong> e <strong>inteligência artificial</strong>, essa pode ser a sua chance.</p>
+            <p>Buscamos pessoas interessadas, com atitude e vontade de crescer, para criar conteúdo em canais digitais com grande potencial.</p>
+            <ul class="vaga-itens">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M10 9.5v5l4-2.5z"/></svg>Criação e edição de vídeo</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>Tecnologia e inteligência artificial</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21v-6M10 21v-9M14 21v-7M18 21V5M4 13l5-5 4 3 7-7"/></svg>Desenvolvimento profissional real</li>
+            </ul>
+            <p class="vaga-perfil"><b>Não é para qualquer perfil.</b>É para quem está disposto a aprender, executar e aproveitar uma grande oportunidade.</p>
+            <a class="vaga-botao" href="mailto:rh@gpmintegracao.com.br?subject=Candidatura%20%C2%B7%20Cria%C3%A7%C3%A3o%2C%20v%C3%ADdeo%20e%20IA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7.5z"/><path d="m10 13.5 4.5-4.5"/></svg>Quero me candidatar</a>
+          </article>
+
+          <article class="vaga" aria-labelledby="vaga-2">
+            <p class="vaga-olho">Oportunidade de trabalho</p>
+            <h3 id="vaga-2">Disciplina que constrói. <span>Tecnologia que amplia.</span></h3>
+            <p>Se você tem <strong>até 30 anos</strong>, tem disciplina, gosta de <strong>tecnologia</strong>, se identifica com o universo das <strong>Forças Armadas</strong> e tem disposição para assumir desafios, essa pode ser a sua chance.</p>
+            <p>Buscamos pessoas com atitude, comprometimento e vontade de crescer em um projeto com grande potencial.</p>
+            <ul class="vaga-itens">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>Tecnologia e inovação</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Projetos com as Forças Armadas</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21v-6M10 21v-9M14 21v-7M18 21V5M4 13l5-5 4 3 7-7"/></svg>Desenvolvimento profissional real</li>
+            </ul>
+            <p class="vaga-perfil"><b>Não é para qualquer perfil.</b>É para quem está disposto a aprender, executar e aproveitar uma grande oportunidade.</p>
+            <a class="vaga-botao" href="mailto:rh@gpmintegracao.com.br?subject=Candidatura%20%C2%B7%20Tecnologia%20e%20For%C3%A7as%20Armadas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7.5z"/><path d="m10 13.5 4.5-4.5"/></svg>Quero me candidatar</a>
+          </article>
+
         </div>
       </div>
     </section>
